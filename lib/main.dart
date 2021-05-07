@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/auth/auth_bloc.dart';
 import 'package:flutter_todo/blocs/simple_bloc_oberver.dart';
+import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/config/custom_router.dart';
 import 'package:flutter_todo/repository/auth/auth_repository.dart';
 import 'package:flutter_todo/config/auth_wrapper.dart';
+import 'package:flutter_todo/repository/todo/firebase_todo_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,10 +30,17 @@ class MyApp extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(
+          BlocProvider<AuthBloc>(
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
             ),
+          ),
+          BlocProvider<TodosBloc>(
+            create: (context) {
+              return TodosBloc(
+                todosRepository: FirebaseTodosRepository(),
+              )..add(LoadTodos());
+            },
           )
         ],
         child: MaterialApp(
