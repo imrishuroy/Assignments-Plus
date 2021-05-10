@@ -40,7 +40,7 @@ class AuthRepository extends BaseAuthRepository {
       );
       // Once signed in, return the UserCredential
       final UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+          await _firebaseAuth.signInWithCredential(credential);
       return _appUser(userCredential.user);
     } on FirebaseAuthException catch (error) {
       throw Failure(code: error.code, message: error.message!);
@@ -55,5 +55,27 @@ class AuthRepository extends BaseAuthRepository {
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
     await GoogleSignIn().signOut();
+  }
+
+  @override
+  Future<AppUser?> signInWithPhone(String phoneNumber) async {
+    late UserCredential? userCredential;
+    await _firebaseAuth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        userCredential = await _firebaseAuth.signInWithCredential(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        print('AuthException- $e');
+      },
+      codeSent: (String? verificationId, int? resendToken) {
+        print('VerificationID - $verificationId');
+        print('Resend Token- $resendToken');
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        print('codeAutoRetrievalTimeout VerificationID $verificationId');
+      },
+    );
+    return _appUser(userCredential != null ? userCredential!.user : null);
   }
 }

@@ -13,6 +13,23 @@ class LoginCubit extends Cubit<LoginState> {
       : _authRepository = authRepository,
         super(LoginState.initial());
 
+  void loginWithPhone() async {
+    if (state.status == LoginStatus.submitting) return;
+    emit(state.copyWith(status: LoginStatus.submitting));
+    try {
+      await _authRepository!.signInWithPhone(state.phoneNumber!);
+      emit(state.copyWith(status: LoginStatus.succuss));
+    } catch (error) {}
+  }
+
+  void phoneNumberChanged(String value) async {
+    emit(state.copyWith(phoneNumber: value, status: LoginStatus.initial));
+  }
+
+  void otp(String value) async {
+    emit(state.copyWith(otp: value, status: LoginStatus.initial));
+  }
+
   void logInWithGoogle() async {
     if (state.status == LoginStatus.submitting) return;
     emit(state.copyWith(status: LoginStatus.submitting));

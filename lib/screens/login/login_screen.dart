@@ -53,7 +53,27 @@ class LoginScreen extends StatelessWidget {
                           },
                           child: Text('Google Sign In'),
                         ),
-                      )
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        child: TextField(
+                          onChanged: (value) => context
+                              .read<LoginCubit>()
+                              .phoneNumberChanged(value),
+                          decoration: InputDecoration(
+                            hintText: 'Enter phone number eg-918540928489',
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20.0),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            context.read<LoginCubit>().loginWithPhone();
+                          },
+                          child: Text('Phone Sign In'),
+                        ),
+                      ),
                     ],
                   ),
                 );
