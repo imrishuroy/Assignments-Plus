@@ -7,6 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthRepository extends BaseAuthRepository {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
   AppUser? _appUser(User? user) {
     if (user == null) return null;
     return AppUser(

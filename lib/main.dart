@@ -11,6 +11,12 @@ import 'package:flutter_todo/repository/auth/auth_repository.dart';
 import 'package:flutter_todo/config/auth_wrapper.dart';
 import 'package:flutter_todo/repository/todo/firebase_todo_repository.dart';
 
+import 'blocs/todo/todo_bloc.dart';
+import 'blocs/todo/todo_bloc.dart';
+import 'repository/todo/base_todo_repository.dart';
+import 'repository/todo/base_todo_repository.dart';
+import 'repository/todo/firebase_todo_repository.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -26,6 +32,9 @@ class MyApp extends StatelessWidget {
       providers: [
         RepositoryProvider<AuthRepository>(
           create: (_) => AuthRepository(),
+        ),
+        RepositoryProvider<TodosRepository>(
+          create: (_) => TodosRepository(),
         )
       ],
       child: MultiBlocProvider(
@@ -36,12 +45,16 @@ class MyApp extends StatelessWidget {
             ),
           ),
           BlocProvider<TodosBloc>(
-            create: (context) {
-              return TodosBloc(
-                todosRepository: FirebaseTodosRepository(),
-              )..add(LoadTodos());
-            },
-          )
+              create: (context) =>
+                  TodosBloc(todosRepository: context.read<TodosRepository>()))
+
+          // BlocProvider<TodosBloc>(
+          //   create: (context) {
+          //     return TodosBloc(
+          //       todosRepository: TodosRepository(),
+          //     )..add(LoadTodos());
+          //   },
+          // )
         ],
         child: MaterialApp(
           darkTheme: ThemeData(backgroundColor: Colors.black),
@@ -49,7 +62,7 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Demo',
           theme: ThemeData(
             primarySwatch: Colors.blue,
-            scaffoldBackgroundColor: Colors.black,
+            // scaffoldBackgroundColor: Colors.black,
           ),
           onGenerateRoute: CustomRouter.onGenerateRoute,
           initialRoute: AuthWrapper.routeName,

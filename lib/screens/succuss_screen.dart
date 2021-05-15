@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todo/repository/auth/auth_repository.dart';
+
 import 'package:flutter_todo/screens/add_todo_page.dart';
 
 class SuccussScreen extends StatelessWidget {
@@ -18,7 +17,7 @@ class SuccussScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => AddTodo(),
+                    builder: (_) => AddTodoScreen(),
                   ),
                 );
               },
