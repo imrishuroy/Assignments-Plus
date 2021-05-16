@@ -28,12 +28,13 @@ class LoginScreen extends StatelessWidget {
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state.status == LoginStatus.error) {
-            showDialog(
-              context: context,
-              builder: (context) => ErrorDialog(
-                content: state.failure!.message,
-              ),
-            );
+            print('ERROR ${state.failure!.message} ');
+            // showDialog(
+            //   context: context,
+            //   builder: (context) => ErrorDialog(
+            //     content: state.failure!.message,
+            //   ),
+            // );
           }
         },
         builder: (context, state) {

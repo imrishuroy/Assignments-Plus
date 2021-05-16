@@ -37,11 +37,15 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       print(todo);
-      BlocProvider.of<TodosBloc>(context).add(AddTodo(Todo(
-        dateTime: DateTime.now(),
-        todo: todo,
-        id: Uuid().v4(),
-      )));
+      BlocProvider.of<TodosBloc>(context).add(
+        AddTodo(
+          Todo(
+            dateTime: DateTime.now(),
+            todo: todo,
+            id: Uuid().v4(),
+          ),
+        ),
+      );
       Navigator.of(context).pop();
     }
 
