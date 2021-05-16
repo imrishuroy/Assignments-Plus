@@ -3,9 +3,6 @@ import 'package:flutter_todo/config/auth_wrapper.dart';
 import 'package:flutter_todo/screens/home/home_screen.dart';
 import 'package:flutter_todo/screens/login/login_screen.dart';
 
-import '../screens/add_todo_page.dart';
-import '../screens/add_todo_page.dart';
-
 class CustomRouter {
   static Route onGenerateRoute(RouteSettings settings) {
     print('Route: ${settings.name}');
@@ -27,8 +24,8 @@ class CustomRouter {
       case HomeScreen.routeName:
         return HomeScreen.route();
 
-      case AddTodoScreen.routeName:
-        return AddTodoScreen.route();
+      // case AddTodoScreen.routeName:
+      //   return AddTodoScreen.route();
 
       default:
         return _errorRoute();

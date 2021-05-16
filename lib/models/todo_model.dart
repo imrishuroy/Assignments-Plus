@@ -1,57 +1,66 @@
-// import 'package:flutter_todo/services/todo_entities.dart';
-// import 'package:meta/meta.dart';
+import 'dart:convert';
 
-// @immutable
-// class Todo {
-//   final bool complete;
-//   final String id;
-//   final String note;
-//   final String task;
+import 'package:equatable/equatable.dart';
+import 'package:flutter_todo/models/entities.dart/todos_entities.dart';
 
-//   Todo(this.task, {this.complete = false, String note = '', required String id})
-//       // : this.note = note ?? '',
-//       : this.note = note,
-//         this.id = id;
+class Todo extends Equatable {
+  final String id;
+  final String todo;
+  final DateTime dateTime;
+  final bool completed;
 
-//   Todo copyWith({bool? complete, String? id, String? note, String? task}) {
-//     return Todo(
-//       task ?? this.task,
-//       complete: complete ?? this.complete,
-//       id: id ?? this.id,
-//       note: note ?? this.note,
-//     );
-//   }
+  Todo({
+    required this.id,
+    required this.todo,
+    required this.dateTime,
+    this.completed = false,
+  });
+  // this.id = id;
+  //       this.todo = todo;
 
-//   @override
-//   int get hashCode =>
-//       complete.hashCode ^ task.hashCode ^ note.hashCode ^ id.hashCode;
+  @override
+  List<Object> get props => [id, todo, dateTime, completed];
 
-//   @override
-//   bool operator ==(Object other) =>
-//       identical(this, other) ||
-//       other is Todo &&
-//           runtimeType == other.runtimeType &&
-//           complete == other.complete &&
-//           task == other.task &&
-//           note == other.note &&
-//           id == other.id;
+  Todo copyWith({
+    String? id,
+    String? todo,
+    DateTime? dateTime,
+    bool? completed,
+  }) {
+    return Todo(
+      id: id ?? this.id,
+      todo: todo ?? this.todo,
+      dateTime: dateTime ?? this.dateTime,
+      completed: completed ?? this.completed,
+    );
+  }
 
-//   @override
-//   String toString() {
-//     return 'Todo { complete: $complete, task: $task, note: $note, id: $id }';
-//   }
+  TodoEntity todoEntry() {
+    return TodoEntity(id, todo, completed, dateTime);
+  }
 
-//   TodoEntity toEntity() {
-//     return TodoEntity(task, id, note, complete);
-//   }
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'todo': todo,
+      'dateTime': dateTime.millisecondsSinceEpoch,
+      'completed': completed,
+    };
+  }
 
-//   static Todo fromEntity(TodoEntity entity) {
-//     return Todo(
-//       entity.task,
-//       // complete: entity.complete ?? false,
-//       complete: entity.complete,
-//       note: entity.note,
-//       id: entity.id,
-//     );
-//   }
-// }
+  factory Todo.fromMap(Map<String, dynamic> map) {
+    return Todo(
+      id: map['id'],
+      todo: map['todo'],
+      dateTime: DateTime.fromMillisecondsSinceEpoch(map['dateTime']),
+      completed: map['completed'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Todo.fromJson(String source) => Todo.fromMap(json.decode(source));
+
+  @override
+  bool get stringify => true;
+}

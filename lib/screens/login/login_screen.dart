@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_todo/repository/auth/auth_repository.dart';
 import 'package:flutter_todo/screens/login/cubit/login_cubit.dart';
-import 'package:flutter_todo/widgets/error_dialog.dart';
 
 class LoginScreen extends StatelessWidget {
   static const String routeName = '/login';
