@@ -45,8 +45,10 @@ class MyApp extends StatelessWidget {
             ),
           ),
           BlocProvider<TodosBloc>(
-              create: (context) =>
-                  TodosBloc(todosRepository: context.read<TodosRepository>()))
+            create: (context) => TodosBloc(
+              todosRepository: context.read<TodosRepository>(),
+            )..add(LoadTodos()),
+          )
 
           // BlocProvider<TodosBloc>(
           //   create: (context) {

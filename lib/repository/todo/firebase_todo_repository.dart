@@ -16,6 +16,8 @@ class TodosRepository implements BaseTodosRepository {
       FirebaseFirestore.instance.collection('users');
   final String uid = FirebaseAuth.instance.currentUser!.uid;
 
+  // String? uid = FirebaseAuth.instance.currentUser?.uid;
+
   AuthRepository auth = AuthRepository();
   @override
   // Future<void> addNewTodo(Todo todo) async {
@@ -39,16 +41,24 @@ class TodosRepository implements BaseTodosRepository {
     return usersRef.doc(todo.id).delete();
   }
 
-  // @override
-  // Stream<List<Todo>> todos() {
-  //   return todosRef.get();
-  //   // return todosRef.snapshots().map((snaps) {
+  @override
+  Stream<List<Todo>> todos() {
+    // String? uid = FirebaseAuth.instance.currentUser?.uid;
+    // AppUser? user = auth.currentUser;
+    // print('TODO ID ${usersRef.id}');
+    // print('UID ${user?.uid}');
 
-  //   //   // return snaps.docs
-  //   //   //     .map((doc) => Todo.fromEntity(TodoEntity.fromSnapshot(doc)))
-  //   //   //     .toList();
-  //   // });
-  // }
+    return usersRef.doc(uid).collection('todos').snapshots().map((snaps) {
+      return snaps.docs.map((doc) => Todo.fromMap(doc.data())).toList();
+    });
+
+    // return todosRef.snapshots().map((snaps) {
+
+    //   // return snaps.docs
+    //   //     .map((doc) => Todo.fromEntity(TodoEntity.fromSnapshot(doc)))
+    //   //     .toList();
+    // });
+  }
 
   @override
   Future<void> updateTodo(Todo todo) {

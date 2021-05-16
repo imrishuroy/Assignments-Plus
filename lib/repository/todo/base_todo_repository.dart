@@ -6,8 +6,7 @@ abstract class BaseTodosRepository {
   Future<void> addNewTodo(Todo todo);
 
   Future<void> deleteTodo(Todo todo);
-
-//  Stream<List<Todo>> todos();
+  Stream<List<Todo>> todos();
 
   Future<void> updateTodo(Todo todo);
 }

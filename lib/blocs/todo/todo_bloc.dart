@@ -15,7 +15,7 @@ part 'todo_state.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final TodosRepository _todosRepository;
-  late StreamSubscription _todosSubscription;
+  StreamSubscription? _todosSubscription;
 
   TodosBloc({@required TodosRepository? todosRepository})
       : assert(todosRepository != null),
@@ -26,6 +26,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   Stream<TodosState> mapEventToState(TodosEvent event) async* {
     if (event is AddTodo) {
       yield* _mapAddTodoToState(event);
+    } else if (event is LoadTodos) {
+      yield* _mapLoadTodosToState();
+    } else if (event is TodosUpdated) {
+      yield* _mapTodosUpdateToState(event);
     }
 
     // if (event is LoadTodos) {
@@ -46,6 +50,21 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     // }
   }
 
+  Stream<TodosState> _mapLoadTodosToState() async* {
+    // yield TodosLoading();
+    _todosSubscription?.cancel();
+    _todosSubscription =
+        _todosRepository.todos().listen((todos) => add(TodosUpdated(todos)));
+  }
+
+  Stream<TodosState> _mapTodosUpdateToState(TodosUpdated event) async* {
+    yield TodosLoaded(event.todos);
+  }
+
+  Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
+    _todosRepository.addNewTodo(event.todo);
+  }
+
   // Stream<TodosState> _mapLoadTodosToState() async* {
   //   // _todosSubscription?.cancel();
   //   _todosSubscription.cancel();
@@ -53,10 +72,6 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   //         (todos) => add(TodosUpdated(todos)),
   //       );
   // }
-
-  Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
-    _todosRepository.addNewTodo(event.todo);
-  }
 
   // Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
   //   _todosRepository.updateTodo(event.updatedTodo);
@@ -97,7 +112,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   @override
   Future<void> close() {
     // _todosSubscription?.cancel();
-    _todosSubscription.cancel();
+    _todosSubscription?.cancel();
     return super.close();
   }
 }
