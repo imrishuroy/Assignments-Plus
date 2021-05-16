@@ -4,7 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/auth/auth_bloc.dart';
+import 'package:flutter_todo/blocs/bloc/tab_bloc.dart';
+import 'package:flutter_todo/blocs/filtered-bloc/flitered_bloc.dart';
 import 'package:flutter_todo/blocs/simple_bloc_oberver.dart';
+import 'package:flutter_todo/blocs/stats/stats_bloc.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/config/custom_router.dart';
 import 'package:flutter_todo/repository/auth/auth_repository.dart';
@@ -46,15 +49,19 @@ class MyApp extends StatelessWidget {
             create: (context) => TodosBloc(
               todosRepository: context.read<TodosRepository>(),
             )..add(LoadTodos()),
+          ),
+          BlocProvider<TabBloc>(
+            create: (context) => TabBloc(),
+          ),
+          BlocProvider<FilteredTodosBloc>(
+            create: (context) => FilteredTodosBloc(
+              todosBloc: BlocProvider.of<TodosBloc>(context),
+            ),
+          ),
+          BlocProvider<StatsBloc>(
+            create: (context) =>
+                StatsBloc(todosBloc: BlocProvider.of<TodosBloc>(context)),
           )
-
-          // BlocProvider<TodosBloc>(
-          //   create: (context) {
-          //     return TodosBloc(
-          //       todosRepository: TodosRepository(),
-          //     )..add(LoadTodos());
-          //   },
-          // )
         ],
         child: MaterialApp(
           darkTheme: ThemeData(backgroundColor: Colors.black),

@@ -1,10 +1,35 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/models/todo_model.dart';
+import 'package:uuid/uuid.dart';
 
 typedef OnSaveCallback = Function(String todo);
 
 class AddEditScreen extends StatefulWidget {
+  static const String routeName = '/addTodo';
+
+  static Route route() {
+    return MaterialPageRoute(
+      settings: RouteSettings(name: routeName),
+      builder: (context) => AddEditScreen(
+        onSave: (todoString) {
+          BlocProvider.of<TodosBloc>(context).add(
+            AddTodo(
+              Todo(
+                todo: todoString,
+                dateTime: DateTime.now(),
+                id: Uuid().v4(),
+              ),
+            ),
+          );
+        },
+        isEditing: false,
+      ),
+    );
+  }
+
   final bool? isEditing;
   final OnSaveCallback? onSave;
   final Todo? todo;
