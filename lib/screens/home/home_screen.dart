@@ -21,48 +21,53 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TabBloc, AppTab>(
-      builder: (context, activeTab) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('Firestore Todos'),
-            actions: [
-              FilterButton(visible: activeTab == AppTab.todos),
-              ExtraActions(),
-              SizedBox(
-                width: 5,
-              ),
-              TextButton(
-                onPressed: () {
-                  RepositoryProvider.of<AuthRepository>(context).signOut();
-                },
-                child: Text(
-                  'LogOut',
-                  style: TextStyle(
-                    color: Colors.white,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: BlocBuilder<TabBloc, AppTab>(
+        builder: (context, activeTab) {
+          return Scaffold(
+            // backgroundColor: Color(0xff222831),
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text('Your Todos'),
+              actions: [
+                FilterButton(visible: activeTab == AppTab.todos),
+                ExtraActions(),
+                SizedBox(
+                  width: 5,
+                ),
+                TextButton(
+                  onPressed: () {
+                    RepositoryProvider.of<AuthRepository>(context).signOut();
+                  },
+                  child: Text(
+                    'LogOut',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: 7,
-              )
-            ],
-          ),
-          body: activeTab == AppTab.todos ? FilteredTodos() : Stats(),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/addTodo');
-            },
-            child: Icon(Icons.add),
-            tooltip: 'Add Todo',
-          ),
-          bottomNavigationBar: TabSelector(
-            activeTab: activeTab,
-            onTabSelected: (tab) =>
-                BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
-          ),
-        );
-      },
+                SizedBox(
+                  width: 7,
+                )
+              ],
+            ),
+            body: activeTab == AppTab.todos ? FilteredTodos() : Stats(),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/addTodo');
+              },
+              child: Icon(Icons.add),
+              tooltip: 'Add Todo',
+            ),
+            bottomNavigationBar: TabSelector(
+              activeTab: activeTab,
+              onTabSelected: (tab) =>
+                  BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+            ),
+          );
+        },
+      ),
     );
   }
 }

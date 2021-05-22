@@ -20,6 +20,7 @@ class DetailsScreen extends StatelessWidget {
               (todo) => todo.id == id,
             );
         return Scaffold(
+          // backgroundColor: Color(0xff222831),
           appBar: AppBar(
             title: Text('Todo Details'),
             actions: [

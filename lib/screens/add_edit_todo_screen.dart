@@ -57,6 +57,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
+      // backgroundColor: Color(0xff222831),
       appBar: AppBar(
         title: Text(
           isEditing ? 'Edit Todo' : 'Add Todo',

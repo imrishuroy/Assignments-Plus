@@ -5,6 +5,7 @@ class SuccussScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // RepositoryProvider.of<AuthRepository>(context).signOut();
     return Scaffold(
+      //  backgroundColor: Color(0xff222831),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
