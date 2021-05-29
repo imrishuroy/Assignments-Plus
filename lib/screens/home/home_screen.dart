@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/bloc/tab_bloc.dart';
 import 'package:flutter_todo/models/app_tab_bar.dart';
-import 'package:flutter_todo/repository/auth/auth_repository.dart';
+import 'package:flutter_todo/repositories/auth/auth_repository.dart';
+
 import 'package:flutter_todo/widgets/extra_actions.dart';
 import 'package:flutter_todo/widgets/filter_button.dart';
 import 'package:flutter_todo/widgets/filtered_todos.dart';

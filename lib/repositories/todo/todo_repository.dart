@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_todo/models/todo_model.dart';
-import 'package:flutter_todo/repository/auth/auth_repository.dart';
-import 'package:flutter_todo/repository/todo/base_todo_repository.dart';
+import 'package:flutter_todo/repositories/auth/auth_repository.dart';
+
+import 'base_todo_repository.dart';
 
 class TodosRepository implements BaseTodosRepository {
   final CollectionReference usersRef =

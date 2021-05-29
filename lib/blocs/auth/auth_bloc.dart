@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/models/app_user_model.dart';
-import 'package:flutter_todo/repository/auth/auth_repository.dart';
+import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';

@@ -8,35 +8,38 @@ class Todo extends Equatable {
   final String todo;
   final DateTime dateTime;
   final bool completed;
+  final String imageUrl;
 
   Todo({
     required this.id,
     required this.todo,
     required this.dateTime,
     this.completed = false,
+    required this.imageUrl,
   });
   // this.id = id;
   //       this.todo = todo;
 
   @override
-  List<Object> get props => [id, todo, dateTime, completed];
+  List<Object> get props => [id, todo, dateTime, completed, this.imageUrl];
 
   Todo copyWith({
     String? id,
     String? todo,
     DateTime? dateTime,
     bool? completed,
+    String? imageUrl,
   }) {
     return Todo(
-      id: id ?? this.id,
-      todo: todo ?? this.todo,
-      dateTime: dateTime ?? this.dateTime,
-      completed: completed ?? this.completed,
-    );
+        id: id ?? this.id,
+        todo: todo ?? this.todo,
+        dateTime: dateTime ?? this.dateTime,
+        completed: completed ?? this.completed,
+        imageUrl: imageUrl ?? this.imageUrl);
   }
 
   TodoEntity todoEntry() {
-    return TodoEntity(id, todo, completed, dateTime);
+    return TodoEntity(id, todo, completed, dateTime, imageUrl);
   }
 
   Map<String, dynamic> toMap() {
@@ -45,6 +48,7 @@ class Todo extends Equatable {
       'todo': todo,
       'dateTime': dateTime.millisecondsSinceEpoch,
       'completed': completed,
+      'imageUrl': imageUrl
     };
   }
 
@@ -54,6 +58,7 @@ class Todo extends Equatable {
       todo: map['todo'],
       dateTime: DateTime.fromMillisecondsSinceEpoch(map['dateTime']),
       completed: map['completed'],
+      imageUrl: map['imageUrl'],
     );
   }
 

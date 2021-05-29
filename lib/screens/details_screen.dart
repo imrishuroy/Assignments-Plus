@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,6 +80,12 @@ class DetailsScreen extends StatelessWidget {
                             todo.todo,
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
+                          SizedBox(height: 20.0),
+                          Container(
+                            height: 250.0,
+                            width: 250.0,
+                            child: CachedNetworkImage(imageUrl: todo.imageUrl),
+                          )
                         ],
                       ),
                     ),
@@ -99,7 +106,7 @@ class DetailsScreen extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) {
                     return AddEditScreen(
-                      onSave: (todoString) {
+                      onSave: (todoString, imageUrl) {
                         BlocProvider.of<TodosBloc>(context).add(
                           UpdateTodo(
                             todo.copyWith(todo: todoString),

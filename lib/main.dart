@@ -10,13 +10,13 @@ import 'package:flutter_todo/blocs/simple_bloc_oberver.dart';
 import 'package:flutter_todo/blocs/stats/stats_bloc.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/config/custom_router.dart';
-import 'package:flutter_todo/repository/auth/auth_repository.dart';
+
 import 'package:flutter_todo/config/auth_wrapper.dart';
-import 'package:flutter_todo/repository/todo/todo_repository.dart';
+import 'package:flutter_todo/repositories/auth/auth_repository.dart';
+import 'package:flutter_todo/repositories/todo/todo_repository.dart';
+import 'package:flutter_todo/repositories/utils/util_repository.dart';
 
 import 'blocs/todo/todo_bloc.dart';
-
-import 'repository/todo/todo_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,6 +36,9 @@ class MyApp extends StatelessWidget {
         ),
         RepositoryProvider<TodosRepository>(
           create: (_) => TodosRepository(),
+        ),
+        RepositoryProvider<UtilRepository>(
+          create: (_) => UtilRepository(),
         )
       ],
       child: MultiBlocProvider(

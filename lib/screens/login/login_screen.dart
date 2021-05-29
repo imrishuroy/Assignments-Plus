@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 
-import 'package:flutter_todo/repository/auth/auth_repository.dart';
 import 'package:flutter_todo/screens/login/cubit/login_cubit.dart';
 import 'package:flutter_todo/widgets/error_dialog.dart';
 
@@ -59,7 +59,7 @@ class LoginScreen extends StatelessWidget {
                     child: Container(
                       height: height * 0.5,
                       //color: Colors.red,
-                      width: width * 0.6,
+                      width: width * 0.9,
                       child: Card(
                         elevation: 10.0,
                         child: Column(
@@ -69,14 +69,14 @@ class LoginScreen extends StatelessWidget {
                             Text(
                               '+ Assignments',
                               style: TextStyle(
-                                fontSize: 30.0,
+                                fontSize: 20.0,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 1.2,
                               ),
                             ),
                             SizedBox(height: 50.0),
                             Container(
-                              width: 260.0,
+                              width: 250.0,
                               height: 50.0,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
@@ -98,20 +98,23 @@ class LoginScreen extends StatelessWidget {
                                           )),
                                       padding: EdgeInsets.zero,
                                       //  color: Colors.white,
-                                      height: 55.0,
-                                      width: 60.0,
+                                      height: 50.0,
+                                      width: 50.0,
                                       child: SvgPicture.asset(
                                         'assets/google.svg',
+                                        height: 30.0,
+                                        width: 30.0,
+                                        fit: BoxFit.contain,
 
                                         // fit: BoxFit.cover,
                                       ),
                                     ),
 
-                                    SizedBox(width: 12.0),
+                                    SizedBox(width: 20.0),
                                     Text(
                                       'Sign in with Google',
                                       style: TextStyle(
-                                        fontSize: width < 900 ? 17 : 20.0,
+                                        fontSize: width < 900 ? 18 : 20.0,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),

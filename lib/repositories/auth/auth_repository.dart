@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_todo/models/app_user_model.dart';
 import 'package:flutter_todo/models/failure_model.dart';
-import 'package:flutter_todo/repository/auth/base_auth_repository.dart';
+import 'package:flutter_todo/repositories/auth/base_auth_repository.dart';
+
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthRepository extends BaseAuthRepository {
@@ -44,8 +45,10 @@ class AuthRepository extends BaseAuthRepository {
           await _firebaseAuth.signInWithCredential(credential);
       return _appUser(userCredential.user);
     } on FirebaseAuthException catch (error) {
+      print(error.toString());
       throw Failure(code: error.code, message: error.message!);
     } on PlatformException catch (error) {
+      print(error.toString());
       throw Failure(code: error.code, message: error.message!);
     } catch (error) {
       throw Failure(message: 'Something went wrong.Try again');

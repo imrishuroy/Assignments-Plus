@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/models/todo_model.dart';
+import 'package:flutter_todo/repositories/utils/util_repository.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
-typedef OnSaveCallback = Function(String todo);
+typedef OnSaveCallback = Function(String todo, String imageUrl);
 
 class AddEditScreen extends StatefulWidget {
   static const String routeName = '/addTodo';
@@ -14,14 +18,14 @@ class AddEditScreen extends StatefulWidget {
     return MaterialPageRoute(
       settings: RouteSettings(name: routeName),
       builder: (context) => AddEditScreen(
-        onSave: (todoString) {
+        onSave: (todoString, imageUrl) {
           BlocProvider.of<TodosBloc>(context).add(
             AddTodo(
               Todo(
-                todo: todoString,
-                dateTime: DateTime.now(),
-                id: Uuid().v4(),
-              ),
+                  todo: todoString,
+                  dateTime: DateTime.now(),
+                  id: Uuid().v4(),
+                  imageUrl: imageUrl),
             ),
           );
         },
@@ -49,8 +53,35 @@ class _AddEditScreenState extends State<AddEditScreen> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String? _todo;
+  String? _imageUrl;
 
   bool get isEditing => widget.isEditing!;
+
+  File? _image;
+  final picker = ImagePicker();
+
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    setState(
+      () {
+        if (pickedFile != null) {
+          _image = File(pickedFile.path);
+        } else {
+          print('No image selected');
+        }
+      },
+    );
+  }
+
+  Future<String?> _getImageUrl(BuildContext context) async {
+    final util = RepositoryProvider.of<UtilRepository>(context, listen: false);
+    final String? url = await util.getImage();
+    if (url != null) {
+      setState(() {
+        _imageUrl = url;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +112,20 @@ class _AddEditScreenState extends State<AddEditScreen> {
                 },
                 onSaved: (value) => _todo = value,
               ),
+              SizedBox(height: 20.0),
+              TextButton.icon(
+                // onPressed: () async => await util.getImage(),
+                onPressed: () => _getImageUrl(context),
+                icon: Icon(Icons.add_a_photo),
+                label: Text('Add Image'),
+              ),
+              SizedBox(height: 20.0),
+              if (_image != null)
+                Container(
+                  height: 100.0,
+                  width: 100.0,
+                  child: Image.file(_image!),
+                )
             ],
           ),
         ),
@@ -91,7 +136,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
-            widget.onSave!(_todo!);
+            widget.onSave!(_todo!, _imageUrl!);
             Navigator.pop(context);
           }
         },

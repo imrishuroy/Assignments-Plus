@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_todo/models/todo_model.dart';
-import 'package:flutter_todo/repository/todo/todo_repository.dart';
+import 'package:flutter_todo/repositories/todo/todo_repository.dart';
+
 import 'package:meta/meta.dart';
 
 part 'todo_event.dart';

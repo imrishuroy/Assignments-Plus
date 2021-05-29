@@ -6,8 +6,15 @@ class TodoEntity extends Equatable {
   final String id;
   final String todo;
   final DateTime dateTime;
+  final String imageUrl;
 
-  const TodoEntity(this.id, this.todo, this.complete, this.dateTime);
+  const TodoEntity(
+    this.id,
+    this.todo,
+    this.complete,
+    this.dateTime,
+    this.imageUrl,
+  );
 
   Map<String, Object> toJson() {
     return {
@@ -15,15 +22,16 @@ class TodoEntity extends Equatable {
       'note': todo,
       'id': id,
       'date': dateTime,
+      'imageUrl': imageUrl,
     };
   }
 
   @override
-  List<Object> get props => [complete, id, todo, dateTime];
+  List<Object> get props => [complete, id, todo, dateTime, imageUrl];
 
   @override
   String toString() {
-    return 'TodoEntity { complete: $complete, date: $dateTime, note: $todo, id: $id }';
+    return 'TodoEntity { complete: $complete, date: $dateTime, note: $todo, id: $id , imageUrl: $imageUrl}';
   }
 
   static TodoEntity fromJson(Map<String, Object> json) {
@@ -32,12 +40,13 @@ class TodoEntity extends Equatable {
       json['id'] as String,
       json['complete'] as bool,
       json['date'] as DateTime,
+      json['imageUrl'] as String,
     );
   }
 
   static TodoEntity fromSnapshot(DocumentSnapshot snap) {
     return TodoEntity(snap.data()?['todo'], snap.id, snap.data()?['complete'],
-        snap.data()?['date']);
+        snap.data()?['imageUrl'], snap.data()?['date']);
   }
 
   Map<String, Object> toDocument() {
@@ -45,6 +54,7 @@ class TodoEntity extends Equatable {
       'complete': complete,
       'todo': todo,
       'date': dateTime,
+      'imageUrl': imageUrl,
     };
   }
 }
