@@ -10,19 +10,23 @@ import 'package:flutter_todo/blocs/filtered-bloc/flitered_bloc.dart';
 import 'package:flutter_todo/blocs/simple_bloc_oberver.dart';
 import 'package:flutter_todo/blocs/stats/stats_bloc.dart';
 import 'package:flutter_todo/blocs/tab/tab_bloc.dart';
+import 'package:flutter_todo/blocs/theme/theme_bloc.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/config/custom_router.dart';
 
 import 'package:flutter_todo/config/auth_wrapper.dart';
+import 'package:flutter_todo/config/shared_prefs.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 import 'package:flutter_todo/repositories/todo/todo_repository.dart';
 import 'package:flutter_todo/repositories/utils/util_repository.dart';
+import 'package:flutter_todo/theme/app_theme.dart';
 
 import 'blocs/todo/todo_bloc.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await SharedPrefs().init();
   Bloc.observer = SimpleBlocObserver();
   EquatableConfig.stringify = kDebugMode;
   runApp(MyApp());
@@ -45,6 +49,9 @@ class MyApp extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
+          BlocProvider<ThemeBloc>(
+            create: (_) => ThemeBloc(),
+          ),
           BlocProvider<AuthBloc>(
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
@@ -72,18 +79,28 @@ class MyApp extends StatelessWidget {
               utils: RepositoryProvider.of<UtilsRepository>(context),
               todosBloc: BlocProvider.of<TodosBloc>(context),
             ),
-          )
-        ],
-        child: MaterialApp(
-          darkTheme: ThemeData(backgroundColor: Colors.black),
-          debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            // scaffoldBackgroundColor: Colors.black,
           ),
-          onGenerateRoute: CustomRouter.onGenerateRoute,
-          initialRoute: AuthWrapper.routeName,
+        ],
+        child: BlocBuilder<ThemeBloc, ThemeState>(
+          builder: (context, state) {
+            print(
+                '${appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)]} -----------------------');
+            return MaterialApp(
+              //  darkTheme: ThemeData(backgroundColor: Colors.black),
+              debugShowCheckedModeBanner: false,
+              title: 'Flutter Demo',
+              //theme: state.themeData,
+              theme:
+                  appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)],
+
+              // ThemeData(
+              //   primarySwatch: Colors.blue,
+              //   // scaffoldBackgroundColor: Colors.black,
+              // ),
+              onGenerateRoute: CustomRouter.onGenerateRoute,
+              initialRoute: AuthWrapper.routeName,
+            );
+          },
         ),
       ),
     );

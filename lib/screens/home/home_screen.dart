@@ -4,6 +4,7 @@ import 'package:flutter_todo/blocs/tab/tab_bloc.dart';
 
 import 'package:flutter_todo/models/app_tab_bar.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
+import 'package:flutter_todo/screens/home/change_theme.dart';
 
 import 'package:flutter_todo/widgets/extra_actions.dart';
 import 'package:flutter_todo/widgets/filter_button.dart';
@@ -49,9 +50,9 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: 7,
-                )
+                SizedBox(width: 7),
+                ChangeTheme(),
+                SizedBox(width: 7),
               ],
             ),
             body: activeTab == AppTab.todos ? FilteredTodos() : Stats(),
