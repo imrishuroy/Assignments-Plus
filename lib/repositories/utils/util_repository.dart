@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:uuid/uuid.dart';
 
-class UtilRepository extends BaseUtilRepository {
+class UtilsRepository extends BaseUtilRepository {
   Future<String?> getImage() async {
     File? _image;
     String? imageUrl;

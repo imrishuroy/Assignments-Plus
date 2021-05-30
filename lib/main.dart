@@ -3,11 +3,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_todo/blocs/add-edit/add_edit_cubit.dart';
 import 'package:flutter_todo/blocs/auth/auth_bloc.dart';
-import 'package:flutter_todo/blocs/bloc/tab_bloc.dart';
+
 import 'package:flutter_todo/blocs/filtered-bloc/flitered_bloc.dart';
 import 'package:flutter_todo/blocs/simple_bloc_oberver.dart';
 import 'package:flutter_todo/blocs/stats/stats_bloc.dart';
+import 'package:flutter_todo/blocs/tab/tab_bloc.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/config/custom_router.dart';
 
@@ -37,8 +39,8 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<TodosRepository>(
           create: (_) => TodosRepository(),
         ),
-        RepositoryProvider<UtilRepository>(
-          create: (_) => UtilRepository(),
+        RepositoryProvider<UtilsRepository>(
+          create: (_) => UtilsRepository(),
         )
       ],
       child: MultiBlocProvider(
@@ -64,6 +66,12 @@ class MyApp extends StatelessWidget {
           BlocProvider<StatsBloc>(
             create: (context) =>
                 StatsBloc(todosBloc: BlocProvider.of<TodosBloc>(context)),
+          ),
+          BlocProvider<AddEditCubit>(
+            create: (context) => AddEditCubit(
+              utils: RepositoryProvider.of<UtilsRepository>(context),
+              todosBloc: BlocProvider.of<TodosBloc>(context),
+            ),
           )
         ],
         child: MaterialApp(

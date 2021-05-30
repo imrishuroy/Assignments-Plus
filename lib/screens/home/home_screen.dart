@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todo/blocs/bloc/tab_bloc.dart';
+import 'package:flutter_todo/blocs/tab/tab_bloc.dart';
+
 import 'package:flutter_todo/models/app_tab_bar.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 
