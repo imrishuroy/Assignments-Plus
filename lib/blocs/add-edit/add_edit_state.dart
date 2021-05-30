@@ -8,12 +8,14 @@ class AddEditState extends Equatable {
   final String? todo;
   final String? imageUrl;
   final Failure? failure;
+  final ImageStatus? imageStatus;
 
   AddEditState({
     @required this.status,
     @required this.todo,
     @required this.imageUrl,
     @required this.failure,
+    @required this.imageStatus,
   });
 
   factory AddEditState.initial() {
@@ -22,23 +24,26 @@ class AddEditState extends Equatable {
       todo: '',
       imageUrl: '',
       failure: Failure(),
+      imageStatus: ImageStatus.initial,
     );
   }
 
   @override
-  List<Object?> get props => [status, todo, imageUrl, failure];
+  List<Object?> get props => [status, todo, imageUrl, failure, imageStatus];
 
   AddEditState copyWith({
     AddEditStatus? status,
     String? todo,
     String? imageUrl,
     Failure? failure,
+    ImageStatus? imageStatus,
   }) {
     return AddEditState(
       status: status ?? this.status,
       todo: todo ?? this.todo,
       imageUrl: imageUrl ?? this.imageUrl,
       failure: failure ?? this.failure,
+      imageStatus: imageStatus ?? this.imageStatus,
     );
   }
 }

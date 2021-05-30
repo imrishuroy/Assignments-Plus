@@ -29,13 +29,18 @@ class AddEditCubit extends Cubit<AddEditState> {
     emit(state.copyWith(imageUrl: imageUrl, status: AddEditStatus.initial));
   }
 
-  void pickImage() async {
-    //  emit(state.copyWith(status: AddEditStatus.submitting));
-    final imageUrl = await _utils?.getImage();
+  bool get canSubmit => state.imageUrl != '' && state.todo != '';
 
+  void pickImage() async {
+    emit(state.copyWith(imageStatus: ImageStatus.submitting));
+    final imageUrl = await _utils?.getImage();
     if (imageUrl != null) {
       print('IMageUrl ------------------------------------------- $imageUrl');
-      emit(state.copyWith(imageUrl: imageUrl, status: AddEditStatus.initial));
+      emit(
+          state.copyWith(imageUrl: imageUrl, imageStatus: ImageStatus.initial));
+
+      print('${state.imageUrl} -----------------------------------');
+      emit(state.copyWith(imageStatus: ImageStatus.succus));
       print('${state.imageUrl} -----------------------------------');
     } else {
       emit(
@@ -54,8 +59,6 @@ class AddEditCubit extends Cubit<AddEditState> {
       _todosBloc?.add(
         AddTodo(
           Todo(
-            // todo: state.todo!,
-            // imageUrl: state.imageUrl!,
             todo: todo!,
             imageUrl: imageUrl!,
             id: Uuid().v4(),

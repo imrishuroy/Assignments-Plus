@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/screens/add_edit_todo_screen.dart';
+import 'package:flutter_todo/widgets/display_image.dart';
 
 class DetailsScreen extends StatelessWidget {
   final String? id;
@@ -35,11 +35,7 @@ class DetailsScreen extends StatelessWidget {
               )
             ],
           ),
-          body:
-              // todo == null
-              //     ? Container()
-              //     :
-              Padding(
+          body: Padding(
             padding: EdgeInsets.all(16.0),
             child: ListView(
               children: [
@@ -84,7 +80,7 @@ class DetailsScreen extends StatelessWidget {
                           Container(
                             height: 250.0,
                             width: 250.0,
-                            child: CachedNetworkImage(imageUrl: todo.imageUrl),
+                            child: DisplayImage(todo.imageUrl),
                           )
                         ],
                       ),
@@ -109,7 +105,7 @@ class DetailsScreen extends StatelessWidget {
                       onSave: (todoString, imageUrl) {
                         BlocProvider.of<TodosBloc>(context).add(
                           UpdateTodo(
-                            todo.copyWith(todo: todoString),
+                            todo.copyWith(todo: todoString, imageUrl: imageUrl),
                           ),
                         );
                       },
