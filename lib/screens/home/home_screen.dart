@@ -5,6 +5,7 @@ import 'package:flutter_todo/blocs/tab/tab_bloc.dart';
 import 'package:flutter_todo/models/app_tab_bar.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 import 'package:flutter_todo/screens/home/change_theme.dart';
+import 'package:flutter_todo/screens/profile/profile_screen.dart';
 
 import 'package:flutter_todo/widgets/extra_actions.dart';
 import 'package:flutter_todo/widgets/filter_button.dart';
@@ -29,33 +30,39 @@ class HomeScreen extends StatelessWidget {
       child: BlocBuilder<TabBloc, AppTab>(
         builder: (context, activeTab) {
           return Scaffold(
-            // backgroundColor: Color(0xff222831),
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Text('Your Todos'),
-              actions: [
-                FilterButton(visible: activeTab == AppTab.todos),
-                ExtraActions(),
-                SizedBox(
-                  width: 5,
-                ),
-                TextButton(
-                  onPressed: () {
-                    RepositoryProvider.of<AuthRepository>(context).signOut();
-                  },
-                  child: Text(
-                    'LogOut',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+            appBar: activeTab == AppTab.profile
+                ? _profileAppBar()
+                : AppBar(
+                    automaticallyImplyLeading: false,
+                    title: Text('Your Todos'),
+                    actions: [
+                      // if (activeTab == AppTab.todos)
+                      FilterButton(visible: activeTab == AppTab.todos),
+                      // if (activeTab == AppTab.todos)
+                      ExtraActions(),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          RepositoryProvider.of<AuthRepository>(context)
+                              .signOut();
+                        },
+                        child: Text(
+                          'LogOut',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 7),
+                      ChangeTheme(),
+                      SizedBox(width: 7),
+                    ],
                   ),
-                ),
-                SizedBox(width: 7),
-                ChangeTheme(),
-                SizedBox(width: 7),
-              ],
-            ),
-            body: activeTab == AppTab.todos ? FilteredTodos() : Stats(),
+            body: SwitchScreens(activeTab),
+
+            // activeTab == AppTab.todos ? FilteredTodos() : Stats(),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/addTodo');
@@ -72,5 +79,33 @@ class HomeScreen extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+AppBar _profileAppBar() {
+  return AppBar(
+    automaticallyImplyLeading: false,
+    title: Text('Your Profile'),
+    actions: [
+      ChangeTheme(),
+      SizedBox(width: 10.0),
+    ],
+  );
+}
+
+class SwitchScreens extends StatelessWidget {
+  final AppTab activeTab;
+
+  const SwitchScreens(this.activeTab);
+
+  @override
+  Widget build(BuildContext context) {
+    if (activeTab == AppTab.todos) {
+      return FilteredTodos();
+    } else if (activeTab == AppTab.stats) {
+      return Stats();
+    } else {
+      return ProfileScreen();
+    }
   }
 }

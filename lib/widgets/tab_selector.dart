@@ -20,12 +20,34 @@ class TabSelector extends StatelessWidget {
       onTap: (index) => onTabSelected!(AppTab.values[index]),
       items: AppTab.values.map((tab) {
         return BottomNavigationBarItem(
-          icon: Icon(
-            tab == AppTab.todos ? Icons.list : Icons.show_chart,
-          ),
-          label: tab == AppTab.stats ? 'Stats' : 'Todos',
-        );
+            icon: _tabIcon(tab),
+
+            // Icon(
+            //   tab == AppTab.todos ? Icons.list : Icons.show_chart,
+            // ),
+            // label: tab == AppTab.stats ? 'Stats' : 'Todos',
+            label: _label(tab));
       }).toList(),
     );
+  }
+}
+
+Widget _tabIcon(AppTab tab) {
+  if (tab == AppTab.todos) {
+    return Icon(Icons.list);
+  } else if (tab == AppTab.stats) {
+    return Icon(Icons.show_chart);
+  } else {
+    return Icon(Icons.person);
+  }
+}
+
+String _label(AppTab tab) {
+  if (tab == AppTab.todos) {
+    return 'Todos';
+  } else if (tab == AppTab.stats) {
+    return 'Stats';
+  } else {
+    return 'Profile';
   }
 }
