@@ -63,13 +63,16 @@ class HomeScreen extends StatelessWidget {
             body: SwitchScreens(activeTab),
 
             // activeTab == AppTab.todos ? FilteredTodos() : Stats(),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/addTodo');
-              },
-              child: Icon(Icons.add),
-              tooltip: 'Add Todo',
-            ),
+
+            floatingActionButton: activeTab == AppTab.todos
+                ? FloatingActionButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/addTodo');
+                    },
+                    child: Icon(Icons.add),
+                    tooltip: 'Add Todo',
+                  )
+                : null,
             bottomNavigationBar: TabSelector(
               activeTab: activeTab,
               onTabSelected: (tab) =>

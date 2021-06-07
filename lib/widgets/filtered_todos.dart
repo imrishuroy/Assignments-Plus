@@ -3,12 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/filtered-bloc/flitered_bloc.dart';
-import 'package:flutter_todo/blocs/tab/tab_bloc.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
-import 'package:flutter_todo/models/app_tab_bar.dart';
 import 'package:flutter_todo/screens/details_screen.dart';
 import 'package:flutter_todo/widgets/deleted_todo_snackbar.dart';
-import 'package:flutter_todo/widgets/main_app_bar.dart';
+
 import 'package:flutter_todo/widgets/todo_item.dart';
 
 class FilteredTodos extends StatelessWidget {
