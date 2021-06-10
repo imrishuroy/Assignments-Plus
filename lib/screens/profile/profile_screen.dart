@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/models/app_user_model.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
+import 'package:flutter_todo/repositories/services/firebase_service.dart';
+import 'package:flutter_todo/screens/profile/leadBoard/lead_board_widget.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -11,6 +13,9 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = RepositoryProvider.of<AuthRepository>(context, listen: false);
 
+    final services =
+        RepositoryProvider.of<FirebaseServices>(context, listen: false);
+    print(services.leadBoardUsers());
     return StreamBuilder<AppUser?>(
       stream: auth.currentUser.asStream(),
       builder: (context, snapshot) {
@@ -25,7 +30,7 @@ class ProfileScreen extends StatelessWidget {
           );
         }
         return Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 40.0),
             Center(
@@ -35,16 +40,31 @@ class ProfileScreen extends StatelessWidget {
                     CachedNetworkImageProvider(snapshot.data!.imageUrl!),
               ),
             ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  '${snapshot.data!.name}',
+                  style: TextStyle(
+                    fontSize: 17.0,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 60.0),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Text(
-                '${snapshot.data!.name}',
+                'LeadBoard',
                 style: TextStyle(
-                  fontSize: 17.0,
+                  fontSize: 23.0,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 1.2,
                 ),
               ),
-            )
+            ),
+            LeadBoardWidget(),
           ],
         );
       },

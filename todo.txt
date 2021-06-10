@@ -1,0 +1,25 @@
+#10 June 2021
+1. We can add a leaderboard of all the users who have completed the most number of todos. ( This can also global or local group of friends)
+
+# 02 June 2021
+1. The app automatically adds todo based on a different platform where we save our links, as like we save a post on LinkedIn or save something on a youtube playlist or some post on Facebook or medium blog as such. (Automatically)
+
+
+# 01 April 2021
+
+1. Add Profile section in the 3 rd tab and edit profile option
+2. 2. Add Webview so that users can see their links it is a link 
+3. 3 Add image cropping 
+
+
+A collection of all your links that you want to read in the future your web URLs, screenshots, and YouTube link, and many more 
+
+So it's a database of your todos and also adds todo according to that
+
+Add google search at the top that is linked webview.
+
+Also, we can make it social, so that others can see each other todos or 
+saved URL.
+
+We will also make a chrome extension to easily add todo.
+

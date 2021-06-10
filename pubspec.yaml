@@ -41,6 +41,7 @@ dependencies:
   sdp_transform: ^0.2.0
   shared_preferences: ^2.0.6
   timeago: ^3.0.2
+  url_launcher: ^6.0.6
   uuid: ^3.0.4
 
 dev_dependencies:

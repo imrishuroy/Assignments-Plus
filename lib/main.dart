@@ -17,6 +17,7 @@ import 'package:flutter_todo/config/custom_router.dart';
 import 'package:flutter_todo/config/auth_wrapper.dart';
 import 'package:flutter_todo/config/shared_prefs.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
+import 'package:flutter_todo/repositories/services/firebase_service.dart';
 import 'package:flutter_todo/repositories/todo/todo_repository.dart';
 import 'package:flutter_todo/repositories/utils/util_repository.dart';
 import 'package:flutter_todo/theme/app_theme.dart';
@@ -45,6 +46,9 @@ class MyApp extends StatelessWidget {
         ),
         RepositoryProvider<UtilsRepository>(
           create: (_) => UtilsRepository(),
+        ),
+        RepositoryProvider<FirebaseServices>(
+          create: (_) => FirebaseServices(),
         )
       ],
       child: MultiBlocProvider(
