@@ -17,9 +17,9 @@ class DetailsScreen extends StatelessWidget {
         final todo = (state as TodosLoaded)
             .todos
             // .firstWhere((todo) => todo.id == id, orElse: () => null);
-            .firstWhere(
-              (todo) => todo.id == id,
-            );
+            .firstWhere((todo) => todo.id == id);
+        // print('-----');
+        // print(todo.imageUrl.isEmpty);
         return Scaffold(
           // backgroundColor: Color(0xff222831),
           appBar: AppBar(
@@ -67,7 +67,7 @@ class DetailsScreen extends StatelessWidget {
                                 bottom: 16.0,
                               ),
                               child: Text(
-                                todo.todo,
+                                todo.title,
                                 style: Theme.of(context).textTheme.headline5,
                               ),
                             ),
@@ -102,10 +102,14 @@ class DetailsScreen extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) {
                     return AddEditScreen(
-                      onSave: (todoString, imageUrl) {
+                      onSave: (title, todoString, imageUrl) {
                         BlocProvider.of<TodosBloc>(context).add(
                           UpdateTodo(
-                            todo.copyWith(todo: todoString, imageUrl: imageUrl),
+                            todo.copyWith(
+                              title: title,
+                              todo: todoString,
+                              imageUrl: imageUrl,
+                            ),
                           ),
                         );
                       },

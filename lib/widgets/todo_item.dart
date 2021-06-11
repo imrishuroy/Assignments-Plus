@@ -32,7 +32,7 @@ class TodoItem extends StatelessWidget {
           child: Container(
             width: MediaQuery.of(context).size.width,
             child: Text(
-              todo?.todo ?? '',
+              todo?.title ?? '',
               style: Theme.of(context).textTheme.headline6,
             ),
           ),

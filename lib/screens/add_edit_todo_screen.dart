@@ -7,7 +7,7 @@ import 'package:flutter_todo/models/todo_model.dart';
 import 'package:flutter_todo/repositories/utils/util_repository.dart';
 import 'package:flutter_todo/widgets/display_image.dart';
 
-typedef OnSaveCallback = Function(String todo, String imageUrl);
+typedef OnSaveCallback = Function(String title, String todo, String imageUrl);
 
 class AddEditScreen extends StatefulWidget {
   static const String routeName = '/addTodo';
@@ -23,10 +23,12 @@ class AddEditScreen extends StatefulWidget {
           // BlocProvider.of<TodosBloc>(context),
         ),
         child: AddEditScreen(
-          onSave: (todoString, imageUrl) {
-            context
-                .read<AddEditCubit>()
-                .addEditTodo(todo: todoString, imageUrl: imageUrl);
+          onSave: (title, todoString, imageUrl) {
+            context.read<AddEditCubit>().addEditTodo(
+                  title: title,
+                  todo: todoString,
+                  imageUrl: imageUrl,
+                );
           },
 
           //  (todoString, imageUrl) {
@@ -81,81 +83,104 @@ class _AddEditScreenState extends State<AddEditScreen> {
             ),
           );
         return Scaffold(
-          // backgroundColor: Color(0xff222831),
-          appBar: AppBar(
-            title: Text(
-              isEditing ? 'Edit Todo' : 'Add Todo',
-            ),
-          ),
-          body: Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
-              child: ListView(
-                children: [
-                  TextFormField(
-                    initialValue: isEditing ? widget.todo!.todo : '',
-                    autofocus: !isEditing,
-                    style: textTheme.headline5,
-                    decoration: InputDecoration(
-                      hintText: 'What needs to be done?',
-                    ),
-                    validator: (val) {
-                      return val!.trim().isEmpty
-                          ? 'Please enter some text'
-                          : null;
-                    },
-                    onChanged: (value) =>
-                        context.read<AddEditCubit>().todoChanged(value),
-
-                    //onSaved: (value) => _todo = value,
-                  ),
-                  SizedBox(height: 20.0),
-                  TextButton.icon(
-                    onPressed: context.read<AddEditCubit>().pickImage,
-                    icon: Icon(Icons.add_a_photo),
-                    label: Text('Add Image'),
-                  ),
-                  SizedBox(height: 20.0),
-                  state.imageStatus == ImageStatus.submitting
-                      ? Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : state.imageStatus == ImageStatus.succus
-                          ? Container(
-                              margin: EdgeInsets.all(10.0),
-                              height: 300.0,
-                              width: double.infinity,
-                              child: DisplayImage(state.imageUrl!),
-                              // (state.imageUrl!),
-                            )
-                          : Container(),
-                ],
+            // backgroundColor: Color(0xff222831),
+            appBar: AppBar(
+              title: Text(
+                isEditing ? 'Edit Todo' : 'Add Todo',
               ),
             ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            tooltip: isEditing ? 'Save changes' : 'Add Todo',
-            child: Icon(
-              isEditing
-                  ? Icons.check
-                  : context.read<AddEditCubit>().canSubmit
-                      ? Icons.check
-                      : Icons.add,
-            ),
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
-                print('TODO----------------- ${state.todo}');
-                print('ImageUrl----------------- ${state.imageUrl}');
+            body: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    TextFormField(
+                      initialValue: isEditing ? widget.todo?.title : '',
+                      autofocus: !isEditing,
+                      style: textTheme.headline5,
+                      decoration: InputDecoration(
+                        hintText: 'What needs to be done?',
+                      ),
+                      validator: (val) {
+                        return val!.trim().isEmpty
+                            ? 'Please enter some text'
+                            : null;
+                      },
+                      onSaved: (value) =>
+                          context.read<AddEditCubit>().titleChanged(value!),
+                      onChanged: (value) =>
+                          context.read<AddEditCubit>().titleChanged(value),
 
-                // widget.onSave!(_todo!, _imageUrl!);
-                widget.onSave!(state.todo!, state.imageUrl!);
-                Navigator.pop(context);
-              }
-            },
-          ),
-        );
+                      //onSaved: (value) => _todo = value,
+                    ),
+                    SizedBox(height: 30.0),
+                    TextFormField(
+                      initialValue: isEditing ? widget.todo?.todo : '',
+                      onSaved: (value) =>
+                          context.read<AddEditCubit>().todoChanged(value!),
+                      onChanged: (value) =>
+                          context.read<AddEditCubit>().todoChanged(value),
+                      maxLength: 500,
+                      maxLines: 11,
+                      decoration: InputDecoration(
+                        hintText: 'Add your todo here...',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(height: 10.0),
+                    TextButton.icon(
+                      onPressed: context.read<AddEditCubit>().pickImage,
+                      icon: Icon(Icons.add_a_photo),
+                      label: Text('Add Image'),
+                    ),
+                    //SizedBox(height: 10.0),
+                    state.imageStatus == ImageStatus.submitting
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : state.imageStatus == ImageStatus.succus
+                            ? Container(
+                                height: 250.0,
+                                width: double.infinity,
+                                child: DisplayImage(state.imageUrl!),
+                                // (state.imageUrl!),
+                              )
+                            : Container(),
+                  ],
+                ),
+              ),
+            ),
+            // floatingActionButton: state.todo!.isNotEmpty
+            floatingActionButton:
+                // isEditing
+                //     ? widget.todo!.title.isNotEmpty
+                //         ?
+                FloatingActionButton(
+              tooltip: isEditing ? 'Save changes' : 'Add Todo',
+              child: Icon(
+                isEditing
+                    ? Icons.check
+                    : context.read<AddEditCubit>().canSubmit
+                        ? Icons.check
+                        // : Icons.add,
+                        : Icons.check,
+              ),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+                  print('TODO----------------- ${state.todo}');
+                  print('ImageUrl----------------- ${state.imageUrl}');
+
+                  // widget.onSave!(_todo!, _imageUrl!);
+                  widget.onSave!(state.title!, state.todo!, state.imageUrl!);
+                  Navigator.pop(context);
+                }
+              },
+            )
+            //     : null
+            // : null,
+            );
       },
     );
   }

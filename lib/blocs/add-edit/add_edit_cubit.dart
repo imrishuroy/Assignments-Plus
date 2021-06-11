@@ -21,6 +21,10 @@ class AddEditCubit extends Cubit<AddEditState> {
         _todosBloc = todosBloc,
         super(AddEditState.initial());
 
+  void titleChanged(String value) async {
+    emit(state.copyWith(title: value, status: AddEditStatus.initial));
+  }
+
   void todoChanged(String value) async {
     emit(state.copyWith(todo: value, status: AddEditStatus.initial));
   }
@@ -52,13 +56,17 @@ class AddEditCubit extends Cubit<AddEditState> {
     }
   }
 
-  void addEditTodo({@required String? todo, @required String? imageUrl}) async {
+  void addEditTodo(
+      {@required String? todo,
+      @required title,
+      @required String? imageUrl}) async {
     if (state.status == AddEditStatus.submitting) return;
     emit(state.copyWith(status: AddEditStatus.submitting));
     try {
       _todosBloc?.add(
         AddTodo(
           Todo(
+            title: title!,
             todo: todo!,
             imageUrl: imageUrl!,
             id: Uuid().v4(),
