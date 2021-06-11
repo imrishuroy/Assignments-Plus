@@ -44,7 +44,7 @@ class LoginScreen extends StatelessWidget {
           print('Width - $width');
           //print("Height - $height");
           return Scaffold(
-            backgroundColor: Color(0xff222831),
+            //backgroundColor: Color(0xff8d93ab),
 
             // backgroundColor: Colors.grey[100],
             body: state.status == LoginStatus.submitting
@@ -63,7 +63,7 @@ class LoginScreen extends StatelessWidget {
                       child: Card(
                         elevation: 10.0,
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             // SizedBox(height: 10.0),
                             Text(
@@ -74,7 +74,7 @@ class LoginScreen extends StatelessWidget {
                                 letterSpacing: 1.2,
                               ),
                             ),
-                            SizedBox(height: 50.0),
+                            //  SizedBox(height: 50.0),
                             Container(
                               width: 250.0,
                               height: 50.0,
@@ -91,22 +91,27 @@ class LoginScreen extends StatelessWidget {
                                     Container(
                                       margin: EdgeInsets.zero,
                                       decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(4),
-                                            bottomLeft: Radius.circular(4),
-                                          )),
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(4),
+                                          bottomLeft: Radius.circular(4),
+                                        ),
+                                      ),
                                       padding: EdgeInsets.zero,
-                                      //  color: Colors.white,
                                       height: 50.0,
                                       width: 50.0,
-                                      child: SvgPicture.asset(
-                                        'assets/google.svg',
-                                        height: 30.0,
-                                        width: 30.0,
-                                        fit: BoxFit.contain,
+                                      child: Container(
+                                        height: 20.0,
+                                        width: 20.0,
+                                        child: SvgPicture.asset(
+                                          'assets/google.svg',
+                                          fit: BoxFit.contain,
+                                          height: 20.0,
+                                          width: 20.0,
+                                          // fit: BoxFit.contain,
 
-                                        // fit: BoxFit.cover,
+                                          // fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
 
@@ -123,15 +128,33 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 55.0),
+                            //   SizedBox(height: 45.0),
+                            // Center(
+                            //   child: Padding(
+                            //     padding: const EdgeInsets.symmetric(
+                            //         horizontal: 20.0),
+                            //     child: Text(
+                            //       '"This has nothing to do with your life.\nBut by adding some todos you can organize it better."',
+                            //       style: TextStyle(
+                            //         fontSize: width < 900 ? 14.0 : 20.0,
+                            //         letterSpacing: 1.2,
+                            //       ),
+                            //       textAlign: TextAlign.center,
+                            //     ),
+                            //   ),
+                            // ),
                             Center(
-                              child: Text(
-                                '"This has nothing to do with your life.\nBut by adding some todos you can organize it better."',
-                                style: TextStyle(
-                                  fontSize: width < 900 ? 14.0 : 20.0,
-                                  letterSpacing: 1.2,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
+                                child: Text(
+                                  '" Don\'t be a minimum guy "',
+                                  style: TextStyle(
+                                    fontSize: width < 900 ? 16.0 : 20.0,
+                                    letterSpacing: 1.2,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
                               ),
                             ),
                           ],

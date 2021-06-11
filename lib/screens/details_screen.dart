@@ -1,14 +1,27 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/screens/add_edit_todo_screen.dart';
 import 'package:flutter_todo/widgets/display_image.dart';
+import 'dart:core';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailsScreen extends StatelessWidget {
   final String? id;
 
   DetailsScreen({Key? key, @required this.id}) : super(key: key);
+
+  Future<void> _onOpen(LinkableElement link) async {
+    await launch(link.url);
+
+    // if (await canLaunch(link.url)) {
+    //   await launch(link.url);
+    // } else {
+    //   throw 'Could not launch $link';
+    // }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +85,20 @@ class DetailsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Text(
-                            todo.todo,
+
+                          SelectableLinkify(
+                            onOpen: _onOpen,
+                            options: LinkifyOptions(humanize: false),
+                            text: todo.todo,
                             style: Theme.of(context).textTheme.subtitle1,
+                            linkStyle: TextStyle(color: Colors.blue),
                           ),
+                          //   child: Text(
+
+                          //     style: Theme.of(context).textTheme.subtitle1,
+                          //   ),
+                          // ),
+
                           SizedBox(height: 20.0),
                           Container(
                             height: 250.0,

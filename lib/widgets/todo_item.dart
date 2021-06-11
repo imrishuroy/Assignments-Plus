@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/models/todo_model.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class TodoItem extends StatelessWidget {
   final DismissDirectionCallback? onDismissed;
@@ -18,6 +19,9 @@ class TodoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final time = todo?.dateTime != null
+        ? timeago.format(DateTime.tryParse(todo!.dateTime.toString())!)
+        : '';
     return Dismissible(
       key: Key('__todo_item_${todo!.id}'),
       onDismissed: onDismissed,
@@ -35,6 +39,14 @@ class TodoItem extends StatelessWidget {
               todo?.title ?? '',
               style: Theme.of(context).textTheme.headline6,
             ),
+          ),
+        ),
+        subtitle: Text(
+          '$time',
+          style: TextStyle(
+            fontSize: 14.0,
+            color: Colors.grey[500],
+            letterSpacing: 0.9,
           ),
         ),
         // subtitle: todo.note.isNotEmpty

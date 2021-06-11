@@ -49,6 +49,12 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Need microphone permission</string>
 
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>https</string>
+		<string>http</string>
+	</array>
+
 
 
 	<key>UIViewControllerBasedStatusBarAppearance</key>

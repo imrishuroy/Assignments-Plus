@@ -31,39 +31,17 @@ class HomeScreen extends StatelessWidget {
         builder: (context, activeTab) {
           return Scaffold(
             appBar: activeTab == AppTab.profile
-                ? _profileAppBar()
+                ? _profileAppBar(context)
                 : AppBar(
                     automaticallyImplyLeading: false,
                     title: Text('Your Todos'),
                     actions: [
-                      // if (activeTab == AppTab.todos)
                       FilterButton(visible: activeTab == AppTab.todos),
-                      // if (activeTab == AppTab.todos)
                       ExtraActions(),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          RepositoryProvider.of<AuthRepository>(context)
-                              .signOut();
-                        },
-                        child: Text(
-                          'LogOut',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 7),
-                      ChangeTheme(),
-                      SizedBox(width: 7),
+                      SizedBox(width: 5),
                     ],
                   ),
             body: SwitchScreens(activeTab),
-
-            // activeTab == AppTab.todos ? FilteredTodos() : Stats(),
-
             floatingActionButton: activeTab == AppTab.todos
                 ? FloatingActionButton(
                     onPressed: () {
@@ -85,11 +63,53 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-AppBar _profileAppBar() {
+AppBar _profileAppBar(BuildContext context) {
+  Future<bool> askForLogout() async {
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Hello there !'),
+            content: Text('Do you want to logout...?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(
+                  'Yes',
+                  style: TextStyle(color: Colors.red, fontSize: 17.0),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(
+                  'No',
+                  style: TextStyle(color: Colors.green, fontSize: 17.0),
+                ),
+              )
+            ],
+          );
+        });
+  }
+
+  _logout() async {
+    if (await askForLogout()) {
+      RepositoryProvider.of<AuthRepository>(context).signOut();
+    }
+  }
+
   return AppBar(
     automaticallyImplyLeading: false,
     title: Text('Your Profile'),
     actions: [
+      TextButton(
+        onPressed: _logout,
+        child: Text(
+          'Logout',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
       ChangeTheme(),
       SizedBox(width: 10.0),
     ],
