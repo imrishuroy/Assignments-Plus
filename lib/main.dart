@@ -20,6 +20,7 @@ import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 import 'package:flutter_todo/repositories/services/firebase_service.dart';
 import 'package:flutter_todo/repositories/todo/todo_repository.dart';
 import 'package:flutter_todo/repositories/utils/util_repository.dart';
+import 'package:flutter_todo/services/notification_services.dart';
 import 'package:flutter_todo/theme/app_theme.dart';
 
 import 'blocs/todo/todo_bloc.dart';
@@ -49,6 +50,9 @@ class MyApp extends StatelessWidget {
         ),
         RepositoryProvider<FirebaseServices>(
           create: (_) => FirebaseServices(),
+        ),
+        RepositoryProvider<NotificationService>(
+          create: (_) => NotificationService(),
         )
       ],
       child: MultiBlocProvider(
@@ -87,20 +91,16 @@ class MyApp extends StatelessWidget {
         ],
         child: BlocBuilder<ThemeBloc, ThemeState>(
           builder: (context, state) {
-            print(
-                '${appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)]} -----------------------');
+            final theme =
+                appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)];
+            print(theme);
+
             return MaterialApp(
-              //  darkTheme: ThemeData(backgroundColor: Colors.black),
               debugShowCheckedModeBanner: false,
-              title: 'Flutter Demo',
+              title: '+Assignments',
               //theme: state.themeData,
               theme:
                   appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)],
-
-              // ThemeData(
-              //   primarySwatch: Colors.blue,
-              //   // scaffoldBackgroundColor: Colors.black,
-              // ),
               onGenerateRoute: CustomRouter.onGenerateRoute,
               initialRoute: AuthWrapper.routeName,
             );

@@ -1,9 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sixteenbrains.todo">
-   <uses-permission android:name="android.permission.INTERNET"/>
    <!-- <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/> -->
+   <uses-permission android:name="android.permission.INTERNET"/>
+   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+   <uses-permission android:name="android.permission.VIBRATE" />
    <application
-        android:label="Todo"
+        android:label="+Assignments"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -39,5 +41,16 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+             <!-- This is extra code -->
+        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+
+
+
     </application>
 </manifest>

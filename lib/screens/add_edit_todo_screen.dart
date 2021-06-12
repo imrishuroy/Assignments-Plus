@@ -5,7 +5,9 @@ import 'package:flutter_todo/blocs/add-edit/add_edit_cubit.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/models/todo_model.dart';
 import 'package:flutter_todo/repositories/utils/util_repository.dart';
+import 'package:flutter_todo/services/notification_services.dart';
 import 'package:flutter_todo/widgets/display_image.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 typedef OnSaveCallback = Function(String title, String todo, String imageUrl);
 
@@ -69,6 +71,23 @@ class _AddEditScreenState extends State<AddEditScreen> {
 
   bool get isEditing => widget.isEditing!;
 
+  DateTime? notificationTime;
+
+  void setNotification(BuildContext context, DateTime time) {
+    final notification =
+        RepositoryProvider.of<NotificationService>(context, listen: false);
+
+    notification.sheduledNotification(
+      time: time,
+      channelId: '5',
+      channelName: '5 sec channel',
+      channelDescription: 'this will display notification of 5 sec',
+      id: 0,
+      title: 'Hi there...',
+      message: 'This is 5 sec notification',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -123,16 +142,55 @@ class _AddEditScreenState extends State<AddEditScreen> {
                           context.read<AddEditCubit>().todoChanged(value),
                       maxLength: 500,
                       maxLines: 11,
+                      minLines: 3,
                       decoration: InputDecoration(
                         hintText: 'Add your todo here...',
                         border: OutlineInputBorder(),
                       ),
                     ),
                     SizedBox(height: 10.0),
-                    TextButton.icon(
-                      onPressed: context.read<AddEditCubit>().pickImage,
-                      icon: Icon(Icons.add_a_photo),
-                      label: Text('Add Image'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton.icon(
+                          onPressed: context.read<AddEditCubit>().pickImage,
+                          icon: Icon(Icons.add_a_photo),
+                          label: Text('Add Image'),
+                        ),
+                        TextButton.icon(
+                          onPressed: () {
+                            // DatePicker.showTime12hPicker(context,
+                            //     showTitleActions: true, onChanged: (date) {
+                            //   print('change $date in time zone ' +
+                            //       date.timeZoneOffset.inHours.toString());
+                            // }, onConfirm: (date) {
+                            //   print('confirm $date');
+                            // }, currentTime: DateTime.now());
+
+                            DatePicker.showDateTimePicker(
+                              context,
+                              showTitleActions: true,
+                              theme: DatePickerTheme(),
+                              minTime: DateTime.now(),
+                              maxTime: DateTime(2022, 1, 1, 00, 00),
+                              onChanged: (date) {
+                                print('change $date in time zone ' +
+                                    date.timeZoneOffset.inHours.toString());
+
+                                setState(() {
+                                  notificationTime = date;
+                                });
+                              },
+                              onConfirm: (date) {
+                                print('confirm $date');
+                              },
+                              // locale: LocaleType.ar,
+                            );
+                          },
+                          icon: Icon(Icons.notification_add),
+                          label: Text('Set Notification'),
+                        )
+                      ],
                     ),
                     //SizedBox(height: 10.0),
                     state.imageStatus == ImageStatus.submitting
@@ -174,6 +232,10 @@ class _AddEditScreenState extends State<AddEditScreen> {
 
                   // widget.onSave!(_todo!, _imageUrl!);
                   widget.onSave!(state.title!, state.todo!, state.imageUrl!);
+                  if (notificationTime != null) {
+                    setNotification(context, notificationTime!);
+                  }
+
                   Navigator.pop(context);
                 }
               },
