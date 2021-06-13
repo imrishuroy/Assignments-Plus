@@ -4,7 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/screens/add_edit_todo_screen.dart';
-import 'package:flutter_todo/widgets/display_image.dart';
+import 'package:intl/intl.dart';
+
 import 'dart:core';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,13 +16,9 @@ class DetailsScreen extends StatelessWidget {
 
   Future<void> _onOpen(LinkableElement link) async {
     await launch(link.url);
-
-    // if (await canLaunch(link.url)) {
-    //   await launch(link.url);
-    // } else {
-    //   throw 'Could not launch $link';
-    // }
   }
+
+  final DateFormat format = DateFormat('dd MMM yy  hh:mm a');
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +28,8 @@ class DetailsScreen extends StatelessWidget {
             .todos
             // .firstWhere((todo) => todo.id == id, orElse: () => null);
             .firstWhere((todo) => todo.id == id);
-        // print('-----');
-        // print(todo.imageUrl.isEmpty);
+
         return Scaffold(
-          // backgroundColor: Color(0xff222831),
           appBar: AppBar(
             title: Text('Todo Details'),
             actions: [
@@ -49,7 +44,7 @@ class DetailsScreen extends StatelessWidget {
             ],
           ),
           body: Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
             child: ListView(
               children: [
                 Row(
@@ -85,7 +80,6 @@ class DetailsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-
                           SelectableLinkify(
                             onOpen: _onOpen,
                             options: LinkifyOptions(humanize: false),
@@ -93,45 +87,63 @@ class DetailsScreen extends StatelessWidget {
                             style: Theme.of(context).textTheme.subtitle1,
                             linkStyle: TextStyle(color: Colors.blue),
                           ),
-                          //   child: Text(
-
-                          //     style: Theme.of(context).textTheme.subtitle1,
-                          //   ),
-                          // ),
-
-                          SizedBox(height: 20.0),
-                          Container(
-                            height: 250.0,
-                            width: 250.0,
-                            child: DisplayImage(todo.imageUrl),
-                          )
                         ],
                       ),
                     ),
                   ],
                 ),
+                SizedBox(height: 20.0),
+                if (todo.notificationDate != null &&
+                    todo.notificationDate != todo.dateTime)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Stack(
+                        children: [
+                          Chip(
+                            label: Text(
+                              '${format.format(todo.notificationDate!)}',
+                            ),
+                          ),
+                          Positioned(
+                            right: -1.7,
+                            top: -1.7,
+                            child: Icon(
+                              Icons.notifications,
+                              color: Colors.red,
+                              size: 19.0,
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
               ],
             ),
           ),
           floatingActionButton: FloatingActionButton(
             tooltip: 'Edit Todo',
             child: Icon(Icons.edit),
-            onPressed:
-                //  todo == null
-                //     ? null
-                //     :
-                () {
+            onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) {
                     return AddEditScreen(
-                      onSave: (title, todoString, imageUrl) {
+                      onSave: (
+                        title,
+                        todoString,
+                        dateTime, {
+                        DateTime? notificationDate,
+                        int? notificationId,
+                      }) {
                         BlocProvider.of<TodosBloc>(context).add(
                           UpdateTodo(
                             todo.copyWith(
                               title: title,
                               todo: todoString,
-                              imageUrl: imageUrl,
+                              dateTime: dateTime,
+                              notificationDate: notificationDate,
+                              notificationId: notificationId,
                             ),
                           ),
                         );
@@ -149,3 +161,6 @@ class DetailsScreen extends StatelessWidget {
     );
   }
 }
+
+// 2021-06-12 18:15:40.444249
+// 2021-06-12 18:15:40.444

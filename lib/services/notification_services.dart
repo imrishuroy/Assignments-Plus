@@ -126,7 +126,7 @@ class NotificationService {
         0, 'notification title', 'notification body', platformChannelSpecifics);
   }
 
-  Future<void> cancelNotification() async {
-    await flutterLocalNotificationsPlugin.cancel(0);
+  Future<void> cancelNotification(int id) async {
+    await flutterLocalNotificationsPlugin.cancel(id);
   }
 }

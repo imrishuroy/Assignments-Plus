@@ -1,4 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 
 class TodoEntity extends Equatable {
@@ -7,65 +8,81 @@ class TodoEntity extends Equatable {
   final String title;
   final String todo;
   final DateTime dateTime;
-  final String imageUrl;
+  final int? notificationId;
+  final DateTime? notificationDate;
 
   const TodoEntity(
-    this.id,
-    this.todo,
     this.complete,
-    this.dateTime,
-    this.imageUrl,
+    this.id,
     this.title,
+    this.todo,
+    this.dateTime,
+    this.notificationId,
+    this.notificationDate,
   );
 
-  Map<String, Object> toJson() {
+  @override
+  List<Object> get props {
+    return [
+      complete,
+      id,
+      title,
+      todo,
+      dateTime,
+      notificationId!,
+      notificationDate!,
+    ];
+  }
+
+  TodoEntity copyWith({
+    bool? complete,
+    String? id,
+    String? title,
+    String? todo,
+    DateTime? dateTime,
+    int? notificationId,
+    DateTime? notificationDate,
+  }) {
+    return TodoEntity(
+      complete ?? this.complete,
+      id ?? this.id,
+      title ?? this.title,
+      todo ?? this.todo,
+      dateTime ?? this.dateTime,
+      notificationId ?? this.notificationId,
+      notificationDate ?? this.notificationDate,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
     return {
       'complete': complete,
-      'note': todo,
       'id': id,
-      'date': dateTime,
-      'imageUrl': imageUrl,
       'title': title,
-    };
-  }
-
-  @override
-  List<Object> get props => [complete, id, todo, dateTime, imageUrl, title];
-
-  @override
-  String toString() {
-    return 'TodoEntity { complete: $complete, date: $dateTime, note: $todo, id: $id , imageUrl: $imageUrl, title: $title}';
-  }
-
-  static TodoEntity fromJson(Map<String, Object> json) {
-    return TodoEntity(
-      json['todo'] as String,
-      json['id'] as String,
-      json['complete'] as bool,
-      json['date'] as DateTime,
-      json['imageUrl'] as String,
-      json['title'] as String,
-    );
-  }
-
-  static TodoEntity fromSnapshot(DocumentSnapshot snap) {
-    return TodoEntity(
-      snap.data()?['todo'],
-      snap.id,
-      snap.data()?['complete'],
-      snap.data()?['imageUrl'],
-      snap.data()?['date'],
-      snap.data()?['title'],
-    );
-  }
-
-  Map<String, Object> toDocument() {
-    return {
-      'complete': complete,
       'todo': todo,
-      'date': dateTime,
-      'imageUrl': imageUrl,
-      'title': title,
+      'dateTime': dateTime.millisecondsSinceEpoch,
+      'notificationId': notificationId,
+      'notificationDate': notificationDate?.millisecondsSinceEpoch,
     };
   }
+
+  factory TodoEntity.fromMap(Map<String, dynamic> map) {
+    return TodoEntity(
+      map['complete'],
+      map['id'],
+      map['title'],
+      map['todo'],
+      DateTime.fromMillisecondsSinceEpoch(map['dateTime']),
+      map['notificationId'],
+      DateTime.fromMillisecondsSinceEpoch(map['notificationDate']),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory TodoEntity.fromJson(String source) =>
+      TodoEntity.fromMap(json.decode(source));
+
+  @override
+  bool get stringify => true;
 }

@@ -84,7 +84,6 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider<AddEditCubit>(
             create: (context) => AddEditCubit(
-              utils: RepositoryProvider.of<UtilsRepository>(context),
               todosBloc: BlocProvider.of<TodosBloc>(context),
             ),
           ),
@@ -94,7 +93,6 @@ class MyApp extends StatelessWidget {
             final theme =
                 appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)];
             print(theme);
-
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               title: '+Assignments',

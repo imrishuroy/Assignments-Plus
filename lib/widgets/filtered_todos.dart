@@ -27,6 +27,7 @@ class FilteredTodos extends StatelessWidget {
               itemCount: todos.length,
               itemBuilder: (context, index) {
                 final todo = todos[index];
+                print(todo);
                 return TodoItem(
                   todo: todo,
                   onDismissed: (direction) {

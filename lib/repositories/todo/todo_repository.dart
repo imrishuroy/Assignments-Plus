@@ -14,8 +14,6 @@ class TodosRepository implements BaseTodosRepository {
 
   @override
   Future<void> addNewTodo(Todo todo) async {
-    // String id = Uuid().v4();
-
     return await usersRef
         .doc(uid)
         .collection('todos')

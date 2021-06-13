@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_todo/models/entities.dart/todos_entities.dart';
 
 class Todo extends Equatable {
   final String id;
@@ -9,7 +8,8 @@ class Todo extends Equatable {
   final String todo;
   final DateTime dateTime;
   final bool completed;
-  final String imageUrl;
+  final int? notificationId;
+  final DateTime? notificationDate;
 
   Todo({
     required this.id,
@@ -17,10 +17,9 @@ class Todo extends Equatable {
     required this.title,
     required this.dateTime,
     this.completed = false,
-    required this.imageUrl,
+    this.notificationDate,
+    this.notificationId,
   });
-  // this.id = id;
-  //       this.todo = todo;
 
   @override
   List<Object> get props => [
@@ -28,8 +27,9 @@ class Todo extends Equatable {
         todo,
         dateTime,
         completed,
-        this.imageUrl,
         title,
+        notificationDate!,
+        notificationId!,
       ];
 
   Todo copyWith({
@@ -39,40 +39,45 @@ class Todo extends Equatable {
     bool? completed,
     String? imageUrl,
     String? title,
+    DateTime? notificationDate,
+    int? notificationId,
   }) {
     return Todo(
       id: id ?? this.id,
       todo: todo ?? this.todo,
       dateTime: dateTime ?? this.dateTime,
       completed: completed ?? this.completed,
-      imageUrl: imageUrl ?? this.imageUrl,
       title: title ?? this.title,
+      notificationDate: notificationDate ?? this.notificationDate,
+      notificationId: notificationId ?? this.notificationId,
     );
   }
 
-  TodoEntity todoEntry() {
-    return TodoEntity(id, todo, completed, dateTime, imageUrl, title);
-  }
-
   Map<String, dynamic> toMap() {
+    print('Map runs-------------');
     return {
       'id': id,
       'todo': todo,
       'dateTime': dateTime.millisecondsSinceEpoch,
       'completed': completed,
-      'imageUrl': imageUrl,
       'title': title,
+      'notificationId': notificationId,
+      'notificationDate': notificationDate?.millisecondsSinceEpoch,
     };
   }
 
   factory Todo.fromMap(Map<String, dynamic> map) {
+    //  print('------------------------${map['notificationDate']}');
     return Todo(
-        id: map['id'],
-        todo: map['todo'],
-        dateTime: DateTime.fromMillisecondsSinceEpoch(map['dateTime']),
-        completed: map['completed'],
-        imageUrl: map['imageUrl'],
-        title: map['title']);
+      id: map['id'],
+      todo: map['todo'],
+      dateTime: DateTime.fromMillisecondsSinceEpoch(map['dateTime']),
+      completed: map['completed'],
+      title: map['title'],
+      notificationDate:
+          DateTime.fromMillisecondsSinceEpoch(map['notificationDate']),
+      notificationId: map['notificationId'],
+    );
   }
 
   String toJson() => json.encode(toMap());
