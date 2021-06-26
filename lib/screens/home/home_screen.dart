@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/tab/tab_bloc.dart';
-
+import 'package:flutter_todo/chats_example.dart';
 import 'package:flutter_todo/models/app_tab_bar.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
-import 'package:flutter_todo/screens/add_edit_todo_screen.dart';
 import 'package:flutter_todo/screens/home/change_theme.dart';
 
 import 'package:flutter_todo/screens/profile/profile_screen.dart';
@@ -37,20 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
     tz.initializeTimeZones();
     RepositoryProvider.of<NotificationService>(context)
         .initialiseSettings(onSelectNotification);
+
     super.initState();
   }
 
   Future<void> onSelectNotification(String? payload) async {
     print('Nofication Clicked');
-    // Navigator.of(context).push(
-    //   MaterialPageRoute(
-    //     builder: (_) {
-    //       return NewScreen(
-    //         payload: payload,
-    //       );
-    //     },
-    //   ),
-    // );
   }
 
   @override
@@ -75,11 +66,10 @@ class _HomeScreenState extends State<HomeScreen> {
             floatingActionButton: activeTab == AppTab.todos
                 ? FloatingActionButton(
                     onPressed: () {
-                      // RepositoryProvider.of<NotificationService>(context)
-                      //     .showNotification();
-                      Navigator.pushNamed(context, AddEditScreen.routeName);
-                      // Navigator.of(context).push(MaterialPageRoute(
-                      //     builder: (_) => NotificationCheck()));
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => ChatsExample()));
+
+                      //   Navigator.pushNamed(context, AddEditScreen.routeName);
                     },
                     child: Icon(Icons.add),
                     tooltip: 'Add Todo',
@@ -100,29 +90,30 @@ class _HomeScreenState extends State<HomeScreen> {
 AppBar _profileAppBar(BuildContext context) {
   Future<bool> askForLogout() async {
     return await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Hello there !'),
-            content: Text('Do you want to logout...?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: Text(
-                  'Yes',
-                  style: TextStyle(color: Colors.red, fontSize: 17.0),
-                ),
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Hello there !'),
+          content: Text('Do you want to logout...?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(
+                'Yes',
+                style: TextStyle(color: Colors.red, fontSize: 17.0),
               ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text(
-                  'No',
-                  style: TextStyle(color: Colors.green, fontSize: 17.0),
-                ),
-              )
-            ],
-          );
-        });
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(
+                'No',
+                style: TextStyle(color: Colors.green, fontSize: 17.0),
+              ),
+            )
+          ],
+        );
+      },
+    );
   }
 
   _logout() async {

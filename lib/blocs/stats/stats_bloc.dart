@@ -13,7 +13,7 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
 
   StatsBloc({TodosBloc? todosBloc})
       : assert(todosBloc != null),
-        super(StatsLoading()) {
+        super(StatsInitial()) {
     _todosSubscription = todosBloc!.stream.listen((state) {
       if (state is TodosLoaded) {
         add(UpdateStats(state.todos));
