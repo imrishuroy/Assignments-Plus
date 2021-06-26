@@ -27,15 +27,15 @@ class AddEditCubit extends Cubit<AddEditState> {
     emit(state.copyWith(todo: value, status: AddEditStatus.initial));
   }
 
-  // void notificationTimeChanged(DateTime dateTime) async{
-  //   emit(state.copyWith())
-  // }
+  void notificationTimeChanged(DateTime dateTime) async {
+    emit(state.copyWith(notificationDate: dateTime));
+  }
 
   bool get canSubmit => state.todo != '';
 
   void addEditTodo({
     @required String? todo,
-    @required title,
+    @required String? title,
     @required DateTime? dateTime,
     DateTime? notificationDate,
     int? notificationId,
@@ -46,11 +46,13 @@ class AddEditCubit extends Cubit<AddEditState> {
       print('THis runs---------------');
       print(notificationDate);
       print(notificationId);
+      print('This is provided title --------- $title');
+      print('This is state title --------- ${state.title}');
       _todosBloc?.add(
         AddTodo(
           Todo(
-            title: title!,
-            todo: todo!,
+            title: title!.isEmpty ? state.title! : title,
+            todo: todo!.isEmpty ? state.todo! : todo,
             id: Uuid().v4(),
             //dateTime: DateTime.now(),
             dateTime: dateTime!,

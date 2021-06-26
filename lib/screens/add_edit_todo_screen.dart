@@ -114,7 +114,35 @@ class _AddEditScreenState extends State<AddEditScreen> {
     super.dispose();
   }
 
-  void addEditTodo(BuildContext context) async {}
+  void _addEditTodo(BuildContext context, AddEditState state) async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      final DateTime dateTime = DateTime.now();
+      final id = dateTime.hour + dateTime.millisecond + dateTime.day;
+      widget.onSave!(
+        state.title!,
+        state.todo!,
+        dateTime,
+        notificationDate: notificationTime ?? dateTime,
+        notificationId: id,
+      );
+      if (notificationTime != null) {
+        setNotification(
+          context: context,
+          time: notificationTime!,
+          id: id,
+          title: 'Reminder',
+          message: state.title!,
+          channelId: dateTime.toString(),
+          channelName: dateTime.toString(),
+          channelDescription: state.title!,
+        );
+      }
+
+      Navigator.pop(context);
+    }
+  }
+
   final DateFormat format = DateFormat('dd MMM yy  hh:mm a');
   @override
   Widget build(BuildContext context) {
@@ -154,20 +182,20 @@ class _AddEditScreenState extends State<AddEditScreen> {
                             ? 'Please enter some text'
                             : null;
                       },
-                      // onSaved: (value) {
-                      //   print(value);
-                      //   context.read<AddEditCubit>().titleChanged(value!);
-                      // },
+                      onSaved: (value) {
+                        print(value);
+                        context.read<AddEditCubit>().titleChanged(value!);
+                      },
                       onChanged: (value) =>
                           context.read<AddEditCubit>().titleChanged(value),
                     ),
                     SizedBox(height: 30.0),
                     TextFormField(
                       initialValue: isEditing ? widget.todo?.todo : '',
-                      // onSaved: (value) {
-                      //   print(value);
-                      //   context.read<AddEditCubit>().todoChanged(value!);
-                      // },
+                      onSaved: (value) {
+                        print(value);
+                        context.read<AddEditCubit>().todoChanged(value!);
+                      },
                       onChanged: (value) =>
                           context.read<AddEditCubit>().todoChanged(value),
                       maxLength: 500,
@@ -204,12 +232,18 @@ class _AddEditScreenState extends State<AddEditScreen> {
                               onChanged: (date) {
                                 print('change $date in time zone ' +
                                     date.timeZoneOffset.inHours.toString());
+                                context
+                                    .read<AddEditCubit>()
+                                    .notificationTimeChanged(date);
                                 setState(() {
                                   notificationTime = date;
                                   formatedTime = format.format(date);
                                 });
                               },
                               onConfirm: (date) {
+                                context
+                                    .read<AddEditCubit>()
+                                    .notificationTimeChanged(date);
                                 print('confirm $date');
                                 if (date != notificationTime) {
                                   setState(() {
@@ -266,35 +300,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
                         // : Icons.add,
                         : Icons.check,
               ),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  final DateTime dateTime = DateTime.now();
-                  final id =
-                      dateTime.hour + dateTime.millisecond + dateTime.day;
-                  widget.onSave!(
-                    state.title!,
-                    state.todo!,
-                    dateTime,
-                    notificationDate: notificationTime ?? dateTime,
-                    notificationId: id,
-                  );
-                  if (notificationTime != null) {
-                    setNotification(
-                      context: context,
-                      time: notificationTime!,
-                      id: id,
-                      title: 'Reminder',
-                      message: state.title!,
-                      channelId: dateTime.toString(),
-                      channelName: dateTime.toString(),
-                      channelDescription: state.title!,
-                    );
-                  }
-
-                  Navigator.pop(context);
-                }
-              },
+              onPressed: () => _addEditTodo(context, state),
             )
             //     : null
             // : null,
