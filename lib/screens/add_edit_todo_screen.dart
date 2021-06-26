@@ -1,13 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todo/blocs/add-edit/add_edit_cubit.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
+
 import 'package:flutter_todo/models/todo_model.dart';
 import 'package:flutter_todo/services/notification_services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
+import 'package:uuid/uuid.dart';
 
 typedef OnSaveCallback = Function(
   String title,
@@ -22,29 +23,28 @@ class AddEditScreen extends StatefulWidget {
 
   static Route route() {
     return MaterialPageRoute(
-      settings: RouteSettings(name: routeName),
-      builder: (context) => BlocProvider<AddEditCubit>(
-        create: (_) => AddEditCubit(
-          todosBloc: context.read<TodosBloc>(),
-        ),
-        child: AddEditScreen(
-          onSave: (
-            title,
-            todoString,
-            time, {
-            DateTime? notificationDate,
-            int? notificationId,
-          }) {
-            context.read<AddEditCubit>().addEditTodo(
-                  title: title,
-                  todo: todoString,
-                  dateTime: time,
-                  notificationDate: notificationDate,
-                  notificationId: notificationId,
-                );
-          },
-          isEditing: false,
-        ),
+      builder: (context) => AddEditScreen(
+        isEditing: false,
+        onSave: (
+          title,
+          todoString,
+          time, {
+          DateTime? notificationDate,
+          int? notificationId,
+        }) {
+          context.read<TodosBloc>().add(
+                AddTodo(
+                  Todo(
+                    id: Uuid().v4(),
+                    title: title,
+                    todo: todoString,
+                    dateTime: time,
+                    notificationId: notificationId,
+                    notificationDate: notificationDate,
+                  ),
+                ),
+              );
+        },
       ),
     );
   }
@@ -70,6 +70,9 @@ class _AddEditScreenState extends State<AddEditScreen> {
   bool get isEditing => widget.isEditing!;
 
   DateTime? notificationTime;
+
+  String? _title;
+  String? _todo;
 
   void setNotification({
     required BuildContext context,
@@ -114,14 +117,16 @@ class _AddEditScreenState extends State<AddEditScreen> {
     super.dispose();
   }
 
-  void _addEditTodo(BuildContext context, AddEditState state) async {
+  void _addEditTodo(
+    BuildContext context,
+  ) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final DateTime dateTime = DateTime.now();
       final id = dateTime.hour + dateTime.millisecond + dateTime.day;
       widget.onSave!(
-        state.title!,
-        state.todo!,
+        _title!,
+        _todo!,
         dateTime,
         notificationDate: notificationTime ?? dateTime,
         notificationId: id,
@@ -132,10 +137,10 @@ class _AddEditScreenState extends State<AddEditScreen> {
           time: notificationTime!,
           id: id,
           title: 'Reminder',
-          message: state.title!,
+          message: _title!,
           channelId: dateTime.toString(),
           channelName: dateTime.toString(),
-          channelDescription: state.title!,
+          channelDescription: _title!,
         );
       }
 
@@ -148,165 +153,135 @@ class _AddEditScreenState extends State<AddEditScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return BlocConsumer<AddEditCubit, AddEditState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        if (state.status == AddEditStatus.submitting)
-          return Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        return Scaffold(
-            // backgroundColor: Color(0xff222831),
-            appBar: AppBar(
-              title: Text(
-                isEditing ? 'Edit Todo' : 'Add Todo',
-              ),
-            ),
-            body: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Form(
-                key: _formKey,
-                child: ListView(
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            isEditing ? 'Edit Todo' : 'Add Todo',
+          ),
+        ),
+        body: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                TextFormField(
+                  initialValue: isEditing ? widget.todo?.title : '',
+                  autofocus: !isEditing,
+                  style: textTheme.headline5,
+                  decoration: InputDecoration(
+                    hintText: 'What needs to be done?',
+                  ),
+                  validator: (val) {
+                    return val!.trim().isEmpty
+                        ? 'Please enter some text'
+                        : null;
+                  },
+                  onSaved: (value) => _title = value,
+                ),
+                SizedBox(height: 30.0),
+                TextFormField(
+                  initialValue: isEditing ? widget.todo?.todo : '',
+                  onSaved: (value) => _todo = value,
+                  validator: (value) =>
+                      value!.isEmpty ? 'Todo can\'t be empty' : null,
+                  maxLength: 500,
+                  maxLines: 11,
+                  minLines: 3,
+                  decoration: InputDecoration(
+                    hintText: 'Add your todo here...',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 10.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TextFormField(
-                      initialValue: isEditing ? widget.todo?.title : '',
-                      autofocus: !isEditing,
-                      style: textTheme.headline5,
-                      decoration: InputDecoration(
-                        hintText: 'What needs to be done?',
-                      ),
-                      validator: (val) {
-                        return val!.trim().isEmpty
-                            ? 'Please enter some text'
-                            : null;
-                      },
-                      onSaved: (value) {
-                        print(value);
-                        context.read<AddEditCubit>().titleChanged(value!);
-                      },
-                      onChanged: (value) =>
-                          context.read<AddEditCubit>().titleChanged(value),
-                    ),
-                    SizedBox(height: 30.0),
-                    TextFormField(
-                      initialValue: isEditing ? widget.todo?.todo : '',
-                      onSaved: (value) {
-                        print(value);
-                        context.read<AddEditCubit>().todoChanged(value!);
-                      },
-                      onChanged: (value) =>
-                          context.read<AddEditCubit>().todoChanged(value),
-                      maxLength: 500,
-                      maxLines: 11,
-                      minLines: 3,
-                      decoration: InputDecoration(
-                        hintText: 'Add your todo here...',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextButton.icon(
-                          onPressed: () {
-                            if (isEditing &&
-                                widget.todo?.notificationId != null) {
-                              final notification =
-                                  RepositoryProvider.of<NotificationService>(
-                                      context,
-                                      listen: false);
-                              notification.cancelNotification(
-                                  widget.todo!.notificationId!);
-                            }
+                    TextButton.icon(
+                      onPressed: () {
+                        if (isEditing && widget.todo?.notificationId != null) {
+                          final notification =
+                              RepositoryProvider.of<NotificationService>(
+                                  context,
+                                  listen: false);
+                          notification
+                              .cancelNotification(widget.todo!.notificationId!);
+                        }
 
-                            DatePicker.showDateTimePicker(
-                              context,
-                              showTitleActions: true,
-                              theme: DatePickerTheme(),
-                              minTime: DateTime.now(),
-                              maxTime: DateTime(2022, 1, 1, 00, 00),
+                        DatePicker.showDateTimePicker(
+                          context,
+                          showTitleActions: true,
+                          theme: DatePickerTheme(),
+                          minTime: DateTime.now(),
+                          maxTime: DateTime(2022, 1, 1, 00, 00),
 
-                              onChanged: (date) {
-                                print('change $date in time zone ' +
-                                    date.timeZoneOffset.inHours.toString());
-                                context
-                                    .read<AddEditCubit>()
-                                    .notificationTimeChanged(date);
-                                setState(() {
-                                  notificationTime = date;
-                                  formatedTime = format.format(date);
-                                });
-                              },
-                              onConfirm: (date) {
-                                context
-                                    .read<AddEditCubit>()
-                                    .notificationTimeChanged(date);
-                                print('confirm $date');
-                                if (date != notificationTime) {
-                                  setState(() {
-                                    notificationTime = date;
-                                    formatedTime = format.format(date);
-                                  });
-                                }
-                              },
-                              // locale: LocaleType.ar,
-                            );
+                          onChanged: (date) {
+                            print('change $date in time zone ' +
+                                date.timeZoneOffset.inHours.toString());
+                            // context
+                            //     .read<AddEditCubit>()
+                            //     .notificationTimeChanged(date);
+                            setState(() {
+                              notificationTime = date;
+                              formatedTime = format.format(date);
+                            });
                           },
-                          icon: Icon(
-                            Icons.notification_add,
-                          ),
-                          label: Text(
-                            isEditing
-                                ? 'Edit Notification'
-                                : 'Set Notification',
-                          ),
-                        ),
-                        if (formatedTime != null ||
-                            widget.todo?.notificationDate != null)
-                          Stack(
-                            children: [
-                              Chip(
-                                label: Text(
-                                  '${formatedTime ?? ''}',
-                                ),
-                              ),
-                              Positioned(
-                                right: -1.7,
-                                top: -1.7,
-                                child: Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                  size: 19.0,
-                                ),
-                              )
-                            ],
-                          ),
-                      ],
+                          onConfirm: (date) {
+                            // context
+                            //     .read<AddEditCubit>()
+                            //     .notificationTimeChanged(date);
+                            print('confirm $date');
+                            if (date != notificationTime) {
+                              setState(() {
+                                notificationTime = date;
+                                formatedTime = format.format(date);
+                              });
+                            }
+                          },
+                          // locale: LocaleType.ar,
+                        );
+                      },
+                      icon: Icon(
+                        Icons.notification_add,
+                      ),
+                      label: Text(
+                        isEditing ? 'Edit Notification' : 'Set Notification',
+                      ),
                     ),
+                    if (formatedTime != null ||
+                        widget.todo?.notificationDate != null)
+                      Stack(
+                        children: [
+                          Chip(
+                            label: Text(
+                              '${formatedTime ?? ''}',
+                            ),
+                          ),
+                          Positioned(
+                            right: -1.7,
+                            top: -1.7,
+                            child: Icon(
+                              Icons.star,
+                              color: Colors.yellow,
+                              size: 19.0,
+                            ),
+                          )
+                        ],
+                      ),
                   ],
                 ),
-              ),
+              ],
             ),
-            floatingActionButton: FloatingActionButton(
-              tooltip: isEditing ? 'Save changes' : 'Add Todo',
-              child: Icon(
-                isEditing
-                    ? Icons.check
-                    : context.read<AddEditCubit>().canSubmit
-                        ? Icons.check
-                        // : Icons.add,
-                        : Icons.check,
-              ),
-              onPressed: () => _addEditTodo(context, state),
-            )
-            //     : null
-            // : null,
-            );
-      },
-    );
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          tooltip: isEditing ? 'Save changes' : 'Add Todo',
+          child: Icon(isEditing ? Icons.check : Icons.add),
+          onPressed: () => _addEditTodo(context),
+        )
+        //     : null
+        // : null,
+        );
   }
 }
 
