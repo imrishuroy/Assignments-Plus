@@ -40,9 +40,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Need permission to pick a image</string>
-
 	<key>NSCameraUsageDescription</key>
 	<string>Need permission to click a image</string>
 
@@ -56,6 +53,21 @@
 	</array>
 
 
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>ShareMedia</string>
+			</array>
+		</dict>
+		<dict/>
+	</array>
+
+  	<key>NSPhotoLibraryUsageDescription</key>
+ 	<string>To upload photos, please allow permission to access your photo library.</string>
 
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

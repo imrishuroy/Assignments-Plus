@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/tab/tab_bloc.dart';
-import 'package:flutter_todo/chats_example.dart';
+
 import 'package:flutter_todo/models/app_tab_bar.dart';
-import 'package:flutter_todo/repositories/auth/auth_repository.dart';
+
+import 'package:flutter_todo/screens/add_edit_todo_screen.dart';
 import 'package:flutter_todo/screens/home/change_theme.dart';
 
 import 'package:flutter_todo/screens/profile/profile_screen.dart';
@@ -55,7 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? _profileAppBar(context)
                 : AppBar(
                     automaticallyImplyLeading: false,
-                    title: Text('Your Todos'),
+                    title: activeTab == AppTab.todos
+                        ? Text('Your Todos')
+                        : Text('Your Todos Data'),
                     actions: [
                       FilterButton(visible: activeTab == AppTab.todos),
                       ExtraActions(),
@@ -66,10 +69,10 @@ class _HomeScreenState extends State<HomeScreen> {
             floatingActionButton: activeTab == AppTab.todos
                 ? FloatingActionButton(
                     onPressed: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => ChatsExample()));
+                      // Navigator.of(context).push(
+                      //     MaterialPageRoute(builder: (_) => ChatsExample()));
 
-                      //   Navigator.pushNamed(context, AddEditScreen.routeName);
+                      Navigator.pushNamed(context, AddEditScreen.routeName);
                     },
                     child: Icon(Icons.add),
                     tooltip: 'Add Todo',
@@ -88,53 +91,10 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 AppBar _profileAppBar(BuildContext context) {
-  Future<bool> askForLogout() async {
-    return await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Hello there !'),
-          content: Text('Do you want to logout...?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(
-                'Yes',
-                style: TextStyle(color: Colors.red, fontSize: 17.0),
-              ),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(
-                'No',
-                style: TextStyle(color: Colors.green, fontSize: 17.0),
-              ),
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  _logout() async {
-    if (await askForLogout()) {
-      RepositoryProvider.of<AuthRepository>(context).signOut();
-    }
-  }
-
   return AppBar(
     automaticallyImplyLeading: false,
     title: Text('Your Profile'),
     actions: [
-      TextButton(
-        onPressed: _logout,
-        child: Text(
-          'Logout',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ),
       ChangeTheme(),
       SizedBox(width: 10.0),
     ],

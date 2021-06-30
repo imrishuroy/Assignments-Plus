@@ -12,7 +12,7 @@ part 'flitered_state.dart';
 
 class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   final TodosBloc _todosBloc;
-  StreamSubscription? _todosSubscription;
+  late StreamSubscription? _todosSubscription;
 
   FilteredTodosBloc({@required TodosBloc? todosBloc})
       : assert(todosBloc != null),

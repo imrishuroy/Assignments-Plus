@@ -25,6 +25,8 @@ class AuthRepository extends BaseAuthRepository {
   @override
   Future<AppUser?> get currentUser async => _appUser(_firebaseAuth.currentUser);
 
+  String? get userId => _firebaseAuth.currentUser?.uid;
+
   @override
   Future<AppUser?> signInWithGoogle() async {
     try {

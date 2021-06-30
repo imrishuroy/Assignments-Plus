@@ -66,18 +66,16 @@ class DetailsScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Hero(
-                            tag: '${todo.id}__heroTag',
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              padding: EdgeInsets.only(
-                                top: 8.0,
-                                bottom: 16.0,
-                              ),
-                              child: Text(
-                                todo.title,
-                                style: Theme.of(context).textTheme.headline5,
-                              ),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.only(
+                              top: 8.0,
+                              bottom: 16.0,
+                            ),
+                            child: Text(
+                              todo.title,
+                              style: TextStyle(fontSize: 20),
+                              //style: Theme.of(context).textTheme.headline5,
                             ),
                           ),
                           SelectableLinkify(

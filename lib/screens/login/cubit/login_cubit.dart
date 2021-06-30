@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_todo/config/paths.dart';
 import 'package:flutter_todo/models/failure_model.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 
@@ -12,6 +14,8 @@ class LoginCubit extends Cubit<LoginState> {
   LoginCubit({@required AuthRepository? authRepository})
       : _authRepository = authRepository,
         super(LoginState.initial());
+  final CollectionReference usersRef =
+      FirebaseFirestore.instance.collection(Paths.users);
 
   void loginWithPhone() async {
     if (state.status == LoginStatus.submitting) return;
@@ -34,7 +38,15 @@ class LoginCubit extends Cubit<LoginState> {
     if (state.status == LoginStatus.submitting) return;
     emit(state.copyWith(status: LoginStatus.submitting));
     try {
-      await _authRepository!.signInWithGoogle();
+      final user = await _authRepository!.signInWithGoogle();
+
+      if (user != null) {
+        final doc = await usersRef.doc(user.uid).get();
+        if (!doc.exists) {
+          usersRef.doc(user.uid).set(user.toMap());
+        }
+      }
+
       emit(state.copyWith(status: LoginStatus.succuss));
     } on Failure catch (error) {
       emit(

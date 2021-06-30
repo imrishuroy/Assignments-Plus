@@ -31,14 +31,12 @@ class TodoItem extends StatelessWidget {
           value: todo?.completed,
           onChanged: onCheckboxChanged,
         ),
-        title: Hero(
-          tag: '${todo!.id}__heroTag',
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: Text(
-              todo?.title ?? '',
-              style: Theme.of(context).textTheme.headline6,
-            ),
+        title: Container(
+          width: MediaQuery.of(context).size.width,
+          child: Text(
+            todo?.title ?? '',
+            //style: Theme.of(context).textTheme.headline6,
+            style: TextStyle(fontSize: 18),
           ),
         ),
         subtitle: Text(

@@ -27,3 +27,17 @@ We will also make a chrome extension to easily add todo.
 Certificate fingerprints:
 SHA1: 2B:3A:BD:BF:DC:A0:A5:9E:29:B0:51:C5:02:2D:10:2D:AC:1F:B7:0B
 SHA256: CC:CB:3F:E7:8B:A7:66:72:11:D3:55:09:D8:BC:4B:81:A3:96:A1:D3:8F:76:73:33:0D:7E:DD:E9:8F:FA:84:2B
+
+
+
+In my opinion , It's throwing this error because of the time which you selected is before than now . In their pub.dev page , there is an example for solve this problem .
+
+tz.TZDateTime _nextInstanceOfTenAM() {
+final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+tz.TZDateTime scheduledDate =
+    tz.TZDateTime(tz.local, now.year, now.month, now.day, 10);
+if (scheduledDate.isBefore(now)) {
+  scheduledDate = scheduledDate.add(const Duration(days: 1));
+}
+return scheduledDate;
+}

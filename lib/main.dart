@@ -21,6 +21,7 @@ import 'package:flutter_todo/repositories/services/firebase_service.dart';
 import 'package:flutter_todo/repositories/todo/todo_repository.dart';
 import 'package:flutter_todo/repositories/utils/util_repository.dart';
 import 'package:flutter_todo/services/notification_services.dart';
+import 'package:flutter_todo/share_intent.dart';
 import 'package:flutter_todo/theme/app_theme.dart';
 
 import 'blocs/todo/todo_bloc.dart';
@@ -99,8 +100,9 @@ class MyApp extends StatelessWidget {
               //theme: state.themeData,
               theme:
                   appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)],
-              onGenerateRoute: CustomRouter.onGenerateRoute,
-              initialRoute: AuthWrapper.routeName,
+              // onGenerateRoute: CustomRouter.onGenerateRoute,
+              //initialRoute: AuthWrapper.routeName,
+              home: ShareIntentExample(),
             );
           },
         ),

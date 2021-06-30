@@ -30,10 +30,11 @@ class _ChatsExampleState extends State<ChatsExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Syncfusion Flutter chart'),
-        ),
-        body: Column(children: [
+      appBar: AppBar(
+        title: const Text('Syncfusion Flutter chart'),
+      ),
+      body: Column(
+        children: [
           Center(
             child: SfCircularChart(
               title: ChartTitle(text: 'Sales by sales person'),
@@ -89,7 +90,9 @@ class _ChatsExampleState extends State<ChatsExample> {
               ),
             ),
           )
-        ]));
+        ],
+      ),
+    );
   }
 }
 

@@ -29,7 +29,12 @@ class TodosRepository implements BaseTodosRepository {
 
   @override
   Stream<List<Todo>> todos() {
-    return usersRef.doc(uid).collection(Paths.todos).snapshots().map((snaps) {
+    return usersRef
+        .doc(uid)
+        .collection(Paths.todos)
+        .orderBy('dateTime', descending: true)
+        .snapshots()
+        .map((snaps) {
       return snaps.docs.map((doc) => Todo.fromMap(doc.data())).toList();
     });
   }
