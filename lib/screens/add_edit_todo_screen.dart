@@ -2,12 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
+import 'package:flutter_todo/config/custom_router.dart';
 
 import 'package:flutter_todo/models/todo_model.dart';
 import 'package:flutter_todo/services/notification_services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:uuid/uuid.dart';
 
 typedef OnSaveCallback = Function(
@@ -21,8 +23,12 @@ typedef OnSaveCallback = Function(
 class AddEditScreen extends StatefulWidget {
   static const String routeName = '/addTodo';
 
-  static Route route() {
+  static Route route(var arguments) {
     return MaterialPageRoute(
+      settings: RouteSettings(
+        name: routeName,
+        arguments: arguments,
+      ),
       builder: (context) => AddEditScreen(
         isEditing: false,
         onSave: (
@@ -52,11 +58,13 @@ class AddEditScreen extends StatefulWidget {
   final bool? isEditing;
   final OnSaveCallback? onSave;
   final Todo? todo;
+  //final String? sharedText;
 
   AddEditScreen({
     Key? key,
     @required this.onSave,
     @required this.isEditing,
+    // this.sharedText,
     this.todo,
   }) : super(key: key);
 
@@ -67,12 +75,18 @@ class AddEditScreen extends StatefulWidget {
 class _AddEditScreenState extends State<AddEditScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  // late StreamSubscription? _intentDataStreamSubscription;
+  // late StreamSubscription? _stringSubscription;
+  // String? _sharedText;
+
   bool get isEditing => widget.isEditing!;
 
   DateTime? notificationTime;
 
   String? _title;
   String? _todo;
+
+  bool _loading = false;
 
   void setNotification({
     required BuildContext context,
@@ -99,14 +113,64 @@ class _AddEditScreenState extends State<AddEditScreen> {
   }
 
   String? formatedTime;
+  // String? sharedString;
 
   @override
   void initState() {
     super.initState();
+
     if (isEditing) {
       setState(() {
         formatedTime = format.format(widget.todo!.notificationDate!);
       });
+    }
+    _getSharedText();
+    // _getSharedText();
+  }
+
+  // void _getSharedText() async {
+  //   setState(() {
+  //     _loading = true;
+  //   });
+  //   try {
+  //     // For sharing or opening urls/text coming from outside the app while the app is in the memory
+  //     _intentDataStreamSubscription =
+  //         ReceiveSharingIntent.getTextStream().listen((String? value) {
+  //       print('------------------Function 1 (getTextStream) runs');
+  //       setState(() {
+  //         _sharedText = value;
+  //       });
+  //     }, onError: (err) {
+  //       print("getLinkStream error: $err");
+  //     });
+
+  //     sharedString = await ReceiveSharingIntent.getInitialText();
+  //     setState(() {});
+
+  //     // For sharing or opening urls/text coming from outside the app while the app is closed
+  //     ReceiveSharingIntent.getInitialText().then((String? value) {
+  //       print('------------------Function 2 (getInitialText) runs');
+  //       setState(() {
+  //         _sharedText = value;
+  //       });
+  //     });
+  //     setState(() {
+  //       _loading = false;
+  //     });
+  //   } catch (e) {
+  //     setState(() {
+  //       _loading = false;
+  //     });
+  //     print(e.toString());
+  //   }
+  // }
+
+  void _getSharedText() async {
+    print('Init Runs ---------------');
+    final text = ModalRoute.of(context)!.settings.arguments;
+    print('This is init state text --------------------- $text');
+    if (text != null) {
+      print('This is init state text --------------------- $text');
     }
   }
 
@@ -114,6 +178,9 @@ class _AddEditScreenState extends State<AddEditScreen> {
   void dispose() {
     print('DISPOSE CALLED');
     _formKey.currentState?.dispose();
+    // _intentDataStreamSubscription?.cancel();
+    // _sharedText = null;
+    ReceiveSharingIntent.reset();
     super.dispose();
   }
 
@@ -153,127 +220,155 @@ class _AddEditScreenState extends State<AddEditScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
+    final _sharedText = ModalRoute.of(context)?.settings.arguments;
+
+    // CustomRouter.onGenerateRoute(settings)
+
+    print('THis is builder text ----------------$_sharedText');
+    print('THis is builder text ----------------${_sharedText.runtimeType}');
     return Scaffold(
         appBar: AppBar(
           title: Text(
             isEditing ? 'Edit Todo' : 'Add Todo',
           ),
         ),
-        body: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                TextFormField(
-                  initialValue: isEditing ? widget.todo?.title : '',
-                  autofocus: !isEditing,
-                  style: textTheme.headline5,
-                  decoration: InputDecoration(
-                    hintText: 'What needs to be done?',
-                  ),
-                  validator: (val) {
-                    return val!.trim().isEmpty
-                        ? 'Please enter some text'
-                        : null;
-                  },
-                  onSaved: (value) => _title = value,
-                ),
-                SizedBox(height: 30.0),
-                TextFormField(
-                  initialValue: isEditing ? widget.todo?.todo : '',
-                  onSaved: (value) => _todo = value,
-                  validator: (value) =>
-                      value!.isEmpty ? 'Todo can\'t be empty' : null,
-                  maxLength: 500,
-                  maxLines: 11,
-                  minLines: 3,
-                  decoration: InputDecoration(
-                    hintText: 'Add your todo here...',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 10.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton.icon(
-                      onPressed: () {
-                        if (isEditing && widget.todo?.notificationId != null) {
-                          final notification =
-                              RepositoryProvider.of<NotificationService>(
-                                  context,
-                                  listen: false);
-                          notification
-                              .cancelNotification(widget.todo!.notificationId!);
-                        }
-
-                        DatePicker.showDateTimePicker(
-                          context,
-                          showTitleActions: true,
-                          theme: DatePickerTheme(),
-                          minTime: DateTime.now(),
-                          maxTime: DateTime(2022, 1, 1, 00, 00),
-
-                          onChanged: (date) {
-                            print('change $date in time zone ' +
-                                date.timeZoneOffset.inHours.toString());
-                            // context
-                            //     .read<AddEditCubit>()
-                            //     .notificationTimeChanged(date);
-                            setState(() {
-                              notificationTime = date;
-                              formatedTime = format.format(date);
-                            });
-                          },
-                          onConfirm: (date) {
-                            // context
-                            //     .read<AddEditCubit>()
-                            //     .notificationTimeChanged(date);
-                            print('confirm $date');
-                            if (date != notificationTime) {
-                              setState(() {
-                                notificationTime = date;
-                                formatedTime = format.format(date);
-                              });
-                            }
-                          },
-                          // locale: LocaleType.ar,
-                        );
-                      },
-                      icon: Icon(
-                        Icons.notification_add,
+        body: _loading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Form(
+                  key: _formKey,
+                  child: ListView(
+                    children: [
+                      TextFormField(
+                        initialValue: isEditing ? widget.todo?.title : '',
+                        autofocus: !isEditing,
+                        style: textTheme.headline5,
+                        decoration: InputDecoration(
+                          hintText: 'What needs to be done?',
+                        ),
+                        validator: (val) {
+                          return val!.trim().isEmpty
+                              ? 'Please enter some text'
+                              : null;
+                        },
+                        onSaved: (value) => _title = value,
                       ),
-                      label: Text(
-                        isEditing ? 'Edit Notification' : 'Set Notification',
+                      SizedBox(height: 30.0),
+                      TextFormField(
+                        controller: TextEditingController(
+                          text: '',
+                        ),
+                        // text: isEditing
+                        //     ? widget.todo?.todo
+                        //     : _sharedText ?? ''),
+                        //  initialValue: _sharedText ?? '',
+                        // isEditing ? widget.todo?.todo : _sharedText ?? '',
+                        onSaved: (value) => _todo = value,
+                        validator: (value) =>
+                            value!.isEmpty ? 'Todo can\'t be empty' : null,
+                        maxLength: 500,
+                        maxLines: 11,
+                        minLines: 3,
+                        decoration: InputDecoration(
+                          hintText: 'Add your todo here...',
+                          border: OutlineInputBorder(),
+                        ),
                       ),
-                    ),
-                    if (formatedTime != null ||
-                        widget.todo?.notificationDate != null)
-                      Stack(
+                      SizedBox(height: 10.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Chip(
+                          TextButton.icon(
+                            onPressed: () {
+                              if (isEditing &&
+                                  widget.todo?.notificationId != null) {
+                                final notification =
+                                    RepositoryProvider.of<NotificationService>(
+                                        context,
+                                        listen: false);
+                                notification.cancelNotification(
+                                    widget.todo!.notificationId!);
+                              }
+
+                              DatePicker.showDateTimePicker(
+                                context,
+                                showTitleActions: true,
+                                theme: DatePickerTheme(),
+                                minTime: DateTime.now(),
+                                maxTime: DateTime(2022, 1, 1, 00, 00),
+
+                                onChanged: (date) {
+                                  print('change $date in time zone ' +
+                                      date.timeZoneOffset.inHours.toString());
+                                  // context
+                                  //     .read<AddEditCubit>()
+                                  //     .notificationTimeChanged(date);
+                                  setState(() {
+                                    notificationTime = date;
+                                    formatedTime = format.format(date);
+                                  });
+                                },
+                                onConfirm: (date) {
+                                  // context
+                                  //     .read<AddEditCubit>()
+                                  //     .notificationTimeChanged(date);
+                                  print('confirm $date');
+                                  if (date != notificationTime) {
+                                    setState(() {
+                                      notificationTime = date;
+                                      formatedTime = format.format(date);
+                                    });
+                                  }
+                                },
+                                // locale: LocaleType.ar,
+                              );
+                            },
+                            icon: Icon(
+                              Icons.notification_add,
+                            ),
                             label: Text(
-                              '${formatedTime ?? ''}',
+                              isEditing
+                                  ? 'Edit Notification'
+                                  : 'Set Notification',
                             ),
                           ),
-                          Positioned(
-                            right: -1.7,
-                            top: -1.7,
-                            child: Icon(
-                              Icons.star,
-                              color: Colors.yellow,
-                              size: 19.0,
+                          if (formatedTime != null ||
+                              widget.todo?.notificationDate != null)
+                            Stack(
+                              children: [
+                                Chip(
+                                  label: Text(
+                                    '${formatedTime ?? ''}',
+                                  ),
+                                ),
+                                Positioned(
+                                  right: -1.7,
+                                  top: -1.7,
+                                  child: Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 19.0,
+                                  ),
+                                )
+                              ],
                             ),
-                          )
                         ],
                       ),
-                  ],
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text('$_sharedText'),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      // Text('$sharedString'),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
-        ),
+              ),
         floatingActionButton: FloatingActionButton(
           tooltip: isEditing ? 'Save changes' : 'Add Todo',
           child: Icon(isEditing ? Icons.check : Icons.add),

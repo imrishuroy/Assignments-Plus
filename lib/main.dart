@@ -91,18 +91,18 @@ class MyApp extends StatelessWidget {
         ],
         child: BlocBuilder<ThemeBloc, ThemeState>(
           builder: (context, state) {
-            final theme =
-                appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)];
-            print(theme);
+            // final theme =
+            //     appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)];
+            //print(theme);
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               title: '+Assignments',
               //theme: state.themeData,
               theme:
                   appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)],
-              // onGenerateRoute: CustomRouter.onGenerateRoute,
-              //initialRoute: AuthWrapper.routeName,
-              home: ShareIntentExample(),
+              onGenerateRoute: CustomRouter.onGenerateRoute,
+              initialRoute: AuthWrapper.routeName,
+              //home: ShareIntentExample(),
             );
           },
         ),

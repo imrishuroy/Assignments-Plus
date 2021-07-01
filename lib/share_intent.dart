@@ -17,6 +17,16 @@ class _ShareIntentExampleState extends State<ShareIntentExample> {
   void initState() {
     super.initState();
 
+    _getSharedItems();
+  }
+
+  bool _loading = false;
+
+  void _getSharedItems() async {
+    setState(() {
+      _loading = true;
+    });
+
     // For sharing images coming from outside the app while the app is in the memory
     _intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream()
         .listen((List<SharedMediaFile> value) {
@@ -51,6 +61,10 @@ class _ShareIntentExampleState extends State<ShareIntentExample> {
         _sharedText = value;
       });
     });
+
+    setState(() {
+      _loading = false;
+    });
   }
 
   @override
@@ -62,21 +76,27 @@ class _ShareIntentExampleState extends State<ShareIntentExample> {
   @override
   Widget build(BuildContext context) {
     const textStyleBold = const TextStyle(fontWeight: FontWeight.bold);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Plugin example app'),
-      ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Text("Shared files:", style: textStyleBold),
-            Text(_sharedFiles?.map((f) => f.path).join(",") ?? ""),
-            SizedBox(height: 100),
-            Text("Shared urls/text:", style: textStyleBold),
-            Text(_sharedText ?? "")
-          ],
-        ),
-      ),
-    );
+    return _loading
+        ? Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              title: const Text('Plugin example app'),
+            ),
+            body: Center(
+              child: Column(
+                children: <Widget>[
+                  Text("Shared files:", style: textStyleBold),
+                  Text(_sharedFiles?.map((f) => f.path).join(",") ?? ""),
+                  SizedBox(height: 100),
+                  Text("Shared urls/text:", style: textStyleBold),
+                  Text(_sharedText ?? "")
+                ],
+              ),
+            ),
+          );
   }
 }

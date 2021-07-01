@@ -15,6 +15,7 @@ import 'package:flutter_todo/widgets/filter_button.dart';
 import 'package:flutter_todo/widgets/filtered_todos.dart';
 import 'package:flutter_todo/widgets/stats.dart';
 import 'package:flutter_todo/widgets/tab_selector.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 class HomeScreen extends StatefulWidget {
@@ -65,13 +66,30 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(width: 5),
                     ],
                   ),
-            body: SwitchScreens(activeTab),
+            body: FutureBuilder<String?>(
+                future: ReceiveSharingIntent.getInitialText(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  String? _sharedText = snapshot.data;
+                  if (_sharedText != null) {
+                    print(
+                        'This is shared text from homescren -------------- $_sharedText');
+                    WidgetsBinding.instance?.addPostFrameCallback(
+                      (_) {
+                        Navigator.of(context).pushNamed(AddEditScreen.routeName,
+                            arguments: _sharedText);
+                      },
+                    );
+                  }
+                  return SwitchScreens(activeTab);
+                }),
             floatingActionButton: activeTab == AppTab.todos
                 ? FloatingActionButton(
                     onPressed: () {
-                      // Navigator.of(context).push(
-                      //     MaterialPageRoute(builder: (_) => ChatsExample()));
-
                       Navigator.pushNamed(context, AddEditScreen.routeName);
                     },
                     child: Icon(Icons.add),
