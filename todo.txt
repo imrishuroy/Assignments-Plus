@@ -41,3 +41,7 @@ if (scheduledDate.isBefore(now)) {
 }
 return scheduledDate;
 }
+
+ [ERROR:flutter/lib/ui/ui_dart_state.cc(199)] Unhandled Exception: dependOnInheritedWidgetOfExactType<_ModalScopeStatus>() or dependOnInheritedElement() was called before _AddEditScreenState.initState() completed.
+E/flutter (26700): When an inherited widget changes, for example if the value of Theme.of() changes, its dependent widgets are rebuilt. If the dependent widget's reference to the inherited widget is in a constructor or an initState() method, then the rebuilt dependent widget will not reflect the changes in the inherited widget.
+E/flutter (26700): Typically references to inherited widgets should occur in widget build() methods. Alternatively, initialization based on inherited widgets can be placed in the didChangeDependencies method, which is called after initState and whenever the dependencies change thereafter.

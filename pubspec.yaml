@@ -51,6 +51,7 @@ dependencies:
   timeago: ^3.0.2
   url_launcher: ^6.0.6
   uuid: ^3.0.4
+  metadata_fetch: ^0.4.1
 
 dev_dependencies:
   flutter_test:
