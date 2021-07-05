@@ -1,3 +1,11 @@
+Todos 
+
+#5 July 2021
+1. Add ask before delete option
+2. When user tap on the notification it should take them to the that todos details
+
+
+
 #10 June 2021
 1. We can add a leaderboard of all the users who have completed the most number of todos. ( This can also global or local group of friends)
 

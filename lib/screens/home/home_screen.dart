@@ -20,9 +20,6 @@ import 'package:flutter_todo/widgets/tab_selector.dart';
 import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:http/http.dart' as http;
-
-import 'package:html/parser.dart' show parse;
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/home';
@@ -40,9 +37,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late StreamSubscription? _intentDataStreamSubscription;
-  late StreamSubscription? _stringSubscription;
-  String? _sharedText;
 
+  String? _sharedText;
+  String? _sharedTitle;
   bool _loading = false;
 
   @override
@@ -63,8 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
       // For sharing or opening urls/text coming from outside the app while the app is in the memory
       _intentDataStreamSubscription =
           ReceiveSharingIntent.getTextStream().listen((String? value) {
-        print('------------------Function 1 (getTextStream) runs');
-        // _sharedText = value;
         setState(() {
           _sharedText = value;
         });
@@ -73,38 +68,19 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       // For sharing or opening urls/text coming from outside the app while the app is closed
       ReceiveSharingIntent.getInitialText().then((String? value) {
-        print('------------------Function 2 (getInitialText) runs');
-        //  _sharedText = value;
         setState(() {
           _sharedText = value;
 
           if (_sharedText != null) {
-            //  print('Split------------${_sharedText.split('/')}');
-            print('this runs 1');
-            _getTitle(_sharedText!);
-
-            //_getHeader(_sharedText);
+            _getSharedTitle(_sharedText!);
           }
-
-          // print('THis is my test $_sharedText');
-          // if (_sharedText != null) {
-          //   _getHeader(_sharedText!).then((value) {
-          //     print('This is value $value ');
-          //     if (value != null) {
-          //       setState(() {
-          //         _header = value;
-          //         print('I am header 2 $_header');
-          //       });
-          //     }
-          //   });
-          // }
         });
       });
 
       setState(() {
         _loading = false;
       });
-      print('Shared Text $_sharedText and Header is $_title');
+      print('Shared Text $_sharedText and Header is $_sharedTitle');
     } catch (e) {
       setState(() {
         _loading = false;
@@ -113,19 +89,20 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  _getTitle(String sharedText) async {
+  void _getSharedTitle(String sharedText) async {
+    setState(() {
+      _loading = true;
+    });
     if (sharedText.contains('http') || sharedText.contains('https')) {
-      print('this runs 2');
-      var data = await MetadataFetch.extract(
-          'https://www.freecodecamp.org/news/how-to-create-a-great-technical-course/');
+      var data = await MetadataFetch.extract(sharedText);
       print('------------This is title ${data?.title}');
       setState(() {
-        _title = data?.title;
+        _sharedTitle = data?.title;
+        _loading = false;
+        data = null;
       });
     }
   }
-
-  String? _title;
 
   Future<void> onSelectNotification(String? payload) async {
     print('Nofication Clicked');
@@ -136,22 +113,20 @@ class _HomeScreenState extends State<HomeScreen> {
     _intentDataStreamSubscription?.cancel();
     ReceiveSharingIntent?.reset();
     super.dispose();
+    _sharedText = '';
+    _sharedTitle = '';
   }
-
-  String? header;
 
   @override
   Widget build(BuildContext context) {
-    print('header ------------ ${_title.runtimeType}');
-    print('header ------------ $_title');
-
-    print(
-        'This is the getted value --------------$_title and ------ $_sharedText ');
     return WillPopScope(
       onWillPop: () async => false,
       child: _loading
-          ? Center(
-              child: CircularProgressIndicator(),
+          ? Container(
+              color: Colors.white,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
             )
           : BlocBuilder<TabBloc, AppTab>(
               builder: (context, activeTab) {
@@ -169,38 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(width: 5),
                           ],
                         ),
-                  body: SwitchScreens(activeTab, _sharedText, _title),
-
-                  // FutureBuilder<String?>(
-                  //     future: ReceiveSharingIntent.getInitialText(),
-                  //     builder: (context, snapshot) {
-                  //       if (snapshot.connectionState == ConnectionState.waiting) {
-                  //         return Center(
-                  //           child: CircularProgressIndicator(),
-                  //         );
-                  //       }
-                  //       String? _sharedText = snapshot.data;
-                  //       if (_sharedText != null) {
-                  //         if (_sharedText.contains('http') ||
-                  //             _sharedText.contains('https')) {
-                  //           // final response = await http.get(url);
-
-                  //           final String? headText = _getHeader(_sharedText);
-                  //         }
-
-                  //         print(
-                  //             'This is shared text from homescren -------------- $_sharedText');
-                  //         WidgetsBinding.instance?.addPostFrameCallback(
-                  //           (_) {
-                  //             Navigator.of(context).pushNamed(
-                  //               AddEditScreen.routeName,
-                  //               arguments: _sharedText,
-                  //             );
-                  //           },
-                  //         );
-                  //       }
-                  // return SwitchScreens(activeTab);
-                  //  }),
+                  body: SwitchScreens(activeTab, _sharedText, _sharedTitle),
                   floatingActionButton: activeTab == AppTab.todos
                       ? FloatingActionButton(
                           onPressed: () {

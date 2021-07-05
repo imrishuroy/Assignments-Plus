@@ -19,9 +19,9 @@ import 'package:flutter_todo/config/shared_prefs.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 import 'package:flutter_todo/repositories/services/firebase_service.dart';
 import 'package:flutter_todo/repositories/todo/todo_repository.dart';
-import 'package:flutter_todo/repositories/utils/util_repository.dart';
+
 import 'package:flutter_todo/services/notification_services.dart';
-import 'package:flutter_todo/share_intent.dart';
+
 import 'package:flutter_todo/theme/app_theme.dart';
 
 import 'blocs/todo/todo_bloc.dart';
@@ -45,9 +45,6 @@ class MyApp extends StatelessWidget {
         ),
         RepositoryProvider<TodosRepository>(
           create: (_) => TodosRepository(),
-        ),
-        RepositoryProvider<UtilsRepository>(
-          create: (_) => UtilsRepository(),
         ),
         RepositoryProvider<FirebaseServices>(
           create: (_) => FirebaseServices(),

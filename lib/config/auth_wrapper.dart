@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/auth/auth_bloc.dart';
-import 'package:flutter_todo/get_shared_text.dart';
 import 'package:flutter_todo/screens/home/home_screen.dart';
 import 'package:flutter_todo/screens/login/login_screen.dart';
 
