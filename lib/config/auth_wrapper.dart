@@ -21,10 +21,11 @@ class AuthWrapper extends StatelessWidget {
         if (state.status == AuthStatus.unauthenticated) {
           Navigator.of(context).pushNamed(LoginScreen.routeName);
         } else if (state.status == AuthStatus.authenticated) {
-          Navigator.of(context)
-              .pushNamed(HomeScreen.routeName); // Navigator.of(context).push(
+          Navigator.of(context).pushNamed(HomeScreen.routeName);
+
+          // Navigator.of(context).push(
           //   MaterialPageRoute(
-          //     builder: (_) => SuccussScreen(),
+          //     builder: (_) => GetSharedText(),
           //   ),
           // );
         }

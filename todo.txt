@@ -1,3 +1,11 @@
+Todos 
+
+#5 July 2021
+1. Add ask before delete option
+2. When user tap on the notification it should take them to the that todos details
+
+
+
 #10 June 2021
 1. We can add a leaderboard of all the users who have completed the most number of todos. ( This can also global or local group of friends)
 
@@ -23,3 +31,25 @@ saved URL.
 
 We will also make a chrome extension to easily add todo.
 
+
+Certificate fingerprints:
+SHA1: 2B:3A:BD:BF:DC:A0:A5:9E:29:B0:51:C5:02:2D:10:2D:AC:1F:B7:0B
+SHA256: CC:CB:3F:E7:8B:A7:66:72:11:D3:55:09:D8:BC:4B:81:A3:96:A1:D3:8F:76:73:33:0D:7E:DD:E9:8F:FA:84:2B
+
+
+
+In my opinion , It's throwing this error because of the time which you selected is before than now . In their pub.dev page , there is an example for solve this problem .
+
+tz.TZDateTime _nextInstanceOfTenAM() {
+final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+tz.TZDateTime scheduledDate =
+    tz.TZDateTime(tz.local, now.year, now.month, now.day, 10);
+if (scheduledDate.isBefore(now)) {
+  scheduledDate = scheduledDate.add(const Duration(days: 1));
+}
+return scheduledDate;
+}
+
+ [ERROR:flutter/lib/ui/ui_dart_state.cc(199)] Unhandled Exception: dependOnInheritedWidgetOfExactType<_ModalScopeStatus>() or dependOnInheritedElement() was called before _AddEditScreenState.initState() completed.
+E/flutter (26700): When an inherited widget changes, for example if the value of Theme.of() changes, its dependent widgets are rebuilt. If the dependent widget's reference to the inherited widget is in a constructor or an initState() method, then the rebuilt dependent widget will not reflect the changes in the inherited widget.
+E/flutter (26700): Typically references to inherited widgets should occur in widget build() methods. Alternatively, initialization based on inherited widgets can be placed in the didChangeDependencies method, which is called after initState and whenever the dependencies change thereafter.

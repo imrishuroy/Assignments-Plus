@@ -36,7 +36,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Stream<TodosState> _mapLoadTodosToState() async* {
     // yield TodosLoading();
-    _todosSubscription?.cancel();
+    await _todosSubscription?.cancel();
     _todosSubscription =
         _todosRepository.todos().listen((todos) => add(TodosUpdated(todos)));
   }
@@ -58,8 +58,8 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   @override
-  Future<void> close() {
-    _todosSubscription?.cancel();
+  Future<void> close() async {
+    await _todosSubscription?.cancel();
     return super.close();
   }
 }

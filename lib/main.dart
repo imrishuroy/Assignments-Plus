@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todo/blocs/add-edit/add_edit_cubit.dart';
+
 import 'package:flutter_todo/blocs/auth/auth_bloc.dart';
 
 import 'package:flutter_todo/blocs/filtered-bloc/flitered_bloc.dart';
@@ -19,8 +19,9 @@ import 'package:flutter_todo/config/shared_prefs.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 import 'package:flutter_todo/repositories/services/firebase_service.dart';
 import 'package:flutter_todo/repositories/todo/todo_repository.dart';
-import 'package:flutter_todo/repositories/utils/util_repository.dart';
+
 import 'package:flutter_todo/services/notification_services.dart';
+
 import 'package:flutter_todo/theme/app_theme.dart';
 
 import 'blocs/todo/todo_bloc.dart';
@@ -44,9 +45,6 @@ class MyApp extends StatelessWidget {
         ),
         RepositoryProvider<TodosRepository>(
           create: (_) => TodosRepository(),
-        ),
-        RepositoryProvider<UtilsRepository>(
-          create: (_) => UtilsRepository(),
         ),
         RepositoryProvider<FirebaseServices>(
           create: (_) => FirebaseServices(),
@@ -82,17 +80,17 @@ class MyApp extends StatelessWidget {
             create: (context) =>
                 StatsBloc(todosBloc: BlocProvider.of<TodosBloc>(context)),
           ),
-          BlocProvider<AddEditCubit>(
-            create: (context) => AddEditCubit(
-              todosBloc: BlocProvider.of<TodosBloc>(context),
-            ),
-          ),
+          // BlocProvider<AddEditCubit>(
+          //   create: (context) => AddEditCubit(
+          //     todosBloc: BlocProvider.of<TodosBloc>(context),
+          //   ),
+          // ),
         ],
         child: BlocBuilder<ThemeBloc, ThemeState>(
           builder: (context, state) {
-            final theme =
-                appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)];
-            print(theme);
+            // final theme =
+            //     appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)];
+            //print(theme);
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               title: '+Assignments',
@@ -101,6 +99,7 @@ class MyApp extends StatelessWidget {
                   appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)],
               onGenerateRoute: CustomRouter.onGenerateRoute,
               initialRoute: AuthWrapper.routeName,
+              //home: ShareIntentExample(),
             );
           },
         ),

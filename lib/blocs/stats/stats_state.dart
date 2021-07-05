@@ -7,6 +7,8 @@ abstract class StatsState extends Equatable {
   List<Object> get props => [];
 }
 
+class StatsInitial extends StatsState {}
+
 class StatsLoading extends StatsState {}
 
 class StatsLoaded extends StatsState {

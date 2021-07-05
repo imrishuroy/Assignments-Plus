@@ -23,7 +23,7 @@ class CustomRouter {
         return HomeScreen.route();
 
       case AddEditScreen.routeName:
-        return AddEditScreen.route();
+        return AddEditScreen.route(settings.arguments);
 
       default:
         return _errorRoute();

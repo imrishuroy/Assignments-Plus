@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/tab/tab_bloc.dart';
 
 import 'package:flutter_todo/models/app_tab_bar.dart';
-import 'package:flutter_todo/repositories/auth/auth_repository.dart';
+
 import 'package:flutter_todo/screens/add_edit_todo_screen.dart';
 import 'package:flutter_todo/screens/home/change_theme.dart';
 
@@ -15,6 +17,8 @@ import 'package:flutter_todo/widgets/filter_button.dart';
 import 'package:flutter_todo/widgets/filtered_todos.dart';
 import 'package:flutter_todo/widgets/stats.dart';
 import 'package:flutter_todo/widgets/tab_selector.dart';
+import 'package:metadata_fetch/metadata_fetch.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 class HomeScreen extends StatefulWidget {
@@ -32,118 +36,144 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late StreamSubscription? _intentDataStreamSubscription;
+
+  String? _sharedText;
+  String? _sharedTitle;
+  bool _loading = false;
+
   @override
   void initState() {
+    _getSharedText();
     tz.initializeTimeZones();
     RepositoryProvider.of<NotificationService>(context)
         .initialiseSettings(onSelectNotification);
+
     super.initState();
+  }
+
+  Future<void> _getSharedText() async {
+    setState(() {
+      _loading = true;
+    });
+    try {
+      // For sharing or opening urls/text coming from outside the app while the app is in the memory
+      _intentDataStreamSubscription =
+          ReceiveSharingIntent.getTextStream().listen((String? value) {
+        setState(() {
+          _sharedText = value;
+        });
+      }, onError: (err) {
+        print("getLinkStream error: $err");
+      });
+      // For sharing or opening urls/text coming from outside the app while the app is closed
+      ReceiveSharingIntent.getInitialText().then((String? value) {
+        setState(() {
+          _sharedText = value;
+
+          if (_sharedText != null) {
+            _getSharedTitle(_sharedText!);
+          }
+        });
+      });
+
+      setState(() {
+        _loading = false;
+      });
+      print('Shared Text $_sharedText and Header is $_sharedTitle');
+    } catch (e) {
+      setState(() {
+        _loading = false;
+      });
+      print(e.toString());
+    }
+  }
+
+  void _getSharedTitle(String sharedText) async {
+    setState(() {
+      _loading = true;
+    });
+    if (sharedText.contains('http') || sharedText.contains('https')) {
+      var data = await MetadataFetch.extract(sharedText);
+      print('------------This is title ${data?.title}');
+      setState(() {
+        _sharedTitle = data?.title;
+        _loading = false;
+        data = null;
+      });
+    }
   }
 
   Future<void> onSelectNotification(String? payload) async {
     print('Nofication Clicked');
-    // Navigator.of(context).push(
-    //   MaterialPageRoute(
-    //     builder: (_) {
-    //       return NewScreen(
-    //         payload: payload,
-    //       );
-    //     },
-    //   ),
-    // );
+  }
+
+  @override
+  void dispose() {
+    _intentDataStreamSubscription?.cancel();
+    ReceiveSharingIntent?.reset();
+    super.dispose();
+    _sharedText = '';
+    _sharedTitle = '';
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: BlocBuilder<TabBloc, AppTab>(
-        builder: (context, activeTab) {
-          return Scaffold(
-            appBar: activeTab == AppTab.profile
-                ? _profileAppBar(context)
-                : AppBar(
-                    automaticallyImplyLeading: false,
-                    title: Text('Your Todos'),
-                    actions: [
-                      FilterButton(visible: activeTab == AppTab.todos),
-                      ExtraActions(),
-                      SizedBox(width: 5),
-                    ],
+      child: _loading
+          ? Container(
+              color: Colors.white,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : BlocBuilder<TabBloc, AppTab>(
+              builder: (context, activeTab) {
+                return Scaffold(
+                  appBar: activeTab == AppTab.profile
+                      ? _profileAppBar(context)
+                      : AppBar(
+                          automaticallyImplyLeading: false,
+                          title: activeTab == AppTab.todos
+                              ? Text('Your Todos')
+                              : Text('Your Todos Data'),
+                          actions: [
+                            FilterButton(visible: activeTab == AppTab.todos),
+                            ExtraActions(),
+                            SizedBox(width: 5),
+                          ],
+                        ),
+                  body: SwitchScreens(activeTab, _sharedText, _sharedTitle),
+                  floatingActionButton: activeTab == AppTab.todos
+                      ? FloatingActionButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, AddEditScreen.routeName);
+                            // Navigator.of(context).push(MaterialPageRoute(
+                            //     builder: (_) => HtmlHeading()));
+                          },
+                          child: Icon(Icons.add),
+                          tooltip: 'Add Todo',
+                        )
+                      : null,
+                  bottomNavigationBar: TabSelector(
+                    activeTab: activeTab,
+                    onTabSelected: (tab) =>
+                        BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
                   ),
-            body: SwitchScreens(activeTab),
-            floatingActionButton: activeTab == AppTab.todos
-                ? FloatingActionButton(
-                    onPressed: () {
-                      // RepositoryProvider.of<NotificationService>(context)
-                      //     .showNotification();
-                      Navigator.pushNamed(context, AddEditScreen.routeName);
-                      // Navigator.of(context).push(MaterialPageRoute(
-                      //     builder: (_) => NotificationCheck()));
-                    },
-                    child: Icon(Icons.add),
-                    tooltip: 'Add Todo',
-                  )
-                : null,
-            bottomNavigationBar: TabSelector(
-              activeTab: activeTab,
-              onTabSelected: (tab) =>
-                  BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }
 
 AppBar _profileAppBar(BuildContext context) {
-  Future<bool> askForLogout() async {
-    return await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Hello there !'),
-            content: Text('Do you want to logout...?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: Text(
-                  'Yes',
-                  style: TextStyle(color: Colors.red, fontSize: 17.0),
-                ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text(
-                  'No',
-                  style: TextStyle(color: Colors.green, fontSize: 17.0),
-                ),
-              )
-            ],
-          );
-        });
-  }
-
-  _logout() async {
-    if (await askForLogout()) {
-      RepositoryProvider.of<AuthRepository>(context).signOut();
-    }
-  }
-
   return AppBar(
     automaticallyImplyLeading: false,
     title: Text('Your Profile'),
     actions: [
-      TextButton(
-        onPressed: _logout,
-        child: Text(
-          'Logout',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ),
       ChangeTheme(),
       SizedBox(width: 10.0),
     ],
@@ -152,11 +182,24 @@ AppBar _profileAppBar(BuildContext context) {
 
 class SwitchScreens extends StatelessWidget {
   final AppTab activeTab;
+  final String? sharedString;
+  final String? title;
 
-  const SwitchScreens(this.activeTab);
+  const SwitchScreens(this.activeTab, this.sharedString, this.title);
 
   @override
   Widget build(BuildContext context) {
+    if (sharedString != null) {
+      WidgetsBinding.instance?.addPostFrameCallback(
+        (_) {
+          Navigator.of(context).pushNamed(
+            AddEditScreen.routeName,
+            arguments: {'sharedString': sharedString, 'title': title},
+          );
+        },
+      );
+    }
+
     if (activeTab == AppTab.todos) {
       return FilteredTodos();
     } else if (activeTab == AppTab.stats) {
