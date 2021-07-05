@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -9,32 +11,34 @@ class NotificationService {
 
   void initialiseSettings(
       Future<void> Function(String? value) onPressed) async {
-    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-    final AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+    if (Platform.isAndroid || Platform.isIOS) {
+      // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+      final AndroidInitializationSettings initializationSettingsAndroid =
+          AndroidInitializationSettings('app_icon');
 
-    final IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings();
+      final IOSInitializationSettings initializationSettingsIOS =
+          IOSInitializationSettings();
 
-    final MacOSInitializationSettings initializationSettingsMacOS =
-        MacOSInitializationSettings();
+      final MacOSInitializationSettings initializationSettingsMacOS =
+          MacOSInitializationSettings();
 
-    final InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-      macOS: initializationSettingsMacOS,
-    );
+      final InitializationSettings initializationSettings =
+          InitializationSettings(
+        android: initializationSettingsAndroid,
+        iOS: initializationSettingsIOS,
+        macOS: initializationSettingsMacOS,
+      );
 
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      //     onSelectNotification: (value) async {
-      //   print('-----------Notification selected');
-      //   Navigator.of(context)
-      //       .push(MaterialPageRoute(builder: (_) => NewScreen(payload: value)));
-      // });
-      onSelectNotification: onPressed,
-    );
+      await flutterLocalNotificationsPlugin.initialize(
+        initializationSettings,
+        //     onSelectNotification: (value) async {
+        //   print('-----------Notification selected');
+        //   Navigator.of(context)
+        //       .push(MaterialPageRoute(builder: (_) => NewScreen(payload: value)));
+        // });
+        onSelectNotification: onPressed,
+      );
+    }
   }
 
   Future<void> showNotification() async {

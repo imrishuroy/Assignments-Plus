@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -49,9 +51,10 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<FirebaseServices>(
           create: (_) => FirebaseServices(),
         ),
-        RepositoryProvider<NotificationService>(
-          create: (_) => NotificationService(),
-        )
+        if (Platform.isAndroid || Platform.isIOS)
+          RepositoryProvider<NotificationService>(
+            create: (_) => NotificationService(),
+          )
       ],
       child: MultiBlocProvider(
         providers: [

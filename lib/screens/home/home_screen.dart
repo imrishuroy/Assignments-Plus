@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,12 +45,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _getSharedText();
-    tz.initializeTimeZones();
-    RepositoryProvider.of<NotificationService>(context)
-        .initialiseSettings(onSelectNotification);
-
     super.initState();
+    print('Homescreen init runs');
+    if (Platform.isAndroid || Platform.isIOS) {
+      _getSharedText();
+      tz.initializeTimeZones();
+      RepositoryProvider.of<NotificationService>(context)
+          .initialiseSettings(onSelectNotification);
+    }
   }
 
   Future<void> _getSharedText() async {
@@ -70,16 +73,29 @@ class _HomeScreenState extends State<HomeScreen> {
       ReceiveSharingIntent.getInitialText().then((String? value) {
         setState(() {
           _sharedText = value;
-
           if (_sharedText != null) {
             _getSharedTitle(_sharedText!);
           }
         });
       });
 
+      // if (_sharedText != null) {
+      //   WidgetsBinding.instance?.addPostFrameCallback(
+      //     (_) {
+      //       Navigator.of(context).pushNamed(
+      //         AddEditScreen.routeName,
+      //         arguments: {
+      //           'sharedString': _sharedText,
+      //           'title': _sharedTitle,
+      //         },
+      //       );
+      //     },
+      //   );
+      // }
       setState(() {
         _loading = false;
       });
+
       print('Shared Text $_sharedText and Header is $_sharedTitle');
     } catch (e) {
       setState(() {
@@ -110,8 +126,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    print('HomeScreen Dispose Called');
+
+    if (Platform.isAndroid || Platform.isIOS) {
+      ReceiveSharingIntent?.reset();
+    }
     _intentDataStreamSubscription?.cancel();
-    ReceiveSharingIntent?.reset();
+
     super.dispose();
     _sharedText = '';
     _sharedTitle = '';
@@ -180,7 +201,7 @@ AppBar _profileAppBar(BuildContext context) {
   );
 }
 
-class SwitchScreens extends StatelessWidget {
+class SwitchScreens extends StatefulWidget {
   final AppTab activeTab;
   final String? sharedString;
   final String? title;
@@ -188,21 +209,45 @@ class SwitchScreens extends StatelessWidget {
   const SwitchScreens(this.activeTab, this.sharedString, this.title);
 
   @override
+  _SwitchScreensState createState() => _SwitchScreensState();
+}
+
+class _SwitchScreensState extends State<SwitchScreens> {
+  int count = 0;
+  @override
+  void dispose() {
+    print('Switch screen dispose callled');
+    if (Platform.isAndroid || Platform.isIOS) {
+      ReceiveSharingIntent?.reset();
+    }
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (sharedString != null) {
+    count++;
+    print('Value of count ------------ $count');
+    print('Shared tesxt from SwitchScreen ------- ${widget.sharedString}');
+    if (widget.activeTab == AppTab.todos &&
+        widget.sharedString != null &&
+        count == 1) {
       WidgetsBinding.instance?.addPostFrameCallback(
         (_) {
           Navigator.of(context).pushNamed(
             AddEditScreen.routeName,
-            arguments: {'sharedString': sharedString, 'title': title},
+            arguments: {
+              'sharedString': widget.sharedString,
+              'title': widget.title
+            },
           );
         },
       );
     }
 
-    if (activeTab == AppTab.todos) {
+    if (widget.activeTab == AppTab.todos) {
       return FilteredTodos();
-    } else if (activeTab == AppTab.stats) {
+    } else if (widget.activeTab == AppTab.stats) {
       return Stats();
     } else {
       return ProfileScreen();

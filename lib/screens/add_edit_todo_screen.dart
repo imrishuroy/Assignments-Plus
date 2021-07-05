@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -139,7 +141,10 @@ class _AddEditScreenState extends State<AddEditScreen> {
   void dispose() {
     print('DISPOSE CALLED');
     _formKey.currentState?.dispose();
-    ReceiveSharingIntent?.reset();
+    if (Platform.isAndroid || Platform.isIOS) {
+      ReceiveSharingIntent?.reset();
+    }
+
     _titleController.dispose();
     _todoController.dispose();
 
@@ -222,75 +227,77 @@ class _AddEditScreenState extends State<AddEditScreen> {
                   ),
                 ),
                 SizedBox(height: 10.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton.icon(
-                      onPressed: () {
-                        if (isEditing && widget.todo?.notificationId != null) {
-                          final notification =
-                              RepositoryProvider.of<NotificationService>(
-                                  context,
-                                  listen: false);
-                          notification
-                              .cancelNotification(widget.todo!.notificationId!);
-                        }
+                if (Platform.isAndroid || Platform.isIOS)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton.icon(
+                        onPressed: () {
+                          if (isEditing &&
+                              widget.todo?.notificationId != null) {
+                            final notification =
+                                RepositoryProvider.of<NotificationService>(
+                                    context,
+                                    listen: false);
+                            notification.cancelNotification(
+                                widget.todo!.notificationId!);
+                          }
 
-                        DatePicker.showDateTimePicker(
-                          context,
-                          showTitleActions: true,
-                          theme: DatePickerTheme(),
-                          minTime: DateTime.now(),
-                          maxTime: DateTime(2022, 1, 1, 00, 00),
-                          onChanged: (date) {
-                            print('change $date in time zone ' +
-                                date.timeZoneOffset.inHours.toString());
+                          DatePicker.showDateTimePicker(
+                            context,
+                            showTitleActions: true,
+                            theme: DatePickerTheme(),
+                            minTime: DateTime.now(),
+                            maxTime: DateTime(2022, 1, 1, 00, 00),
+                            onChanged: (date) {
+                              print('change $date in time zone ' +
+                                  date.timeZoneOffset.inHours.toString());
 
-                            setState(() {
-                              notificationTime = date;
-                              formatedTime = format.format(date);
-                            });
-                          },
-                          onConfirm: (date) {
-                            print('confirm $date');
-                            if (date != notificationTime) {
                               setState(() {
                                 notificationTime = date;
                                 formatedTime = format.format(date);
                               });
-                            }
-                          },
-                        );
-                      },
-                      icon: Icon(
-                        Icons.notification_add,
+                            },
+                            onConfirm: (date) {
+                              print('confirm $date');
+                              if (date != notificationTime) {
+                                setState(() {
+                                  notificationTime = date;
+                                  formatedTime = format.format(date);
+                                });
+                              }
+                            },
+                          );
+                        },
+                        icon: Icon(
+                          Icons.notification_add,
+                        ),
+                        label: Text(
+                          isEditing ? 'Edit Notification' : 'Set Notification',
+                        ),
                       ),
-                      label: Text(
-                        isEditing ? 'Edit Notification' : 'Set Notification',
-                      ),
-                    ),
-                    if (formatedTime != null ||
-                        widget.todo?.notificationDate != null)
-                      Stack(
-                        children: [
-                          Chip(
-                            label: Text(
-                              '${formatedTime ?? ''}',
+                      if (formatedTime != null ||
+                          widget.todo?.notificationDate != null)
+                        Stack(
+                          children: [
+                            Chip(
+                              label: Text(
+                                '${formatedTime ?? ''}',
+                              ),
                             ),
-                          ),
-                          Positioned(
-                            right: -1.7,
-                            top: -1.7,
-                            child: Icon(
-                              Icons.star,
-                              color: Colors.yellow,
-                              size: 19.0,
-                            ),
-                          )
-                        ],
-                      ),
-                  ],
-                ),
+                            Positioned(
+                              right: -1.7,
+                              top: -1.7,
+                              child: Icon(
+                                Icons.star,
+                                color: Colors.yellow,
+                                size: 19.0,
+                              ),
+                            )
+                          ],
+                        ),
+                    ],
+                  ),
               ],
             ),
           ),

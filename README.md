@@ -35,3 +35,10 @@ samples, guidance on mobile development, and a full API reference.
   uuid: ^3.0.4
   flutter_webrtc: ^0.2.8
   sdp_transform: ^0.2.0
+
+
+
+You can set any port using the --web-port option.
+
+flutter run -d chrome --web-port 8080
+flutter run -d chrome --web-port 7357 - registered on gcp

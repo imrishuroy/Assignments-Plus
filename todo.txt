@@ -3,7 +3,10 @@ Todos
 #5 July 2021
 1. Add ask before delete option
 2. When user tap on the notification it should take them to the that todos details
-
+3. We can add feature that user can import their document from where they saved in past
+   such as medium or any other blog sites or whatsapp chats or google docs
+4. Add feature of adding folders and then add documents in that and
+   they can also move their document to another folder
 
 
 #10 June 2021
