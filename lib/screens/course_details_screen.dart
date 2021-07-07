@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
+import 'package:flutter_todo/models/todo_model.dart';
+import 'package:flutter_todo/repositories/utils/util_repository.dart';
 import 'package:flutter_todo/screens/add_edit_todo_screen.dart';
 import 'package:intl/intl.dart';
 
@@ -19,6 +21,15 @@ class DetailsScreen extends StatelessWidget {
   }
 
   final DateFormat format = DateFormat('dd MMM yy  hh:mm a');
+
+  void _deleteTodo(BuildContext context, Todo todo) async {
+    final utils = context.read<UitilsRepository>();
+    final bool result = await utils.askToRemove(context);
+    if (result) {
+      BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
+      Navigator.pop(context, todo);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +48,7 @@ class DetailsScreen extends StatelessWidget {
                 tooltip: 'Delete Todo',
                 icon: Icon(Icons.delete),
                 onPressed: () {
-                  BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
-                  Navigator.pop(context, todo);
+                  _deleteTodo(context, todo);
                 },
               )
             ],

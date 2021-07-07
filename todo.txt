@@ -1,5 +1,21 @@
 Todos 
 
+
+#7 July 2021
+
+1.Add Backup Option 
+2.Add trash option / recycle bin option
+3.Add Backup to google sheets they can Backup their files to google sheets
+4.Add delete notification when deleting todos to avoid memory leakes
+5.In todo app add option of blogs of lattest tech where users can see blogs according to
+their interest and they can also add todos from tha
+6.Add search functionality
+7.Add blogs page where other users can add blogs that they are reading 
+(it can have sections such as entertainment, app development, web etc ) and users can choose 
+their field and read that blog or post and they can also add that in his list
+
+
+
 #5 July 2021
 1. Add ask before delete option
 2. When user tap on the notification it should take them to the that todos details
@@ -56,3 +72,4 @@ return scheduledDate;
  [ERROR:flutter/lib/ui/ui_dart_state.cc(199)] Unhandled Exception: dependOnInheritedWidgetOfExactType<_ModalScopeStatus>() or dependOnInheritedElement() was called before _AddEditScreenState.initState() completed.
 E/flutter (26700): When an inherited widget changes, for example if the value of Theme.of() changes, its dependent widgets are rebuilt. If the dependent widget's reference to the inherited widget is in a constructor or an initState() method, then the rebuilt dependent widget will not reflect the changes in the inherited widget.
 E/flutter (26700): Typically references to inherited widgets should occur in widget build() methods. Alternatively, initialization based on inherited widgets can be placed in the didChangeDependencies method, which is called after initState and whenever the dependencies change thereafter.
+ -->

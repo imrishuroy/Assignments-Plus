@@ -5,7 +5,7 @@ import 'package:flutter_todo/screens/home/home_screen.dart';
 import 'package:flutter_todo/screens/login/login_screen.dart';
 
 class AuthWrapper extends StatelessWidget {
-  static const String routeName = '/authwrapper';
+  static const String routeName = '/auth';
 
   static Route route() {
     return MaterialPageRoute(

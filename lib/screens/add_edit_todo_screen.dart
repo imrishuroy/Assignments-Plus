@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
@@ -13,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:universal_platform/universal_platform.dart';
 import 'package:uuid/uuid.dart';
 
 typedef OnSaveCallback = Function(
@@ -141,7 +139,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
   void dispose() {
     print('DISPOSE CALLED');
     _formKey.currentState?.dispose();
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (!UniversalPlatform.isWeb) {
       ReceiveSharingIntent?.reset();
     }
 
@@ -227,7 +225,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
                   ),
                 ),
                 SizedBox(height: 10.0),
-                if (Platform.isAndroid || Platform.isIOS)
+                if (!UniversalPlatform.isWeb)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

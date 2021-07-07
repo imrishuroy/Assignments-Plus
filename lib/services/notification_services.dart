@@ -1,9 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:timezone/timezone.dart' as tz;
+
+import 'package:universal_platform/universal_platform.dart';
 
 class NotificationService {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -11,7 +11,8 @@ class NotificationService {
 
   void initialiseSettings(
       Future<void> Function(String? value) onPressed) async {
-    if (Platform.isAndroid || Platform.isIOS) {
+    print('This runs---------------');
+    if (!UniversalPlatform.isWeb) {
       // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
       final AndroidInitializationSettings initializationSettingsAndroid =
           AndroidInitializationSettings('app_icon');

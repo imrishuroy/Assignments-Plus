@@ -21,6 +21,7 @@ import 'package:flutter_todo/widgets/tab_selector.dart';
 import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:universal_platform/universal_platform.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/home';
@@ -47,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     print('Homescreen init runs');
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (!UniversalPlatform.isWeb) {
       _getSharedText();
       tz.initializeTimeZones();
       RepositoryProvider.of<NotificationService>(context)

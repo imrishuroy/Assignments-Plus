@@ -1,13 +1,9 @@
-import 'dart:io';
-
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:flutter_todo/blocs/auth/auth_bloc.dart';
-
 import 'package:flutter_todo/blocs/filtered-bloc/flitered_bloc.dart';
 import 'package:flutter_todo/blocs/simple_bloc_oberver.dart';
 import 'package:flutter_todo/blocs/stats/stats_bloc.dart';
@@ -15,18 +11,16 @@ import 'package:flutter_todo/blocs/tab/tab_bloc.dart';
 import 'package:flutter_todo/blocs/theme/theme_bloc.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/config/custom_router.dart';
-
 import 'package:flutter_todo/config/auth_wrapper.dart';
 import 'package:flutter_todo/config/shared_prefs.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 import 'package:flutter_todo/repositories/services/firebase_service.dart';
 import 'package:flutter_todo/repositories/todo/todo_repository.dart';
-
+import 'package:flutter_todo/repositories/utils/util_repository.dart';
 import 'package:flutter_todo/services/notification_services.dart';
-
 import 'package:flutter_todo/theme/app_theme.dart';
-
 import 'blocs/todo/todo_bloc.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,10 +45,13 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<FirebaseServices>(
           create: (_) => FirebaseServices(),
         ),
-        if (Platform.isAndroid || Platform.isIOS)
+        RepositoryProvider<UitilsRepository>(
+          create: (_) => UitilsRepository(),
+        ),
+        if (!UniversalPlatform.isWeb)
           RepositoryProvider<NotificationService>(
             create: (_) => NotificationService(),
-          )
+          ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -97,6 +94,7 @@ class MyApp extends StatelessWidget {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               title: '+Assignments',
+
               //theme: state.themeData,
               theme:
                   appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)],

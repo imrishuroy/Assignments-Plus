@@ -4,7 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/filtered-bloc/flitered_bloc.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
-import 'package:flutter_todo/screens/details_screen.dart';
+
+import 'package:flutter_todo/screens/course_details_screen.dart';
 import 'package:flutter_todo/widgets/deleted_todo_snackbar.dart';
 
 import 'package:flutter_todo/widgets/todo_item.dart';
@@ -14,8 +15,6 @@ class FilteredTodos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //  final activeTab = BlocProvider.of<TabBloc>(context);
-
     return Scaffold(
       body: BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
         builder: (context, state) {
@@ -30,7 +29,7 @@ class FilteredTodos extends StatelessWidget {
                 print(todo);
                 return TodoItem(
                   todo: todo,
-                  onDismissed: (direction) {
+                  onDelete: () {
                     BlocProvider.of<TodosBloc>(context).add(DeleteTodo(todo));
                     ScaffoldMessenger.of(context).showSnackBar(
                       DeleteTodoSnackBar(
