@@ -13,6 +13,8 @@ their interest and they can also add todos from tha
 7.Add blogs page where other users can add blogs that they are reading 
 (it can have sections such as entertainment, app development, web etc ) and users can choose 
 their field and read that blog or post and they can also add that in his list
+8.Add analytics for crashes and user behaviour
+
 
 
 
