@@ -9,4 +9,6 @@ abstract class BaseTodosRepository {
   Stream<List<Todo>> todos();
 
   Future<void> updateTodo(Todo todo);
+
+  Stream<List<Todo>> searchTodos(String keyword);
 }

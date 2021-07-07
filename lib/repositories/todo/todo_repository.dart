@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_todo/config/paths.dart';
 import 'package:flutter_todo/models/todo_model.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
@@ -46,5 +47,18 @@ class TodosRepository implements BaseTodosRepository {
         .collection(Paths.todos)
         .doc(todo.id)
         .update(todo.toMap());
+  }
+
+  @required
+  Stream<List<Todo>> searchTodos(String keyword) {
+    return usersRef
+        .doc(uid)
+        .collection(Paths.todos)
+        .where('title', isGreaterThanOrEqualTo: keyword)
+        // .where('title', isLessThanOrEqualTo: keyword)
+        .snapshots()
+        .map((snaps) {
+      return snaps.docs.map((doc) => Todo.fromMap(doc.data())).toList();
+    });
   }
 }
