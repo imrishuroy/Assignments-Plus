@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/auth/auth_bloc.dart';
 import 'package:flutter_todo/blocs/filtered-bloc/flitered_bloc.dart';
+import 'package:flutter_todo/blocs/public-todo/publictodo_bloc.dart';
 import 'package:flutter_todo/blocs/simple_bloc_oberver.dart';
 import 'package:flutter_todo/blocs/stats/stats_bloc.dart';
 import 'package:flutter_todo/blocs/tab/tab_bloc.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_todo/config/custom_router.dart';
 import 'package:flutter_todo/config/auth_wrapper.dart';
 import 'package:flutter_todo/config/shared_prefs.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
+import 'package:flutter_todo/repositories/public-todos/public_todos_repository.dart';
 import 'package:flutter_todo/repositories/services/firebase_service.dart';
 import 'package:flutter_todo/repositories/todo/todo_repository.dart';
 import 'package:flutter_todo/repositories/utils/util_repository.dart';
@@ -48,6 +50,9 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<UitilsRepository>(
           create: (_) => UitilsRepository(),
         ),
+        RepositoryProvider<PublicTodosRepository>(
+          create: (_) => PublicTodosRepository(),
+        ),
         if (!UniversalPlatform.isWeb)
           RepositoryProvider<NotificationService>(
             create: (_) => NotificationService(),
@@ -62,6 +67,10 @@ class MyApp extends StatelessWidget {
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
             ),
+          ),
+          BlocProvider<PublictodoBloc>(
+            create: (context) => PublictodoBloc(
+                publicTodosRepository: context.read<PublicTodosRepository>()),
           ),
           BlocProvider<TodosBloc>(
             create: (context) => TodosBloc(

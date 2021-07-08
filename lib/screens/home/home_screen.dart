@@ -11,7 +11,7 @@ import 'package:flutter_todo/screens/add_edit_todo_screen.dart';
 import 'package:flutter_todo/screens/home/change_theme.dart';
 
 import 'package:flutter_todo/screens/profile/profile_screen.dart';
-import 'package:flutter_todo/screens/public/public_screen.dart';
+import 'package:flutter_todo/screens/public/public_todos_screen.dart';
 import 'package:flutter_todo/services/notification_services.dart';
 
 import 'package:flutter_todo/widgets/extra_actions.dart';
@@ -254,7 +254,7 @@ class _SwitchScreensState extends State<SwitchScreens> {
     } else if (widget.activeTab == AppTab.stats) {
       return Stats();
     } else if (widget.activeTab == AppTab.public) {
-      return PublicScreen();
+      return PublicTodosScreen();
     } else {
       return ProfileScreen();
     }
