@@ -51,14 +51,19 @@ class TodosRepository implements BaseTodosRepository {
 
   @required
   Stream<List<Todo>> searchTodos(String keyword) {
-    return usersRef
-        .doc(uid)
-        .collection(Paths.todos)
-        .where('title', isGreaterThanOrEqualTo: keyword)
-        // .where('title', isLessThanOrEqualTo: keyword)
-        .snapshots()
-        .map((snaps) {
-      return snaps.docs.map((doc) => Todo.fromMap(doc.data())).toList();
-    });
+    try {
+      return usersRef
+          .doc(uid)
+          .collection(Paths.todos)
+
+          // .where('title', isGreaterThanOrEqualTo: keyword)
+          .where('title', isGreaterThanOrEqualTo: keyword)
+          .snapshots()
+          .map((snaps) {
+        return snaps.docs.map((doc) => Todo.fromMap(doc.data())).toList();
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 }

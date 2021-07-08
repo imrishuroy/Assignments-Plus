@@ -57,6 +57,11 @@ class DetailsScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
             child: ListView(
               children: [
+                SwitchListTile.adaptive(
+                  value: true,
+                  title: Text('Make it public'),
+                  onChanged: (value) {},
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

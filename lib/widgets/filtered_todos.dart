@@ -7,7 +7,7 @@ import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/models/todo_model.dart';
 import 'package:flutter_todo/repositories/todo/todo_repository.dart';
 
-import 'package:flutter_todo/screens/course_details_screen.dart';
+import 'package:flutter_todo/screens/todos_details_screen.dart';
 import 'package:flutter_todo/widgets/deleted_todo_snackbar.dart';
 import 'package:flutter_todo/widgets/search_items.dart';
 
@@ -67,18 +67,9 @@ class _FilteredTodosState extends State<FilteredTodos> {
                         },
                         child: Icon(Icons.clear),
                       )
-                    : InkWell(
-                        onTap: () {
-                          // final todos = todoRepo.searchTodos('Top');
-                          // print('-------------- Todos $todos');
-                          // todos.forEach((element) {
-                          //   print(element.first.title);
-                          // });
-                        },
-                        child: Icon(
-                          Icons.search,
-                          color: Colors.green,
-                        ),
+                    : Icon(
+                        Icons.search,
+                        color: Colors.green,
                       ),
               ),
             ),

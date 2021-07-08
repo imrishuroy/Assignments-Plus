@@ -11,6 +11,7 @@ import 'package:flutter_todo/screens/add_edit_todo_screen.dart';
 import 'package:flutter_todo/screens/home/change_theme.dart';
 
 import 'package:flutter_todo/screens/profile/profile_screen.dart';
+import 'package:flutter_todo/screens/public/public_screen.dart';
 import 'package:flutter_todo/services/notification_services.dart';
 
 import 'package:flutter_todo/widgets/extra_actions.dart';
@@ -153,6 +154,8 @@ class _HomeScreenState extends State<HomeScreen> {
           : BlocBuilder<TabBloc, AppTab>(
               builder: (context, activeTab) {
                 return Scaffold(
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.miniCenterFloat,
                   appBar: activeTab == AppTab.profile
                       ? _profileAppBar(context)
                       : AppBar(
@@ -250,6 +253,8 @@ class _SwitchScreensState extends State<SwitchScreens> {
       return FilteredTodos();
     } else if (widget.activeTab == AppTab.stats) {
       return Stats();
+    } else if (widget.activeTab == AppTab.public) {
+      return PublicScreen();
     } else {
       return ProfileScreen();
     }
