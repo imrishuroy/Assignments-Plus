@@ -70,7 +70,8 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider<PublictodoBloc>(
             create: (context) => PublictodoBloc(
-                publicTodosRepository: context.read<PublicTodosRepository>()),
+                publicTodosRepository: context.read<PublicTodosRepository>())
+              ..add(LoadPublicTodos()),
           ),
           BlocProvider<TodosBloc>(
             create: (context) => TodosBloc(

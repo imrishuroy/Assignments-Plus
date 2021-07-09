@@ -21,7 +21,7 @@ typedef OnSaveCallback = Function(
   int? notificationId,
 });
 
-class AddEditScreen extends StatefulWidget {
+class AddEditTodoScreen extends StatefulWidget {
   static const String routeName = '/addTodo';
 
   static Route route(var arguments) {
@@ -30,7 +30,7 @@ class AddEditScreen extends StatefulWidget {
         name: routeName,
         arguments: arguments,
       ),
-      builder: (context) => AddEditScreen(
+      builder: (context) => AddEditTodoScreen(
         isEditing: false,
         onSave: (
           title,
@@ -60,7 +60,7 @@ class AddEditScreen extends StatefulWidget {
   final OnSaveCallback? onSave;
   final Todo? todo;
 
-  AddEditScreen({
+  AddEditTodoScreen({
     Key? key,
     @required this.onSave,
     @required this.isEditing,
@@ -68,10 +68,10 @@ class AddEditScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _AddEditScreenState createState() => _AddEditScreenState();
+  _AddEditTodoScreenState createState() => _AddEditTodoScreenState();
 }
 
-class _AddEditScreenState extends State<AddEditScreen> {
+class _AddEditTodoScreenState extends State<AddEditTodoScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _todoController = TextEditingController();

@@ -30,7 +30,7 @@ class DeletePublicTodo extends PublictodoEvent {
   bool? get stringify => true;
 }
 
-class UpdatePublicTodo extends TodosEvent {
+class UpdatePublicTodo extends PublictodoEvent {
   final PublicTodo todo;
 
   UpdatePublicTodo(this.todo);
@@ -41,13 +41,13 @@ class UpdatePublicTodo extends TodosEvent {
   bool? get stringify => true;
 }
 
-class PublicTodosUpdated extends TodosEvent {
+class PublicTodosUpdated extends PublictodoEvent {
   final List<PublicTodo> todos;
 
   PublicTodosUpdated(this.todos);
 
   @override
-  List<Object> get props => [props];
+  List<Object> get props => [todos];
 
   @override
   bool? get stringify => true;

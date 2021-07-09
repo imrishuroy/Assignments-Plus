@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/models/todo_model.dart';
 
 class DeleteTodoSnackBar extends SnackBar {
   DeleteTodoSnackBar({
     Key? key,
-    @required Todo? todo,
+    @required String? title,
     @required VoidCallback? onUndo,
   }) : super(
           key: key,
           content: Text(
-            'Deleted ${todo?.todo}',
+            'Deleted ${title ?? ''}',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),

@@ -5,16 +5,16 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/models/todo_model.dart';
 import 'package:flutter_todo/repositories/utils/util_repository.dart';
-import 'package:flutter_todo/screens/add_edit_todo_screen.dart';
+import 'package:flutter_todo/screens/todos/add_edit_todo_screen.dart';
 import 'package:intl/intl.dart';
 
 import 'dart:core';
 import 'package:url_launcher/url_launcher.dart';
 
-class DetailsScreen extends StatelessWidget {
+class TodoDetailsScreen extends StatelessWidget {
   final String? id;
 
-  DetailsScreen({Key? key, @required this.id}) : super(key: key);
+  TodoDetailsScreen({Key? key, @required this.id}) : super(key: key);
 
   Future<void> _onOpen(LinkableElement link) async {
     await launch(link.url);
@@ -141,7 +141,7 @@ class DetailsScreen extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) {
-                    return AddEditScreen(
+                    return AddEditTodoScreen(
                       onSave: (
                         title,
                         todoString,

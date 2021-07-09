@@ -7,7 +7,7 @@ import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/models/todo_model.dart';
 import 'package:flutter_todo/repositories/todo/todo_repository.dart';
 
-import 'package:flutter_todo/screens/todos_details_screen.dart';
+import 'package:flutter_todo/screens/todos/todos_details_screen.dart';
 import 'package:flutter_todo/widgets/deleted_todo_snackbar.dart';
 import 'package:flutter_todo/widgets/search_items.dart';
 
@@ -116,13 +116,13 @@ class _FilteredTodosState extends State<FilteredTodos> {
                                 final removedTodo =
                                     await Navigator.of(context).push(
                                   MaterialPageRoute(builder: (_) {
-                                    return DetailsScreen(id: todo.id);
+                                    return TodoDetailsScreen(id: todo.id);
                                   }),
                                 );
                                 if (removedTodo != null) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     DeleteTodoSnackBar(
-                                      todo: todo,
+                                      title: todo.title,
                                       onUndo: () =>
                                           BlocProvider.of<TodosBloc>(context)
                                               .add(AddTodo(todo)),
@@ -155,7 +155,7 @@ class _FilteredTodosState extends State<FilteredTodos> {
                                     .add(DeleteTodo(todo));
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   DeleteTodoSnackBar(
-                                    todo: todo,
+                                    title: todo.title,
                                     onUndo: () =>
                                         BlocProvider.of<TodosBloc>(context)
                                             .add(AddTodo(todo)),
@@ -166,13 +166,13 @@ class _FilteredTodosState extends State<FilteredTodos> {
                                 final removedTodo =
                                     await Navigator.of(context).push(
                                   MaterialPageRoute(builder: (_) {
-                                    return DetailsScreen(id: todo.id);
+                                    return TodoDetailsScreen(id: todo.id);
                                   }),
                                 );
                                 if (removedTodo != null) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     DeleteTodoSnackBar(
-                                      todo: todo,
+                                      title: todo.title,
                                       onUndo: () =>
                                           BlocProvider.of<TodosBloc>(context)
                                               .add(AddTodo(todo)),

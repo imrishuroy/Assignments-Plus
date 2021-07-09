@@ -17,9 +17,9 @@ class PublicTodosRepository {
 //     });
 //   }
 
-  Stream<List<PublicTodo?>>? allTodos() {
+  Stream<List<PublicTodo>> allTodos() {
     try {
-      publicTodos.snapshots().map((snaps) {
+      return publicTodos.snapshots().map((snaps) {
         return snaps.docs.map((doc) => PublicTodo.fromMap(doc.data())).toList();
       });
     } catch (error) {
@@ -45,6 +45,16 @@ class PublicTodosRepository {
     } catch (error) {
       print(error.toString());
       throw Failure(message: 'Something went wrong');
+    }
+  }
+
+  Future<void> updatePublicTodo(PublicTodo todoToUpdate) async {
+    try {
+      if (todoToUpdate.authorId == _currentUserId) {
+        await publicTodos.doc(todoToUpdate.todoId).update(todoToUpdate.toMap());
+      }
+    } catch (error) {
+      throw Failure(message: error.toString());
     }
   }
 }

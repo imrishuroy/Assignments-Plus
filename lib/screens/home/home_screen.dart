@@ -6,12 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/tab/tab_bloc.dart';
 
 import 'package:flutter_todo/models/app_tab_bar.dart';
+import 'package:flutter_todo/screens/public-todo/public_todos_screen.dart';
 
-import 'package:flutter_todo/screens/add_edit_todo_screen.dart';
+import 'package:flutter_todo/screens/todos/add_edit_todo_screen.dart';
 import 'package:flutter_todo/screens/home/change_theme.dart';
 
 import 'package:flutter_todo/screens/profile/profile_screen.dart';
-import 'package:flutter_todo/screens/public/public_todos_screen.dart';
+
 import 'package:flutter_todo/services/notification_services.dart';
 
 import 'package:flutter_todo/widgets/extra_actions.dart';
@@ -174,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? FloatingActionButton(
                           onPressed: () {
                             Navigator.pushNamed(
-                                context, AddEditScreen.routeName);
+                                context, AddEditTodoScreen.routeName);
                             // Navigator.of(context).push(MaterialPageRoute(
                             //     builder: (_) => HtmlHeading()));
                           },
@@ -239,7 +240,7 @@ class _SwitchScreensState extends State<SwitchScreens> {
       WidgetsBinding.instance?.addPostFrameCallback(
         (_) {
           Navigator.of(context).pushNamed(
-            AddEditScreen.routeName,
+            AddEditTodoScreen.routeName,
             arguments: {
               'sharedString': widget.sharedString,
               'title': widget.title

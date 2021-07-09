@@ -7,12 +7,14 @@ class PublicTodo extends Equatable {
   final String? todo;
   final String? authorId;
   final String? todoId;
+  final DateTime? dateTime;
 
   PublicTodo({
     required this.title,
     required this.todo,
     required this.authorId,
     required this.todoId,
+    required this.dateTime,
   });
 
   PublicTodo copyWith({
@@ -20,12 +22,14 @@ class PublicTodo extends Equatable {
     String? todo,
     String? authorId,
     String? todoId,
+    DateTime? dateTime,
   }) {
     return PublicTodo(
       title: title ?? this.title,
       todo: todo ?? this.todo,
       authorId: authorId ?? this.authorId,
       todoId: todoId ?? this.todoId,
+      dateTime: dateTime ?? this.dateTime,
     );
   }
 
@@ -35,15 +39,18 @@ class PublicTodo extends Equatable {
       'todo': todo,
       'authorId': authorId,
       'todoId': todoId,
+      'dateTime': dateTime?.millisecondsSinceEpoch,
     };
   }
 
   factory PublicTodo.fromMap(Map<String, dynamic> map) {
     return PublicTodo(
-        title: map['title'],
-        todo: map['todo'],
-        authorId: map['authorId'],
-        todoId: map['todoId']);
+      title: map['title'] ?? '',
+      todo: map['todo'] ?? '',
+      authorId: map['authorId'] ?? '',
+      todoId: map['todoId'] ?? '',
+      dateTime: DateTime.fromMillisecondsSinceEpoch(map['dateTime'] ?? 0),
+    );
   }
 
   String toJson() => json.encode(toMap());
@@ -55,5 +62,13 @@ class PublicTodo extends Equatable {
   bool get stringify => true;
 
   @override
-  List<Object?> get props => [title, todo, authorId, todoId];
+  List<Object?> get props {
+    return [
+      title,
+      todo,
+      authorId,
+      todoId,
+      dateTime,
+    ];
+  }
 }

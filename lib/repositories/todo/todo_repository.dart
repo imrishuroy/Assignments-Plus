@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/config/paths.dart';
 import 'package:flutter_todo/models/todo_model.dart';
-import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 
 import 'base_todo_repository.dart';
 
@@ -12,7 +11,7 @@ class TodosRepository implements BaseTodosRepository {
       FirebaseFirestore.instance.collection(Paths.users);
   final String uid = FirebaseAuth.instance.currentUser!.uid;
 
-  AuthRepository auth = AuthRepository();
+  // AuthRepository auth = AuthRepository();
 
   @override
   Future<void> addNewTodo(Todo todo) async {
