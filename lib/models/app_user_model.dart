@@ -7,11 +7,15 @@ class AppUser extends Equatable {
   final String? uid;
   final String? name;
   final String? imageUrl;
+  final String? about;
+  final String? email;
 
   AppUser({
     @required this.uid,
     @required this.name,
     @required this.imageUrl,
+    @required this.about,
+    @required this.email,
   });
 
   @override
@@ -21,11 +25,15 @@ class AppUser extends Equatable {
     String? uid,
     String? name,
     String? imageUrl,
+    String? about,
+    String? email,
   }) {
     return AppUser(
       uid: uid ?? this.uid,
       name: name ?? this.name,
       imageUrl: imageUrl ?? this.imageUrl,
+      about: about ?? this.about,
+      email: email ?? this.email,
     );
   }
 
@@ -34,14 +42,18 @@ class AppUser extends Equatable {
       'uid': uid,
       'name': name,
       'imageUrl': imageUrl,
+      'about': about,
+      'email': email,
     };
   }
 
   factory AppUser.fromMap(Map<String, dynamic> map) {
     return AppUser(
       uid: map['uid'],
-      name: map['name'],
-      imageUrl: map['imageUrl'],
+      name: map['name'] ?? '',
+      imageUrl: map['imageUrl'] ?? '',
+      about: map['about'] ?? '',
+      email: map['email'] ?? '',
     );
   }
 

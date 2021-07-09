@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_todo/models/app_user_model.dart';
 import 'package:flutter_todo/models/public_todos.dart';
+import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PublicTodoItem extends StatelessWidget {
   final GestureTapCallback? onTap;
@@ -30,9 +33,20 @@ class PublicTodoItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text('$time'),
-          Text(
-            'Rishu Roy',
-            style: TextStyle(color: Colors.black87.withOpacity(0.7)),
+          FutureBuilder<AppUser?>(
+            future: context.read<AuthRepository>().getUser(todo?.authorId),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              return Text(
+                '${snapshot.data?.name}',
+                style: TextStyle(color: Colors.black87.withOpacity(0.7)),
+              );
+            },
           ),
         ],
       ),

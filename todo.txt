@@ -3,6 +3,8 @@ Todos
 We don't claim ownership links are resourses added in the app. We only help them to 
 organise them better and make our users life manageable
 
+#9 July 2021
+Export your todos to pdf and excel sheet
 
 #7 July 2021
 

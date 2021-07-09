@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_todo/blocs/public-todo/publictodo_bloc.dart';
 import 'package:flutter_todo/models/public_todos.dart';
+import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 import 'package:flutter_todo/repositories/utils/util_repository.dart';
 import 'package:flutter_todo/screens/public-todo/add_edit_public_todos.dart';
 import 'package:intl/intl.dart';
@@ -32,6 +33,7 @@ class PublicTodoDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _authRepo = context.read<AuthRepository>();
     return BlocBuilder<PublictodoBloc, PublictodoState>(
       builder: (context, state) {
         print('this is state of public todos details ----- $state');
@@ -48,13 +50,14 @@ class PublicTodoDetailsScreen extends StatelessWidget {
               appBar: AppBar(
                 title: Text('Todo Details'),
                 actions: [
-                  IconButton(
-                    tooltip: 'Delete Todo',
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
-                      _deleteTodo(context, todo);
-                    },
-                  )
+                  if (_authRepo.userId == todo.authorId)
+                    IconButton(
+                      tooltip: 'Delete Todo',
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        _deleteTodo(context, todo);
+                      },
+                    )
                 ],
               ),
               body: Padding(
@@ -77,7 +80,6 @@ class PublicTodoDetailsScreen extends StatelessWidget {
                                 child: Text(
                                   '${todo.title}',
                                   style: TextStyle(fontSize: 20),
-                                  //style: Theme.of(context).textTheme.headline5,
                                 ),
                               ),
                               SelectableLinkify(

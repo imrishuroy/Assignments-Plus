@@ -133,7 +133,7 @@ class _AddEditPublicTodoScreenState extends State<AddEditPublicTodoScreen> {
                   autofocus: !isEditing,
                   style: textTheme.headline5,
                   decoration: InputDecoration(
-                    hintText: 'What needs to be done?',
+                    hintText: 'What do you want to share?',
                   ),
                   validator: (val) {
                     return val!.trim().isEmpty
@@ -148,7 +148,7 @@ class _AddEditPublicTodoScreenState extends State<AddEditPublicTodoScreen> {
                   onSaved: (value) => _todo = value,
                   validator: (value) =>
                       value!.isEmpty ? 'Todo can\'t be empty' : null,
-                  maxLength: 500,
+                  maxLength: 800,
                   maxLines: 11,
                   minLines: 3,
                   decoration: InputDecoration(

@@ -2,16 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/public-todo/publictodo_bloc.dart';
+import 'package:flutter_todo/config/paths.dart';
 import 'package:flutter_todo/models/public_todos.dart';
 import 'package:flutter_todo/screens/public-todo/add_edit_public_todos.dart';
-import 'package:flutter_todo/screens/public-todo/public_todo_item.dart';
+import 'package:flutter_todo/screens/public-todo/widgets/public_todo_item.dart';
 import 'package:flutter_todo/screens/public-todo/public_todos.details.dart';
 import 'package:flutter_todo/widgets/deleted_todo_snackbar.dart';
 
 class PublicTodosScreen extends StatelessWidget {
   PublicTodosScreen({Key? key}) : super(key: key);
   final CollectionReference publicTodos =
-      FirebaseFirestore.instance.collection('dev-public');
+      FirebaseFirestore.instance.collection(Paths.public);
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +50,6 @@ class PublicTodosScreen extends StatelessWidget {
                             ),
                           );
                           if (removedTodo != null) {
-                            //Navigator.of(context).pop();
-
                             ScaffoldMessenger.of(context).showSnackBar(
                               DeleteTodoSnackBar(
                                 title: publicTodo.title,
@@ -75,78 +74,3 @@ class PublicTodosScreen extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_todo/config/paths.dart';
-
-// class PublicScreen extends StatelessWidget {
-//   PublicScreen({Key? key}) : super(key: key);
-
-//   final CollectionReference public =
-//       FirebaseFirestore.instance.collection(Paths.public);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return StreamBuilder<QuerySnapshot>(
-//       stream: public.snapshots(),
-//       builder: (context, snapshot) {
-//         if (snapshot.hasError) {
-//           return Center(
-//             child: Text('Something went wrong'),
-//           );
-//         }
-//         if (snapshot.connectionState == ConnectionState.waiting) {
-//           return Center(
-//             child: CircularProgressIndicator(),
-//           );
-//         }
-//         final data = snapshot.data;
-
-//         return ListView.builder(
-//             itemCount: data?.size,
-//             itemBuilder: (context, index) {
-//               final DocumentReference todoRef = data?.docs[index]['todos'];
-//               return FutureBuilder<DocumentSnapshot>(
-//                   future: todoRef.get(),
-//                   builder: (context, snapshot) {
-//                     if (snapshot.hasError) {
-//                       return Center(
-//                         child: Text('Something went wrong'),
-//                       );
-//                     }
-//                     if (snapshot.connectionState == ConnectionState.waiting) {
-//                       return Center(
-//                         child: CircularProgressIndicator(),
-//                       );
-//                     }
-//                     return ListTile(
-//                       title: Text('${snapshot.data?.data()?['title']}'),
-//                     );
-//                   });
-//             });
-
-//         // return ListView.builder(
-//         //   itemCount: data?.size,
-//         //   itemBuilder: (context, index) {
-//         //     final todosRef = data?.docs[index]['todos'];
-
-//         //     return
-//         //   },
-//         // );
-//       },
-//     );
-//   }
-// }
-
-// // Document Reference
