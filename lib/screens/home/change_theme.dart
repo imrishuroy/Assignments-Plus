@@ -11,6 +11,8 @@ class ChangeTheme extends StatelessWidget {
     return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) {
         return PopupMenuButton<ThemeOption>(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
           icon: Icon(Icons.settings),
           onSelected: (action) {
             switch (action) {
@@ -32,11 +34,29 @@ class ChangeTheme extends StatelessWidget {
           },
           itemBuilder: (context) => <PopupMenuItem<ThemeOption>>[
             PopupMenuItem(
-              child: Text('Light'),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.light_mode_rounded,
+                    color: Colors.amber,
+                  ),
+                  SizedBox(width: 10.0),
+                  Text('Light'),
+                ],
+              ),
               value: ThemeOption.light,
             ),
             PopupMenuItem(
-              child: Text('Dark'),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.dark_mode_sharp,
+                    color: Colors.black,
+                  ),
+                  SizedBox(width: 10.0),
+                  Text('Dark'),
+                ],
+              ),
               value: ThemeOption.dark,
             )
           ],

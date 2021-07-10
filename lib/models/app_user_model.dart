@@ -63,5 +63,5 @@ class AppUser extends Equatable {
       AppUser.fromMap(json.decode(source));
 
   @override
-  List<Object?> get props => [uid, name, imageUrl];
+  List<Object?> get props => [uid, name, imageUrl, about, email];
 }

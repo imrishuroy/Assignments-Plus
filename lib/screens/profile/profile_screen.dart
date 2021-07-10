@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/auth/auth_bloc.dart';
 import 'package:flutter_todo/blocs/profile/profile_bloc.dart';
 import 'package:flutter_todo/models/app_user_model.dart';
+
+import 'package:flutter_todo/screens/profile/widgets/name_and_about.dart';
+import 'package:flutter_todo/screens/profile/widgets/name_and_about_textfileds.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
@@ -14,161 +18,35 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  // final _nameController = TextEditingController();
+  final _nameController = TextEditingController();
 
-  // final _aboutController = TextEditingController();
+  final _aboutController = TextEditingController();
 
   bool _editting = false;
 
-  String? _name;
-  String? _about;
-
-  _editProfile(AppUser appUser) async {
+  Future<void> _editProfile(AppUser appUser) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+      print('About Conutrolller ----- ${_aboutController.text}');
       BlocProvider.of<ProfileBloc>(context).add(
         UpdateProfile(
           appUser.copyWith(
-            name: _name,
-            about: _about,
+            name: _nameController.text,
+            about: _aboutController.text,
           ),
         ),
       );
+      setState(() {
+        _editting = false;
+      });
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
-      if (state is ProfileInitial) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      } else if (state is ProfileLoaded) {
-        // _nameController.text = state.appUser.name ?? '';
-        // _aboutController.text = state.appUser.about ?? '';
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: 40.0),
-                Center(
-                  child: CircleAvatar(
-                    radius: 65.0,
-                    backgroundImage:
-                        NetworkImage(state.appUser.imageUrl ?? errorImage),
-                  ),
-                ),
-                // SizedBox(height: 10.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        if (_editting) {
-                          _editProfile(state.appUser);
-                          setState(() {
-                            _editting = false;
-                          });
-                        } else {
-                          setState(() {
-                            _editting = !_editting;
-                          });
-                        }
-                      },
-                      icon: Icon(
-                        _editting ? Icons.check : Icons.edit_outlined,
-                        size: 20.0,
-                      ),
-                    )
-                  ],
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                  child: Center(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: 200.0,
-                          child: TextFormField(
-                            validator: (value) =>
-                                value!.isEmpty ? 'About can\'t be empty' : null,
-                            onSaved: (value) => _name = value,
-                            // controller: _nameController,
-                            initialValue: state.appUser.name,
-                            textAlign: TextAlign.center,
-                            enabled: _editting,
-                            style: TextStyle(
-                              fontSize: 17.0,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 1.0,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: 'Enter your name',
-                              border: !_editting ? InputBorder.none : null,
-                              // focusedBorder: InputBorder.none,
-                              // enabledBorder: InputBorder.none,
-                              // errorBorder: InputBorder.none,
-                              // disabledBorder: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: _editting ? 20.0 : 0.0),
-                        TextFormField(
-                          initialValue: state.appUser.about ?? '',
-                          validator: (value) =>
-                              value!.isEmpty ? 'About can\'t be empty' : null,
-                          onSaved: (value) => _about = value,
-                          //controller: _aboutController,
-                          enabled: _editting,
-                          maxLength: 100,
-                          minLines: 1,
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                            hintText: 'Tell us something about you',
-                            disabledBorder: InputBorder.none,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(3.0),
-                              borderSide: BorderSide(color: Colors.green),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                // Text(
-                //   '${state.appUser.name}',
-                //   style: TextStyle(
-                //     fontSize: 19.0,
-                //     fontWeight: FontWeight.w600,
-                //   ),
-                // ),
-                // SizedBox(height: 8.0),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                //   child: Text(
-                //     '${state.appUser.about}',
-                //     style: TextStyle(
-                //       fontSize: 14.0,
-                //     ),
-                //     textAlign: TextAlign.center,
-                //   ),
-                //  ),
-              ],
-            ),
-          ),
-        );
-      }
-
-      return Text('');
-    });
+  void dispose() {
+    _aboutController.dispose();
+    _nameController.dispose();
+    super.dispose();
   }
 
   Future _signOutUser(BuildContext context) async {
@@ -204,11 +82,105 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       final bool logout = await result ?? false;
       if (logout) {
+        //   await auth.signOut();
+        // Navigator.of(context)
+        //     .pushAndRemoveUntil(AuthWrapper.route(), (route) => false);
+
         authBloc.add(AuthLogoutRequested());
+        // authBloc.close();
       }
     } catch (error) {
       print(error.toString());
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    print('UID---------------${user?.uid}');
+
+    return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
+      if (state is ProfileInitial) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      } else if (state is ProfileLoaded) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 40.0),
+                Center(
+                  child: CircleAvatar(
+                    radius: 65.0,
+                    backgroundImage: NetworkImage(
+                      state.appUser.imageUrl != null &&
+                              state.appUser.imageUrl!.isNotEmpty
+                          ? state.appUser.imageUrl!
+                          : errorImage,
+
+                      // state.appUser.imageUrl ?? state.appUser!.imageUrl!.isEmpty!  ? errorImage: errorImage,
+                    ),
+                  ),
+                ),
+                // SizedBox(height: 10.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        if (_editting) {
+                          _editProfile(state.appUser);
+                        } else {
+                          setState(() {
+                            _nameController.text = state.appUser.name ?? '';
+                            _aboutController.text = state.appUser.about ?? '';
+                            _editting = !_editting;
+                          });
+                        }
+                      },
+                      icon: Icon(
+                        _editting ? Icons.check : Icons.edit_outlined,
+                        size: _editting ? 25 : 20.0,
+                        color: _editting ? Colors.green : Colors.black,
+                      ),
+                    )
+                  ],
+                ),
+
+                !_editting
+                    ? NameAndAbout(
+                        name: state.appUser.name,
+                        about: state.appUser.about,
+                      )
+                    : NameAndAboutTextFields(
+                        isEditing: _editting,
+                        nameController: _nameController,
+                        aboutController: _aboutController,
+                      ),
+                Spacer(),
+                //Logout(),
+                Center(
+                  child: TextButton.icon(
+                    style: TextButton.styleFrom(primary: Colors.red),
+                    onPressed: () {
+                      _signOutUser(context);
+                    },
+                    icon: Icon(Icons.logout),
+                    label: Text('Logout'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+
+      return Text('');
+    });
   }
 }
 
