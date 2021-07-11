@@ -13,6 +13,11 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   ThemeBloc() : super(ThemeState.initial());
 
   @override
+  Future<void> close() {
+    return super.close();
+  }
+
+  @override
   Stream<ThemeState> mapEventToState(
     ThemeEvent event,
   ) async* {

@@ -10,6 +10,11 @@ class TabBloc extends Bloc<TabEvent, AppTab> {
   TabBloc() : super(AppTab.todos);
 
   @override
+  Future<void> close() {
+    return super.close();
+  }
+
+  @override
   Stream<AppTab> mapEventToState(TabEvent event) async* {
     if (event is UpdateTab) {
       yield event.tab;

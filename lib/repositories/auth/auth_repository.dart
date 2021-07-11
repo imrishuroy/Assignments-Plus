@@ -34,6 +34,8 @@ class AuthRepository extends BaseAuthRepository {
 
   String? get userId => _firebaseAuth.currentUser?.uid;
 
+  String? get userImage => _firebaseAuth.currentUser?.photoURL;
+
   @override
   Future<AppUser?> signInWithGoogle() async {
     try {
@@ -53,18 +55,18 @@ class AuthRepository extends BaseAuthRepository {
       final UserCredential userCredential =
           await _firebaseAuth.signInWithCredential(credential);
 
-      final user = await _userRef.doc(userCredential.user?.uid).get();
+      // final user = await _userRef.doc(userCredential.user?.uid).get();
 
-      print('User Exists ---- ${user.exists}');
+      // print('User Exists ---- ${user.exists}');
 
-      if (!user.exists) {
-        _userRef.doc(userCredential.user?.uid).set({
-          'name': userCredential.user?.displayName ?? '',
-          'imageUrl': userCredential.user?.photoURL,
-          'about': '',
-          'email': userCredential.user?.email ?? ''
-        });
-      }
+      // if (!user.exists) {
+      //   _userRef.doc(userCredential.user?.uid).set({
+      //     'name': userCredential.user?.displayName ?? '',
+      //     'imageUrl': userCredential.user?.photoURL,
+      //     'about': '',
+      //     'email': userCredential.user?.email ?? ''
+      //   });
+      // }
 
       return _appUser(userCredential.user);
     } on FirebaseAuthException catch (error) {

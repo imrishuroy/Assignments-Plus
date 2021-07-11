@@ -3,11 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/tab/tab_bloc.dart';
+import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/models/app_tab_bar.dart';
+import 'package:flutter_todo/repositories/todo/todo_repository.dart';
 import 'package:flutter_todo/screens/home/widgets/my_appbar.dart';
 import 'package:flutter_todo/screens/home/widgets/switch_screen.dart';
 import 'package:flutter_todo/screens/todos/add_edit_todo_screen.dart';
 import 'package:flutter_todo/services/notification_services.dart';
+import 'package:flutter_todo/test.dart';
 import 'package:flutter_todo/widgets/tab_selector.dart';
 import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
@@ -16,11 +19,34 @@ import 'package:universal_platform/universal_platform.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/home';
+  final String userId;
 
-  static Route route() {
+  const HomeScreen({Key? key, required this.userId}) : super(key: key);
+
+  // static Route route(String userId) {
+  //   print('This is route userId --------- $userId');
+  //   return MaterialPageRoute(
+  //     settings: RouteSettings(
+  //       name: routeName,
+  //     ),
+  //     builder: (context) => BlocProvider<TodosBloc>(
+  //       create: (context) => TodosBloc(
+  //           todosRepository: context.read<TodosRepository>(), userId: userId),
+  //       child: HomeScreen(
+  //         userId: userId,
+  //       ),
+  //     ),
+  //   );
+  // }
+  static Route route(String userId) {
+    print('This is route userId --------- $userId');
     return MaterialPageRoute(
-      settings: RouteSettings(name: routeName),
-      builder: (context) => HomeScreen(),
+      settings: RouteSettings(
+        name: routeName,
+      ),
+      builder: (context) => HomeScreen(
+        userId: userId,
+      ),
     );
   }
 
@@ -119,6 +145,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // final userId = ModalRoute.of(context)!.settings.arguments as String?;
+    // print('---------------------UserId ---- $userId');
     return WillPopScope(
       onWillPop: () async => false,
       child: _loading
@@ -139,12 +167,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       activeTab: activeTab,
                     ),
                   ),
-                  body: SwitchScreens(activeTab, _sharedText, _sharedTitle),
+                  body: SwitchScreens(
+                      activeTab, _sharedText, _sharedTitle, widget.userId),
                   floatingActionButton: activeTab == AppTab.todos
                       ? FloatingActionButton(
                           onPressed: () {
-                            Navigator.pushNamed(
-                                context, AddEditTodoScreen.routeName);
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => Test(),
+                              ),
+                            );
+                            // Navigator.pushNamed(
+                            //     context, AddEditTodoScreen.routeName);
                             // Navigator.of(context).push(MaterialPageRoute(
                             //     builder: (_) => HtmlHeading()));
                           },

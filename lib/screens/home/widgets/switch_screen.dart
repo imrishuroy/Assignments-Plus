@@ -12,8 +12,10 @@ class SwitchScreens extends StatefulWidget {
   final AppTab activeTab;
   final String? sharedString;
   final String? title;
+  final String userId;
 
-  const SwitchScreens(this.activeTab, this.sharedString, this.title);
+  const SwitchScreens(
+      this.activeTab, this.sharedString, this.title, this.userId);
 
   @override
   _SwitchScreensState createState() => _SwitchScreensState();
@@ -53,9 +55,13 @@ class _SwitchScreensState extends State<SwitchScreens> {
     }
 
     if (widget.activeTab == AppTab.todos) {
-      return FilteredTodos();
+      return FilteredTodos(
+        userId: widget.userId,
+      );
     } else if (widget.activeTab == AppTab.stats) {
-      return Stats();
+      return Stats(
+        userId: widget.userId,
+      );
     } else if (widget.activeTab == AppTab.public) {
       return PublicTodosScreen();
     } else {

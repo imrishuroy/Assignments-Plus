@@ -22,13 +22,16 @@ class WeeklyData {
 }
 
 class Stats extends StatelessWidget {
+  final String userId;
+
+  const Stats({Key? key, required this.userId}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final _todos = context.read<TodosRepository>();
     int completed = 0;
     List<WeeklyData> weeklyData = [];
     return StreamBuilder<List<Todo>>(
-      stream: _todos.todos(),
+      stream: _todos.todos(userId),
       builder: (context, snapshots) {
         if (snapshots.connectionState == ConnectionState.waiting) {
           return Center(

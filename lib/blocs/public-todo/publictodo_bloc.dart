@@ -11,15 +11,19 @@ part 'publictodo_state.dart';
 
 class PublictodoBloc extends Bloc<PublictodoEvent, PublictodoState> {
   final PublicTodosRepository? _publicTodosRepository;
-  StreamSubscription? _todosSubscription;
+  late StreamSubscription _todosSubscription;
   PublictodoBloc({required PublicTodosRepository? publicTodosRepository})
       : assert(publicTodosRepository != null),
         _publicTodosRepository = publicTodosRepository,
-        super(PublictodoLoading());
+        super(PublictodoLoading()) {
+    _todosSubscription = _publicTodosRepository!.allTodos().listen((todos) {
+      add(PublicTodosUpdated(todos));
+    });
+  }
 
   @override
   Future<void> close() {
-    _todosSubscription?.cancel();
+    _todosSubscription.cancel();
     return super.close();
   }
 
@@ -41,7 +45,7 @@ class PublictodoBloc extends Bloc<PublictodoEvent, PublictodoState> {
   }
 
   Stream<PublictodoState> _mapLoadPublicTodos() async* {
-    await _todosSubscription?.cancel();
+    await _todosSubscription.cancel();
     _todosSubscription = _publicTodosRepository!
         .allTodos()
         .listen((todos) => add(PublicTodosUpdated(todos)));

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_todo/models/todo_model.dart';
+import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 import 'package:flutter_todo/repositories/todo/todo_repository.dart';
 
 import 'package:meta/meta.dart';
@@ -12,12 +13,29 @@ part 'todo_state.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final TodosRepository _todosRepository;
-  StreamSubscription? _todosSubscription;
-
-  TodosBloc({@required TodosRepository? todosRepository})
+  late StreamSubscription _todosSubscription;
+  late StreamSubscription _authSubsrciption;
+  final AuthRepository _authRepository;
+  //final String _userId;
+  String? userId;
+  TodosBloc(
+      {@required TodosRepository? todosRepository,
+      required AuthRepository authRepository})
       : assert(todosRepository != null),
         _todosRepository = todosRepository!,
-        super(TodosLoading());
+        _authRepository = authRepository,
+        //  _userId = userId,
+        super(TodosLoading()) {
+    _authSubsrciption = _authRepository.onAuthChanges.listen((user) {
+      userId = user!.uid;
+      _todosSubscription = _todosRepository.todos(userId!).listen((todos) {
+        add(TodosUpdated(todos));
+      });
+    });
+    // _todosSubscription = _todosRepository.todos(_userId).listen((todos) {
+    //   add(TodosUpdated(todos));
+    // });
+  }
 
   @override
   Stream<TodosState> mapEventToState(TodosEvent event) async* {
@@ -36,9 +54,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   Stream<TodosState> _mapLoadTodosToState() async* {
     // yield TodosLoading();
-    await _todosSubscription?.cancel();
-    _todosSubscription =
-        _todosRepository.todos().listen((todos) => add(TodosUpdated(todos)));
+    _todosSubscription.cancel();
+    _todosSubscription = _todosRepository
+        .todos(userId!)
+        .listen((todos) => add(TodosUpdated(todos)));
   }
 
   Stream<TodosState> _mapTodosUpdateToState(TodosUpdated event) async* {
@@ -46,20 +65,20 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
-    _todosRepository.addNewTodo(event.todo);
+    _todosRepository.addNewTodo(event.todo, userId!);
   }
 
   Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
-    _todosRepository.deleteTodo(event.todo);
+    _todosRepository.deleteTodo(event.todo, userId!);
   }
 
   Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
-    _todosRepository.updateTodo(event.updatedTodo);
+    _todosRepository.updateTodo(event.updatedTodo, userId!);
   }
 
   @override
   Future<void> close() async {
-    await _todosSubscription?.cancel();
+    await _todosSubscription.cancel();
     return super.close();
   }
 }
