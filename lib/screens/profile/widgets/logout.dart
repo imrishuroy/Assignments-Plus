@@ -6,7 +6,6 @@ class Logout extends StatelessWidget {
   const Logout({Key? key}) : super(key: key);
 
   Future<void> _signOutUser(BuildContext context) async {
-    final authBloc = context.read<AuthBloc>();
     try {
       var result = await showDialog(
         context: context,
@@ -36,7 +35,7 @@ class Logout extends StatelessWidget {
 
       final bool logout = await result ?? false;
       if (logout) {
-        authBloc.add(AuthLogoutRequested());
+        BlocProvider.of<AuthBloc>(context)..add(AuthLogoutRequested());
       }
     } catch (error) {
       print(error.toString());

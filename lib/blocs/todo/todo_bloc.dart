@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_todo/models/app_user_model.dart';
 import 'package:flutter_todo/models/todo_model.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 import 'package:flutter_todo/repositories/todo/todo_repository.dart';
@@ -18,19 +19,22 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final AuthRepository _authRepository;
   //final String _userId;
   String? userId;
-  TodosBloc(
-      {@required TodosRepository? todosRepository,
-      required AuthRepository authRepository})
-      : assert(todosRepository != null),
+  TodosBloc({
+    @required TodosRepository? todosRepository,
+    required AuthRepository authRepository,
+  })  : assert(todosRepository != null),
         _todosRepository = todosRepository!,
         _authRepository = authRepository,
         //  _userId = userId,
         super(TodosLoading()) {
-    _authSubsrciption = _authRepository.onAuthChanges.listen((user) {
-      userId = user!.uid;
-      _todosSubscription = _todosRepository.todos(userId!).listen((todos) {
-        add(TodosUpdated(todos));
-      });
+    _authSubsrciption = _authRepository.onAuthChanges.listen((AppUser? user) {
+      //userId = user!.uid;
+      if (user?.uid != null) {
+        userId = user?.uid;
+        _todosSubscription = _todosRepository.todos(userId!).listen((todos) {
+          add(TodosUpdated(todos));
+        });
+      }
     });
     // _todosSubscription = _todosRepository.todos(_userId).listen((todos) {
     //   add(TodosUpdated(todos));
@@ -79,6 +83,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   @override
   Future<void> close() async {
     await _todosSubscription.cancel();
+    await _authSubsrciption.cancel();
     return super.close();
   }
 }

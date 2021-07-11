@@ -5,13 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/filtered-bloc/flitered_bloc.dart';
 import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
 import 'package:flutter_todo/models/todo_model.dart';
-import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 import 'package:flutter_todo/repositories/todo/todo_repository.dart';
-
 import 'package:flutter_todo/screens/todos/todos_details_screen.dart';
 import 'package:flutter_todo/widgets/deleted_todo_snackbar.dart';
 import 'package:flutter_todo/widgets/search_items.dart';
-
 import 'package:flutter_todo/widgets/todo_item.dart';
 
 class FilteredTodos extends StatefulWidget {
@@ -37,37 +34,6 @@ class _FilteredTodosState extends State<FilteredTodos> {
   String _searchKeyword = '';
 
   final _searchController = TextEditingController();
-
-  Future<void> _signOut(BuildContext context) async {
-    final result = await showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text('Sign Out'),
-        content: Text('Do you want to sign out of the app?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(
-              'Yes',
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(
-              'No',
-              style: TextStyle(color: Colors.green),
-            ),
-          )
-        ],
-      ),
-    );
-    print(result);
-    if (result) {
-      RepositoryProvider.of<AuthRepository>(context, listen: false).signOut();
-      // Navigator.of(context).pushNamed('/');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

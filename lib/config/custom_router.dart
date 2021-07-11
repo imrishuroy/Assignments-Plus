@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/config/auth_wrapper.dart';
-import 'package:flutter_todo/screens/profile/profile_screen.dart';
 import 'package:flutter_todo/screens/public-todo/add_edit_public_todos.dart';
 import 'package:flutter_todo/screens/todos/add_edit_todo_screen.dart';
 import 'package:flutter_todo/screens/home/home_screen.dart';
 import 'package:flutter_todo/screens/login/login_screen.dart';
-import 'package:flutter_todo/widgets/filtered_todos.dart';
 
 class CustomRouter {
   static Route onGenerateRoute(RouteSettings settings) {
@@ -24,17 +22,12 @@ class CustomRouter {
 
       case HomeScreen.routeName:
         return HomeScreen.route(settings.arguments as String);
-      // case FilteredTodos.routeName:
-      //   return FilteredTodos.route();
 
       case AddEditTodoScreen.routeName:
         return AddEditTodoScreen.route(settings.arguments);
 
       case AddEditPublicTodoScreen.routeName:
         return AddEditPublicTodoScreen.route();
-
-      case ProfileScreen.routeName:
-        return ProfileScreen.route(settings.arguments as String);
 
       default:
         return _errorRoute();

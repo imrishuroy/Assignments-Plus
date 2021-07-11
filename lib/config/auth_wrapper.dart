@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/auth/auth_bloc.dart';
 import 'package:flutter_todo/screens/home/home_screen.dart';
 import 'package:flutter_todo/screens/login/login_screen.dart';
-import 'package:flutter_todo/screens/profile/profile_screen.dart';
-import 'package:flutter_todo/widgets/filtered_todos.dart';
 
 class AuthWrapper extends StatelessWidget {
   static const String routeName = '/auth';

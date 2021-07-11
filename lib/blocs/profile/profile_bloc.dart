@@ -15,35 +15,31 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   late StreamSubscription _streamSubscription;
   final ProfileRepository _profileRepository;
   final AuthRepository _authRepository;
-  //final String _userId;
-  //final AuthRepository _authRepository;
+  late StreamSubscription _authSubsciption;
+
   String? userId;
   ProfileBloc({
     required ProfileRepository profileRepository,
     required AuthRepository authRepository,
-    // required AuthRepository authRepository,
-    //required String userId,
   })  : _profileRepository = profileRepository,
-        //_authRepository = authRepository,
-        // _userId = userId,
         _authRepository = authRepository,
         super(ProfileInitial()) {
-    _authRepository.onAuthChanges.listen((user) {
-      userId = user!.uid;
-      _streamSubscription =
-          profileRepository.streamUser(userId).listen((event) {
-        add(LoadProfile());
-      });
+    _authSubsciption = _authRepository.onAuthChanges.listen((AppUser? user) {
+      if (user?.uid != null) {
+        userId = user?.uid;
+        _streamSubscription =
+            profileRepository.streamUser(userId).listen((event) {
+          add(LoadProfile());
+        });
+      }
     });
-    // _streamSubscription =
-    //     _profileRepository.streamUser(_userId).listen((appUser) {
-    //   add(LoadProfile());
-    // });
   }
 
   @override
   Future<void> close() {
     _streamSubscription.cancel();
+    _authSubsciption.cancel();
+
     return super.close();
   }
 
