@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_todo/models/todo_model.dart';
 import 'package:flutter_todo/repositories/todo/todo_repository.dart';
+import 'package:flutter_todo/widgets/loading_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -22,18 +23,19 @@ class WeeklyData {
 }
 
 class Stats extends StatelessWidget {
+  final String userId;
+
+  const Stats({Key? key, required this.userId}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final _todos = context.read<TodosRepository>();
     int completed = 0;
     List<WeeklyData> weeklyData = [];
     return StreamBuilder<List<Todo>>(
-      stream: _todos.todos(),
+      stream: _todos.todos(userId),
       builder: (context, snapshots) {
         if (snapshots.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return LoadingIndicator();
         }
 
         List<Todo>? todos = snapshots.data;

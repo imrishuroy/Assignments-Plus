@@ -5,6 +5,7 @@ import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 
 import 'package:flutter_todo/screens/login/cubit/login_cubit.dart';
 import 'package:flutter_todo/widgets/error_dialog.dart';
+import 'package:flutter_todo/widgets/loading_indicator.dart';
 
 class LoginScreen extends StatelessWidget {
   static const String routeName = '/login';
@@ -49,11 +50,7 @@ class LoginScreen extends StatelessWidget {
             // backgroundColor: Colors.grey[100],
             body: state.status == LoginStatus.submitting
                 ? Center(
-                    child: Container(
-                      width: 50.0,
-                      height: 50.0,
-                      child: Image.asset('assets/loader.gif'),
-                    ),
+                    child: LoadingIndicator(),
                   )
                 : Center(
                     child: Container(
@@ -65,7 +62,6 @@ class LoginScreen extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            // SizedBox(height: 10.0),
                             Text(
                               '+ Assignments',
                               style: TextStyle(
@@ -74,7 +70,6 @@ class LoginScreen extends StatelessWidget {
                                 letterSpacing: 1.2,
                               ),
                             ),
-                            //  SizedBox(height: 50.0),
                             Container(
                               width: 250.0,
                               height: 50.0,
@@ -128,21 +123,6 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            //   SizedBox(height: 45.0),
-                            // Center(
-                            //   child: Padding(
-                            //     padding: const EdgeInsets.symmetric(
-                            //         horizontal: 20.0),
-                            //     child: Text(
-                            //       '"This has nothing to do with your life.\nBut by adding some todos you can organize it better."',
-                            //       style: TextStyle(
-                            //         fontSize: width < 900 ? 14.0 : 20.0,
-                            //         letterSpacing: 1.2,
-                            //       ),
-                            //       textAlign: TextAlign.center,
-                            //     ),
-                            //   ),
-                            // ),
                             Center(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -162,41 +142,6 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
-            //  Column(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     // crossAxisAlignment: CrossAxisAlignment.center,
-            //     children: [
-            //       Center(
-            //         child: ElevatedButton(
-            //           onPressed: () {
-            //             context.read<LoginCubit>().logInWithGoogle();
-            //           },
-            //           child: Text('Google Sign In'),
-            //         ),
-            //       ),
-            //       Padding(
-            //         padding: const EdgeInsets.symmetric(horizontal: 30.0),
-            //         child: TextField(
-            //           onChanged: (value) => context
-            //               .read<LoginCubit>()
-            //               .phoneNumberChanged(value),
-            //           decoration: InputDecoration(
-            //             hintText: 'Enter phone number eg-918540928489',
-            //           ),
-            //         ),
-            //       ),
-            //       SizedBox(height: 20.0),
-            //       Center(
-            //         child: ElevatedButton(
-            //           onPressed: () {
-            //             context.read<LoginCubit>().loginWithPhone();
-            //           },
-            //           child: Text('Phone Sign In'),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
           );
         },
       ),

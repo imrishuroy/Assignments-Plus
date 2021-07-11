@@ -11,11 +11,8 @@ class DismissibleBackground extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            Icon(
-              Icons.delete,
-              color: Colors.white,
-            ),
-            Text(
+            const Icon(Icons.delete, color: Colors.white),
+            const Text(
               ' Delete',
               style: TextStyle(
                 color: Colors.white,
@@ -23,9 +20,7 @@ class DismissibleBackground extends StatelessWidget {
               ),
               textAlign: TextAlign.right,
             ),
-            SizedBox(
-              width: 20,
-            ),
+            const SizedBox(width: 20),
           ],
         ),
         alignment: Alignment.centerRight,

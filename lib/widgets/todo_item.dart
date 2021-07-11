@@ -29,7 +29,7 @@ class TodoItem extends StatelessWidget {
               TextButton(
                 child: Text(
                   'Cancel',
-                  style: TextStyle(color: Colors.black),
+                  style: const TextStyle(color: Colors.black),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop(false);
@@ -38,7 +38,7 @@ class TodoItem extends StatelessWidget {
               TextButton(
                 child: Text(
                   'Delete',
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                 ),
                 onPressed: () {
                   onDelete!();

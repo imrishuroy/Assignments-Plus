@@ -1,136 +1,128 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todo/blocs/auth/auth_bloc.dart';
-
+import 'package:flutter_todo/blocs/profile/profile_bloc.dart';
 import 'package:flutter_todo/models/app_user_model.dart';
-import 'package:flutter_todo/repositories/auth/auth_repository.dart';
-import 'package:flutter_todo/repositories/services/firebase_service.dart';
+import 'package:flutter_todo/screens/leadBoard/lead_board.dart';
+import 'package:flutter_todo/screens/profile/widgets/logout.dart';
+import 'package:flutter_todo/screens/profile/widgets/name_and_about.dart';
+import 'package:flutter_todo/screens/profile/widgets/name_and_about_textfileds.dart';
+import 'package:flutter_todo/widgets/display_image.dart';
+import 'package:flutter_todo/widgets/loading_indicator.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class ProfileScreen extends StatefulWidget {
+  ProfileScreen({Key? key}) : super(key: key);
 
-  Future _signOutUser(BuildContext context) async {
-    //  final auth = context.read<AuthRepository>();
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
 
-    final authBloc = context.read<AuthBloc>();
-    try {
-      var result = await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('SignOut'),
-            content: Text('Do you want to signOut ?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: Text(
-                  'Yes',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text(
-                  'No',
-                  style: TextStyle(color: Colors.green),
-                ),
-              ),
-            ],
-          );
-        },
+class _ProfileScreenState extends State<ProfileScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  final _nameController = TextEditingController();
+
+  final _aboutController = TextEditingController();
+
+  bool _editting = false;
+
+  Future<void> _editProfile(AppUser appUser) async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      BlocProvider.of<ProfileBloc>(context).add(
+        UpdateProfile(
+          appUser.copyWith(
+            name: _nameController.text,
+            about: _aboutController.text,
+          ),
+        ),
       );
-
-      final bool logout = await result ?? false;
-      if (logout) {
-        //   await auth.signOut();
-        // Navigator.of(context)
-        //     .pushAndRemoveUntil(AuthWrapper.route(), (route) => false);
-
-        authBloc.add(AuthLogoutRequested());
-      }
-    } catch (error) {
-      print(error.toString());
+      setState(() {
+        _editting = false;
+      });
     }
   }
 
   @override
+  void dispose() {
+    _aboutController.dispose();
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final auth = context.read<AuthRepository>();
-
-    final services =
-        RepositoryProvider.of<FirebaseServices>(context, listen: false);
-    print(services.leadBoardUsers());
-
-    return StreamBuilder<AppUser?>(
-      stream: auth.currentUser.asStream(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Center(
-            child: Text('No data found :('),
-          );
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        return BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, state) {
-            return Column(
-              //crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 40.0),
-                Center(
-                  child: CircleAvatar(
-                    radius: 70.0,
-                    backgroundImage:
-                        CachedNetworkImageProvider(snapshot.data!.imageUrl!),
-                  ),
-                ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      '${snapshot.data!.name}',
-                      style: TextStyle(
-                        fontSize: 17.0,
-                        letterSpacing: 1.2,
-                      ),
+    return Scaffold(
+      body: BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
+        if (state is ProfileInitial) {
+          return LoadingIndicator();
+        } else if (state is ProfileLoaded) {
+          return Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 20.0),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50.0),
+                    child: DisplayImage(
+                      state.appUser.imageUrl != null &&
+                              state.appUser.imageUrl!.isNotEmpty
+                          ? state.appUser.imageUrl!
+                          : errorImage,
+                      errorIconSize: 30.0,
                     ),
                   ),
-                ),
-                Spacer(),
-                Center(
-                  child: TextButton.icon(
-                    style: TextButton.styleFrom(primary: Colors.red),
-                    onPressed: () {
-                      _signOutUser(context);
-                    },
-                    icon: Icon(Icons.logout),
-                    label: Text('Logout'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          if (_editting) {
+                            _editProfile(state.appUser);
+                          } else {
+                            setState(() {
+                              _nameController.text = state.appUser.name ?? '';
+                              _aboutController.text = state.appUser.about ?? '';
+                              _editting = !_editting;
+                            });
+                          }
+                        },
+                        icon: Icon(
+                          _editting ? Icons.check : Icons.edit_outlined,
+                          size: _editting ? 25 : 20.0,
+                          color: _editting ? Colors.green : Colors.grey,
+                        ),
+                      )
+                    ],
                   ),
-                ),
-                SizedBox(height: 20.0)
+                  !_editting
+                      ? NameAndAbout(
+                          name: state.appUser.name,
+                          about: state.appUser.about,
+                        )
+                      : NameAndAboutTextFields(
+                          isEditing: _editting,
+                          nameController: _nameController,
+                          aboutController: _aboutController,
+                        ),
+                  const SizedBox(height: 25.0),
+                  LeadBoard(),
+                  const Logout(),
+                ],
+              ),
+            ),
+          );
+        }
 
-                // SizedBox(height: 60.0),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                //   child: Text(
-                //     'LeadBoard',
-                //     style: TextStyle(
-                //       fontSize: 23.0,
-                //       fontWeight: FontWeight.w600,
-                //       letterSpacing: 1.2,
-                //     ),
-                //   ),
-                // ),
-                // LeadBoardWidget(),
-              ],
-            );
-          },
-        );
-      },
+        return Text('');
+      }),
     );
   }
 }
+
+const String errorImage =
+    'https://developers.google.com/maps/documentation/maps-static/images/error-image-generic.png';

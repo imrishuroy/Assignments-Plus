@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_todo/config/paths.dart';
 import 'package:flutter_todo/models/app_user_model.dart';
 import 'package:flutter_todo/models/failure_model.dart';
 import 'package:flutter_todo/repositories/auth/base_auth_repository.dart';
@@ -9,12 +11,17 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthRepository extends BaseAuthRepository {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  final CollectionReference _userRef =
+      FirebaseFirestore.instance.collection(Paths.users);
+
   AppUser? _appUser(User? user) {
     if (user == null) return null;
     return AppUser(
       uid: user.uid,
       name: user.displayName,
       imageUrl: user.photoURL,
+      about: '',
+      email: user.email,
     );
   }
 
@@ -26,6 +33,8 @@ class AuthRepository extends BaseAuthRepository {
   Future<AppUser?> get currentUser async => _appUser(_firebaseAuth.currentUser);
 
   String? get userId => _firebaseAuth.currentUser?.uid;
+
+  String? get userImage => _firebaseAuth.currentUser?.photoURL;
 
   @override
   Future<AppUser?> signInWithGoogle() async {
@@ -45,6 +54,20 @@ class AuthRepository extends BaseAuthRepository {
       // Once signed in, return the UserCredential
       final UserCredential userCredential =
           await _firebaseAuth.signInWithCredential(credential);
+
+      // final user = await _userRef.doc(userCredential.user?.uid).get();
+
+      // print('User Exists ---- ${user.exists}');
+
+      // if (!user.exists) {
+      //   _userRef.doc(userCredential.user?.uid).set({
+      //     'name': userCredential.user?.displayName ?? '',
+      //     'imageUrl': userCredential.user?.photoURL,
+      //     'about': '',
+      //     'email': userCredential.user?.email ?? ''
+      //   });
+      // }
+
       return _appUser(userCredential.user);
     } on FirebaseAuthException catch (error) {
       print(error.toString());
@@ -54,6 +77,21 @@ class AuthRepository extends BaseAuthRepository {
       throw Failure(code: error.code, message: error.message!);
     } catch (error) {
       throw Failure(message: 'Something went wrong.Try again');
+    }
+  }
+
+  Future<AppUser?> getUser(String? userId) async {
+    AppUser? appUser;
+    try {
+      final user = await _userRef.doc(userId).get();
+      final userData = user.data();
+      if (userData != null) {
+        appUser = AppUser.fromMap(userData);
+      }
+      return appUser;
+    } catch (error) {
+      print('Error getting getUser ${error.toString()}');
+      throw error;
     }
   }
 

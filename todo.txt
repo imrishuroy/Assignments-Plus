@@ -1,5 +1,10 @@
 Todos 
 
+We don't claim ownership links are resourses added in the app. We only help them to 
+organise them better and make our users life manageable
+
+#9 July 2021
+Export your todos to pdf and excel sheet
 
 #7 July 2021
 
@@ -14,6 +19,7 @@ their interest and they can also add todos from tha
 (it can have sections such as entertainment, app development, web etc ) and users can choose 
 their field and read that blog or post and they can also add that in his list
 8.Add analytics for crashes and user behaviour
+9.Add Payment to the app and also coupon so that you can sell to friends and family for free
 
 
 

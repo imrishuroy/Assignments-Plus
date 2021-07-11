@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/auth/auth_bloc.dart';
 import 'package:flutter_todo/blocs/filtered-bloc/flitered_bloc.dart';
+import 'package:flutter_todo/blocs/profile/profile_bloc.dart';
+import 'package:flutter_todo/blocs/public-todo/publictodo_bloc.dart';
 import 'package:flutter_todo/blocs/simple_bloc_oberver.dart';
 import 'package:flutter_todo/blocs/stats/stats_bloc.dart';
 import 'package:flutter_todo/blocs/tab/tab_bloc.dart';
@@ -14,6 +16,8 @@ import 'package:flutter_todo/config/custom_router.dart';
 import 'package:flutter_todo/config/auth_wrapper.dart';
 import 'package:flutter_todo/config/shared_prefs.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
+import 'package:flutter_todo/repositories/profile/profile_repository.dart';
+import 'package:flutter_todo/repositories/public-todos/public_todos_repository.dart';
 import 'package:flutter_todo/repositories/services/firebase_service.dart';
 import 'package:flutter_todo/repositories/todo/todo_repository.dart';
 import 'package:flutter_todo/repositories/utils/util_repository.dart';
@@ -25,9 +29,9 @@ import 'package:universal_platform/universal_platform.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await SharedPrefs().init();
   Bloc.observer = SimpleBlocObserver();
   EquatableConfig.stringify = kDebugMode;
+  await SharedPrefs().init();
   runApp(MyApp());
 }
 
@@ -48,6 +52,12 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<UitilsRepository>(
           create: (_) => UitilsRepository(),
         ),
+        RepositoryProvider<PublicTodosRepository>(
+          create: (_) => PublicTodosRepository(),
+        ),
+        RepositoryProvider<ProfileRepository>(
+          create: (_) => ProfileRepository(),
+        ),
         if (!UniversalPlatform.isWeb)
           RepositoryProvider<NotificationService>(
             create: (_) => NotificationService(),
@@ -56,15 +66,21 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<ThemeBloc>(
-            create: (_) => ThemeBloc(),
+            create: (context) => ThemeBloc(),
           ),
           BlocProvider<AuthBloc>(
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
             ),
           ),
+          BlocProvider<PublictodoBloc>(
+            create: (context) => PublictodoBloc(
+                publicTodosRepository: context.read<PublicTodosRepository>())
+              ..add(LoadPublicTodos()),
+          ),
           BlocProvider<TodosBloc>(
             create: (context) => TodosBloc(
+              authRepository: context.read<AuthRepository>(),
               todosRepository: context.read<TodosRepository>(),
             )..add(LoadTodos()),
           ),
@@ -80,27 +96,23 @@ class MyApp extends StatelessWidget {
             create: (context) =>
                 StatsBloc(todosBloc: BlocProvider.of<TodosBloc>(context)),
           ),
-          // BlocProvider<AddEditCubit>(
-          //   create: (context) => AddEditCubit(
-          //     todosBloc: BlocProvider.of<TodosBloc>(context),
-          //   ),
-          // ),
+          BlocProvider<ProfileBloc>(
+            //lazy: false,
+            create: (context) => ProfileBloc(
+              profileRepository: context.read<ProfileRepository>(),
+              authRepository: context.read<AuthRepository>(),
+            )..add(LoadProfile()),
+          )
         ],
         child: BlocBuilder<ThemeBloc, ThemeState>(
           builder: (context, state) {
-            // final theme =
-            //     appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)];
-            //print(theme);
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               title: '+Assignments',
-
-              //theme: state.themeData,
               theme:
                   appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)],
               onGenerateRoute: CustomRouter.onGenerateRoute,
               initialRoute: AuthWrapper.routeName,
-              //home: ShareIntentExample(),
             );
           },
         ),

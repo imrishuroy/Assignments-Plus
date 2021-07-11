@@ -26,12 +26,6 @@ class UitilsRepository {
       ),
     );
     print(result);
-    if (result) {
-      return true;
-
-      // Navigator.of(context).pushNamed('/');
-    } else {
-      return false;
-    }
+    return result ?? false;
   }
 }

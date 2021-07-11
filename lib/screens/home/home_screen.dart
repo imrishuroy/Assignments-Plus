@@ -1,22 +1,13 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/tab/tab_bloc.dart';
-
 import 'package:flutter_todo/models/app_tab_bar.dart';
-
-import 'package:flutter_todo/screens/add_edit_todo_screen.dart';
-import 'package:flutter_todo/screens/home/change_theme.dart';
-
-import 'package:flutter_todo/screens/profile/profile_screen.dart';
+import 'package:flutter_todo/screens/home/widgets/my_appbar.dart';
+import 'package:flutter_todo/screens/home/widgets/switch_screen.dart';
+import 'package:flutter_todo/screens/todos/add_edit_todo_screen.dart';
 import 'package:flutter_todo/services/notification_services.dart';
-
-import 'package:flutter_todo/widgets/extra_actions.dart';
-import 'package:flutter_todo/widgets/filter_button.dart';
-import 'package:flutter_todo/widgets/filtered_todos.dart';
-import 'package:flutter_todo/widgets/stats.dart';
+import 'package:flutter_todo/widgets/loading_indicator.dart';
 import 'package:flutter_todo/widgets/tab_selector.dart';
 import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
@@ -25,11 +16,18 @@ import 'package:universal_platform/universal_platform.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/home';
+  final String userId;
 
-  static Route route() {
+  const HomeScreen({Key? key, required this.userId}) : super(key: key);
+
+  static Route route(String userId) {
     return MaterialPageRoute(
-      settings: RouteSettings(name: routeName),
-      builder: (context) => HomeScreen(),
+      settings: RouteSettings(
+        name: routeName,
+      ),
+      builder: (context) => HomeScreen(
+        userId: userId,
+      ),
     );
   }
 
@@ -80,19 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       });
 
-      // if (_sharedText != null) {
-      //   WidgetsBinding.instance?.addPostFrameCallback(
-      //     (_) {
-      //       Navigator.of(context).pushNamed(
-      //         AddEditScreen.routeName,
-      //         arguments: {
-      //           'sharedString': _sharedText,
-      //           'title': _sharedTitle,
-      //         },
-      //       );
-      //     },
-      //   );
-      // }
       setState(() {
         _loading = false;
       });
@@ -112,7 +97,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     if (sharedText.contains('http') || sharedText.contains('https')) {
       var data = await MetadataFetch.extract(sharedText);
-      print('------------This is title ${data?.title}');
       setState(() {
         _sharedTitle = data?.title;
         _loading = false;
@@ -127,9 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    print('HomeScreen Dispose Called');
-
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (!UniversalPlatform.isWeb) {
       ReceiveSharingIntent?.reset();
     }
     _intentDataStreamSubscription?.cancel();
@@ -146,36 +128,28 @@ class _HomeScreenState extends State<HomeScreen> {
       child: _loading
           ? Container(
               color: Colors.white,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const LoadingIndicator(),
             )
           : BlocBuilder<TabBloc, AppTab>(
               builder: (context, activeTab) {
                 return Scaffold(
-                  appBar: activeTab == AppTab.profile
-                      ? _profileAppBar(context)
-                      : AppBar(
-                          automaticallyImplyLeading: false,
-                          title: activeTab == AppTab.todos
-                              ? Text('Your Todos')
-                              : Text('Your Todos Data'),
-                          actions: [
-                            FilterButton(visible: activeTab == AppTab.todos),
-                            ExtraActions(),
-                            SizedBox(width: 5),
-                          ],
-                        ),
-                  body: SwitchScreens(activeTab, _sharedText, _sharedTitle),
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.miniCenterFloat,
+                  appBar: PreferredSize(
+                    preferredSize: Size.fromHeight(60),
+                    child: MyAppBar(
+                      activeTab: activeTab,
+                    ),
+                  ),
+                  body: SwitchScreens(
+                      activeTab, _sharedText, _sharedTitle, widget.userId),
                   floatingActionButton: activeTab == AppTab.todos
                       ? FloatingActionButton(
                           onPressed: () {
                             Navigator.pushNamed(
-                                context, AddEditScreen.routeName);
-                            // Navigator.of(context).push(MaterialPageRoute(
-                            //     builder: (_) => HtmlHeading()));
+                                context, AddEditTodoScreen.routeName);
                           },
-                          child: Icon(Icons.add),
+                          child: const Icon(Icons.add),
                           tooltip: 'Add Todo',
                         )
                       : null,
@@ -188,70 +162,5 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
     );
-  }
-}
-
-AppBar _profileAppBar(BuildContext context) {
-  return AppBar(
-    automaticallyImplyLeading: false,
-    title: Text('Your Profile'),
-    actions: [
-      ChangeTheme(),
-      SizedBox(width: 10.0),
-    ],
-  );
-}
-
-class SwitchScreens extends StatefulWidget {
-  final AppTab activeTab;
-  final String? sharedString;
-  final String? title;
-
-  const SwitchScreens(this.activeTab, this.sharedString, this.title);
-
-  @override
-  _SwitchScreensState createState() => _SwitchScreensState();
-}
-
-class _SwitchScreensState extends State<SwitchScreens> {
-  int count = 0;
-  @override
-  void dispose() {
-    print('Switch screen dispose callled');
-    if (Platform.isAndroid || Platform.isIOS) {
-      ReceiveSharingIntent?.reset();
-    }
-
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    count++;
-    print('Value of count ------------ $count');
-    print('Shared tesxt from SwitchScreen ------- ${widget.sharedString}');
-    if (widget.activeTab == AppTab.todos &&
-        widget.sharedString != null &&
-        count == 1) {
-      WidgetsBinding.instance?.addPostFrameCallback(
-        (_) {
-          Navigator.of(context).pushNamed(
-            AddEditScreen.routeName,
-            arguments: {
-              'sharedString': widget.sharedString,
-              'title': widget.title
-            },
-          );
-        },
-      );
-    }
-
-    if (widget.activeTab == AppTab.todos) {
-      return FilteredTodos();
-    } else if (widget.activeTab == AppTab.stats) {
-      return Stats();
-    } else {
-      return ProfileScreen();
-    }
   }
 }

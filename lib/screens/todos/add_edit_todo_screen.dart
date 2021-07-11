@@ -21,7 +21,7 @@ typedef OnSaveCallback = Function(
   int? notificationId,
 });
 
-class AddEditScreen extends StatefulWidget {
+class AddEditTodoScreen extends StatefulWidget {
   static const String routeName = '/addTodo';
 
   static Route route(var arguments) {
@@ -30,7 +30,7 @@ class AddEditScreen extends StatefulWidget {
         name: routeName,
         arguments: arguments,
       ),
-      builder: (context) => AddEditScreen(
+      builder: (context) => AddEditTodoScreen(
         isEditing: false,
         onSave: (
           title,
@@ -60,7 +60,7 @@ class AddEditScreen extends StatefulWidget {
   final OnSaveCallback? onSave;
   final Todo? todo;
 
-  AddEditScreen({
+  AddEditTodoScreen({
     Key? key,
     @required this.onSave,
     @required this.isEditing,
@@ -68,10 +68,10 @@ class AddEditScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _AddEditScreenState createState() => _AddEditScreenState();
+  _AddEditTodoScreenState createState() => _AddEditTodoScreenState();
 }
 
-class _AddEditScreenState extends State<AddEditScreen> {
+class _AddEditTodoScreenState extends State<AddEditTodoScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _todoController = TextEditingController();
@@ -210,7 +210,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
                   },
                   onSaved: (value) => _title = value,
                 ),
-                SizedBox(height: 30.0),
+                const SizedBox(height: 30.0),
                 TextFormField(
                   controller: _todoController,
                   onSaved: (value) => _todo = value,
@@ -267,7 +267,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
                             },
                           );
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.notification_add,
                         ),
                         label: Text(
@@ -286,7 +286,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
                             Positioned(
                               right: -1.7,
                               top: -1.7,
-                              child: Icon(
+                              child: const Icon(
                                 Icons.star,
                                 color: Colors.yellow,
                                 size: 19.0,
