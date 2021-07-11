@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/auth/auth_bloc.dart';
 import 'package:flutter_todo/blocs/filtered-bloc/flitered_bloc.dart';
 import 'package:flutter_todo/blocs/profile/profile_bloc.dart';
-
 import 'package:flutter_todo/blocs/public-todo/publictodo_bloc.dart';
 import 'package:flutter_todo/blocs/simple_bloc_oberver.dart';
 import 'package:flutter_todo/blocs/stats/stats_bloc.dart';
@@ -30,101 +28,16 @@ import 'package:universal_platform/universal_platform.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp();
   Bloc.observer = SimpleBlocObserver();
   EquatableConfig.stringify = kDebugMode;
   await SharedPrefs().init();
-
   runApp(MyApp());
-  //runApp(Initialization());
 }
 
-// class Initialization extends StatefulWidget {
-//   Initialization({Key? key}) : super(key: key);
-
-//   /// directly inside [build].
-
-//   @override
-//   _InitializationState createState() => _InitializationState();
-// }
-
-// class _InitializationState extends State<Initialization> {
-//   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: FutureBuilder(
-//         future: _initialization,
-//         builder: (context, snapshot) {
-//           if (snapshot.hasError) {
-//             return Center(
-//               child: Text('Something went wrong'),
-//             );
-//           }
-//           if (snapshot.connectionState == ConnectionState.waiting) {
-//             return Center(
-//               child: CircularProgressIndicator(),
-//             );
-//           }
-//           return MyApp();
-//         },
-//       ),
-//     );
-//   }
-// }
-
-// class Initialization extends StatefulWidget {
-//   Initialization({Key? key}) : super(key: key);
-
-//   /// directly inside [build].
-
-//   @override
-//   _InitializationState createState() => _InitializationState();
-// }
-
-// class _InitializationState extends State<Initialization> {
-//   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-//   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-//   @override
-//   Widget build(BuildContext context) {
-//     return StreamBuilder<User?>(
-//       stream: _firebaseAuth.userChanges(),
-//       builder: (context, snapshot) {
-//         if (snapshot.hasError) {
-//           return Center(
-//             child: Text('Something went wrong'),
-//           );
-//         }
-//         if (snapshot.connectionState == ConnectionState.waiting) {
-//           return Center(
-//             child: CircularProgressIndicator(),
-//           );
-//         }
-//         final user = snapshot.data;
-//         if (user != null) {
-//           return MyApp(
-//             userId: user.uid,
-//           );
-//         } else {
-//           return AuthWrapper();
-//         }
-//       },
-//     );
-//   }
-// }
-
 class MyApp extends StatelessWidget {
-  // final String userId;
-
-  // const MyApp({Key? key, required this.userId}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-    print('Current user form main appp ----------- ${user?.uid}');
-
-    //FirebaseAuth.instance.signOut();
-
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<AuthRepository>(
@@ -167,7 +80,6 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider<TodosBloc>(
             create: (context) => TodosBloc(
-              //userId: userId,
               authRepository: context.read<AuthRepository>(),
               todosRepository: context.read<TodosRepository>(),
             )..add(LoadTodos()),
@@ -188,9 +100,7 @@ class MyApp extends StatelessWidget {
             //lazy: false,
             create: (context) => ProfileBloc(
               profileRepository: context.read<ProfileRepository>(),
-              // userId: context.read<AuthRepository>().userId!,
               authRepository: context.read<AuthRepository>(),
-              // userId: userId,
             )..add(LoadProfile()),
           )
         ],

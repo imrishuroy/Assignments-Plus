@@ -1,13 +1,13 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/tab/tab_bloc.dart';
 import 'package:flutter_todo/models/app_tab_bar.dart';
 import 'package:flutter_todo/screens/home/widgets/my_appbar.dart';
 import 'package:flutter_todo/screens/home/widgets/switch_screen.dart';
+import 'package:flutter_todo/screens/todos/add_edit_todo_screen.dart';
 import 'package:flutter_todo/services/notification_services.dart';
-import 'package:flutter_todo/test.dart';
+import 'package:flutter_todo/widgets/loading_indicator.dart';
 import 'package:flutter_todo/widgets/tab_selector.dart';
 import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
@@ -20,23 +20,7 @@ class HomeScreen extends StatefulWidget {
 
   const HomeScreen({Key? key, required this.userId}) : super(key: key);
 
-  // static Route route(String userId) {
-  //   print('This is route userId --------- $userId');
-  //   return MaterialPageRoute(
-  //     settings: RouteSettings(
-  //       name: routeName,
-  //     ),
-  //     builder: (context) => BlocProvider<TodosBloc>(
-  //       create: (context) => TodosBloc(
-  //           todosRepository: context.read<TodosRepository>(), userId: userId),
-  //       child: HomeScreen(
-  //         userId: userId,
-  //       ),
-  //     ),
-  //   );
-  // }
   static Route route(String userId) {
-    print('This is route userId --------- $userId');
     return MaterialPageRoute(
       settings: RouteSettings(
         name: routeName,
@@ -113,7 +97,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     if (sharedText.contains('http') || sharedText.contains('https')) {
       var data = await MetadataFetch.extract(sharedText);
-      print('------------This is title ${data?.title}');
       setState(() {
         _sharedTitle = data?.title;
         _loading = false;
@@ -128,9 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    print('HomeScreen Dispose Called');
-
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (!UniversalPlatform.isWeb) {
       ReceiveSharingIntent?.reset();
     }
     _intentDataStreamSubscription?.cancel();
@@ -142,16 +123,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final userId = ModalRoute.of(context)!.settings.arguments as String?;
-    // print('---------------------UserId ---- $userId');
     return WillPopScope(
       onWillPop: () async => false,
       child: _loading
           ? Container(
               color: Colors.white,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const LoadingIndicator(),
             )
           : BlocBuilder<TabBloc, AppTab>(
               builder: (context, activeTab) {
@@ -169,17 +146,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   floatingActionButton: activeTab == AppTab.todos
                       ? FloatingActionButton(
                           onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => Test(),
-                              ),
-                            );
-                            // Navigator.pushNamed(
-                            //     context, AddEditTodoScreen.routeName);
-                            // Navigator.of(context).push(MaterialPageRoute(
-                            //     builder: (_) => HtmlHeading()));
+                            Navigator.pushNamed(
+                                context, AddEditTodoScreen.routeName);
                           },
-                          child: Icon(Icons.add),
+                          child: const Icon(Icons.add),
                           tooltip: 'Add Todo',
                         )
                       : null,

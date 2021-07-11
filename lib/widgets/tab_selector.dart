@@ -16,9 +16,10 @@ class TabSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      elevation: 20.0,
       type: BottomNavigationBarType.shifting,
       selectedItemColor: Colors.green,
-      unselectedItemColor: Colors.black54,
+      unselectedItemColor: Colors.grey,
       currentIndex: AppTab.values.indexOf(activeTab!),
       onTap: (index) => onTabSelected!(AppTab.values[index]),
       items: AppTab.values.map((tab) {
@@ -34,7 +35,7 @@ Widget _tabIcon(AppTab tab) {
   } else if (tab == AppTab.stats) {
     return Icon(Icons.show_chart);
   } else if (tab == AppTab.public) {
-    return Icon(Icons.accessibility_sharp);
+    return Icon(Icons.public);
   } else {
     return Icon(Icons.person);
   }

@@ -35,18 +35,16 @@ class TodoDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TodosBloc, TodosState>(
       builder: (context, state) {
-        final todo = (state as TodosLoaded)
-            .todos
-            // .firstWhere((todo) => todo.id == id, orElse: () => null);
-            .firstWhere((todo) => todo.id == id);
+        final todo =
+            (state as TodosLoaded).todos.firstWhere((todo) => todo.id == id);
 
         return Scaffold(
           appBar: AppBar(
-            title: Text('Todo Details'),
+            title: const Text('Todo Details'),
             actions: [
               IconButton(
                 tooltip: 'Delete Todo',
-                icon: Icon(Icons.delete),
+                icon: const Icon(Icons.delete),
                 onPressed: () {
                   _deleteTodo(context, todo);
                 },
@@ -54,14 +52,16 @@ class TodoDetailsScreen extends StatelessWidget {
             ],
           ),
           body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
             child: ListView(
               children: [
-                SwitchListTile.adaptive(
-                  value: true,
-                  title: Text('Make it public'),
-                  onChanged: (value) {},
-                ),
+                const SizedBox(height: 15.0),
+                // SwitchListTile.adaptive(
+                //   value: true,
+                //   title: Text('Make it public'),
+                //   onChanged: (value) {},
+                // ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -83,14 +83,13 @@ class TodoDetailsScreen extends StatelessWidget {
                         children: [
                           Container(
                             width: MediaQuery.of(context).size.width,
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                               top: 8.0,
                               bottom: 16.0,
                             ),
                             child: Text(
                               todo.title,
-                              style: TextStyle(fontSize: 20),
-                              //style: Theme.of(context).textTheme.headline5,
+                              style: const TextStyle(fontSize: 20),
                             ),
                           ),
                           SelectableLinkify(
@@ -105,7 +104,7 @@ class TodoDetailsScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 if (todo.notificationDate != null &&
                     todo.notificationDate != todo.dateTime)
                   Row(
@@ -118,10 +117,10 @@ class TodoDetailsScreen extends StatelessWidget {
                               '${format.format(todo.notificationDate!)}',
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             right: -1.7,
                             top: -1.7,
-                            child: Icon(
+                            child: const Icon(
                               Icons.notifications,
                               color: Colors.red,
                               size: 19.0,
@@ -136,7 +135,7 @@ class TodoDetailsScreen extends StatelessWidget {
           ),
           floatingActionButton: FloatingActionButton(
             tooltip: 'Edit Todo',
-            child: Icon(Icons.edit),
+            child: const Icon(Icons.edit),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -174,6 +173,3 @@ class TodoDetailsScreen extends StatelessWidget {
     );
   }
 }
-
-// 2021-06-12 18:15:40.444249
-// 2021-06-12 18:15:40.444

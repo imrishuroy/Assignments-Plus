@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_todo/models/app_user_model.dart';
 import 'package:flutter_todo/models/public_todos.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
@@ -37,14 +38,16 @@ class PublicTodoItem extends StatelessWidget {
             future: context.read<AuthRepository>().getUser(todo?.authorId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
+                // return spinkit;
+                return const SpinKitThreeBounce(
+                  color: Colors.black12,
+                  size: 20.0,
                 );
               }
 
               return Text(
-                '${snapshot.data?.name}',
-                style: TextStyle(color: Colors.black87.withOpacity(0.7)),
+                '${snapshot.data?.name?.split(' ')[0]}',
+                style: TextStyle(color: Colors.grey, fontSize: 15.0),
               );
             },
           ),
@@ -53,3 +56,13 @@ class PublicTodoItem extends StatelessWidget {
     ));
   }
 }
+
+final spinkit = SpinKitThreeBounce(
+  itemBuilder: (BuildContext context, int index) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: index.isEven ? Colors.red : Colors.green,
+      ),
+    );
+  },
+);

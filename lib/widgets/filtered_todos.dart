@@ -8,20 +8,12 @@ import 'package:flutter_todo/models/todo_model.dart';
 import 'package:flutter_todo/repositories/todo/todo_repository.dart';
 import 'package:flutter_todo/screens/todos/todos_details_screen.dart';
 import 'package:flutter_todo/widgets/deleted_todo_snackbar.dart';
+import 'package:flutter_todo/widgets/loading_indicator.dart';
 import 'package:flutter_todo/widgets/search_items.dart';
 import 'package:flutter_todo/widgets/todo_item.dart';
 
 class FilteredTodos extends StatefulWidget {
   final String userId;
-
-  // static const String routeName = '/filter';
-
-  // static Route route() {
-  //   return MaterialPageRoute(
-  //     settings: RouteSettings(name: routeName),
-  //     builder: (_) => FilteredTodos(),
-  //   );
-  // }
 
   FilteredTodos({Key? key, required this.userId}) : super(key: key);
 
@@ -95,9 +87,7 @@ class _FilteredTodosState extends State<FilteredTodos> {
                   }
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Expanded(
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                      child: LoadingIndicator(),
                     );
                   }
                   return Expanded(
@@ -147,7 +137,7 @@ class _FilteredTodosState extends State<FilteredTodos> {
             : BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
                 builder: (context, state) {
                   if (state is FilteredTodosLoading) {
-                    return Center(child: CircularProgressIndicator());
+                    return LoadingIndicator();
                   } else if (state is FilteredTodosLoaded) {
                     final todos = state.filteredTodos;
                     return Expanded(

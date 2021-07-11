@@ -12,11 +12,7 @@ class ErrorDialog extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return
-        //Platform.isIOS
-        // ? _showIOSDialog(context)
-        //:
-        _showAndroidDialog(context);
+    return _showAndroidDialog(context);
   }
 
   // CupertinoAlertDialog _showIOSDialog(BuildContext context) {

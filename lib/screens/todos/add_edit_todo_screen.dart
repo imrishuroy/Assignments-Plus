@@ -210,7 +210,7 @@ class _AddEditTodoScreenState extends State<AddEditTodoScreen> {
                   },
                   onSaved: (value) => _title = value,
                 ),
-                SizedBox(height: 30.0),
+                const SizedBox(height: 30.0),
                 TextFormField(
                   controller: _todoController,
                   onSaved: (value) => _todo = value,
@@ -267,7 +267,7 @@ class _AddEditTodoScreenState extends State<AddEditTodoScreen> {
                             },
                           );
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.notification_add,
                         ),
                         label: Text(
@@ -286,7 +286,7 @@ class _AddEditTodoScreenState extends State<AddEditTodoScreen> {
                             Positioned(
                               right: -1.7,
                               top: -1.7,
-                              child: Icon(
+                              child: const Icon(
                                 Icons.star,
                                 color: Colors.yellow,
                                 size: 19.0,

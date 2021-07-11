@@ -9,27 +9,25 @@ import 'package:flutter_todo/widgets/filter_button.dart';
 AppBar mainAppBar(AppTab activeTab, BuildContext context) {
   return AppBar(
     automaticallyImplyLeading: false,
-    title: Text('Your Todos'),
+    title: const Text('Your Todos'),
     actions: [
       FilterButton(visible: activeTab == AppTab.todos),
       ExtraActions(),
-      SizedBox(
-        width: 5,
-      ),
+      const SizedBox(width: 5),
       TextButton(
         onPressed: () {
           RepositoryProvider.of<AuthRepository>(context).signOut();
         },
-        child: Text(
+        child: const Text(
           'LogOut',
           style: TextStyle(
             color: Colors.white,
           ),
         ),
       ),
-      SizedBox(width: 7),
+      const SizedBox(width: 7),
       ChangeTheme(),
-      SizedBox(width: 7),
+      const SizedBox(width: 7),
     ],
   );
 }

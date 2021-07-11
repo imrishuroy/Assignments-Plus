@@ -26,10 +26,6 @@ class UitilsRepository {
       ),
     );
     print(result);
-    if (result != null) {
-      return true;
-    } else {
-      return false;
-    }
+    return result ?? false;
   }
 }

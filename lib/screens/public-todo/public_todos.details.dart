@@ -7,6 +7,7 @@ import 'package:flutter_todo/models/public_todos.dart';
 import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 import 'package:flutter_todo/repositories/utils/util_repository.dart';
 import 'package:flutter_todo/screens/public-todo/add_edit_public_todos.dart';
+import 'package:flutter_todo/widgets/loading_indicator.dart';
 import 'package:intl/intl.dart';
 import 'dart:core';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,6 +26,7 @@ class PublicTodoDetailsScreen extends StatelessWidget {
   void _deleteTodo(BuildContext context, PublicTodo todo) async {
     final utils = context.read<UitilsRepository>();
     final bool result = await utils.askToRemove(context);
+    print('--------------REsult $result');
     if (result) {
       BlocProvider.of<PublictodoBloc>(context).add(DeletePublicTodo(todo));
       Navigator.pop(context, todo);
@@ -39,7 +41,7 @@ class PublicTodoDetailsScreen extends StatelessWidget {
         print('this is state of public todos details ----- $state');
         if (state is PublictodoLoading) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: LoadingIndicator(),
           );
         }
         if (state is PublicTodosLoaded) {

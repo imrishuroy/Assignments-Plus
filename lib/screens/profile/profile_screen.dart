@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/profile/profile_bloc.dart';
 import 'package:flutter_todo/models/app_user_model.dart';
+import 'package:flutter_todo/screens/leadBoard/lead_board.dart';
 import 'package:flutter_todo/screens/profile/widgets/logout.dart';
 import 'package:flutter_todo/screens/profile/widgets/name_and_about.dart';
 import 'package:flutter_todo/screens/profile/widgets/name_and_about_textfileds.dart';
+import 'package:flutter_todo/widgets/display_image.dart';
+import 'package:flutter_todo/widgets/loading_indicator.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
@@ -52,11 +55,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       body: BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
         if (state is ProfileInitial) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return LoadingIndicator();
         } else if (state is ProfileLoaded) {
-          print('profile state is ------- ${state.appUser.uid}');
           return Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -65,21 +65,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 40.0),
-
-                  Center(
-                    child: CircleAvatar(
-                      radius: 65.0,
-                      backgroundImage: NetworkImage(
-                        state.appUser.imageUrl != null &&
-                                state.appUser.imageUrl!.isNotEmpty
-                            ? state.appUser.imageUrl!
-                            : errorImage,
-                      ),
+                  const SizedBox(height: 20.0),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50.0),
+                    child: DisplayImage(
+                      state.appUser.imageUrl != null &&
+                              state.appUser.imageUrl!.isNotEmpty
+                          ? state.appUser.imageUrl!
+                          : errorImage,
+                      errorIconSize: 30.0,
                     ),
                   ),
-                  // ),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -98,12 +94,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         icon: Icon(
                           _editting ? Icons.check : Icons.edit_outlined,
                           size: _editting ? 25 : 20.0,
-                          color: _editting ? Colors.green : Colors.black,
+                          color: _editting ? Colors.green : Colors.grey,
                         ),
                       )
                     ],
                   ),
-
                   !_editting
                       ? NameAndAbout(
                           name: state.appUser.name,
@@ -114,16 +109,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           nameController: _nameController,
                           aboutController: _aboutController,
                         ),
-                  Spacer(),
-                  Logout(),
-                  // Center(
-                  //   child: TextButton.icon(
-                  //     style: TextButton.styleFrom(primary: Colors.red),
-                  //     onPressed: () => _signOut(context),
-                  //     icon: Icon(Icons.logout),
-                  //     label: Text('Logout'),
-                  //   ),
-                  // ),
+                  const SizedBox(height: 25.0),
+                  LeadBoard(),
+                  const Logout(),
                 ],
               ),
             ),

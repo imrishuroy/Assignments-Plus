@@ -8,6 +8,7 @@ import 'package:flutter_todo/screens/public-todo/add_edit_public_todos.dart';
 import 'package:flutter_todo/screens/public-todo/widgets/public_todo_item.dart';
 import 'package:flutter_todo/screens/public-todo/public_todos.details.dart';
 import 'package:flutter_todo/widgets/deleted_todo_snackbar.dart';
+import 'package:flutter_todo/widgets/loading_indicator.dart';
 
 class PublicTodosScreen extends StatelessWidget {
   PublicTodosScreen({Key? key}) : super(key: key);
@@ -21,17 +22,17 @@ class PublicTodosScreen extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).pushNamed(AddEditPublicTodoScreen.routeName);
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       body: Column(
         children: [
           Expanded(
-            child: BlocConsumer<PublictodoBloc, PublictodoState>(
-              listener: (context, state) {},
+            child: BlocBuilder<PublictodoBloc, PublictodoState>(
               builder: (context, state) {
                 if (state is PublictodoLoading) {
-                  return Center(
-                    child: CircularProgressIndicator(),
+                  return const Center(
+                    // child: CircularProgressIndicator(),
+                    child: const LoadingIndicator(),
                   );
                 } else if (state is PublicTodosLoaded) {
                   final todos = state.todos;

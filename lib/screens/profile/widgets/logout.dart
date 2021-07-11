@@ -16,14 +16,14 @@ class Logout extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(true),
-                child: Text(
+                child: const Text(
                   'Yes',
                   style: TextStyle(color: Colors.red),
                 ),
               ),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: Text(
+                child: const Text(
                   'No',
                   style: TextStyle(color: Colors.green),
                 ),

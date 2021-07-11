@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todo/blocs/auth/auth_bloc.dart';
 import 'package:flutter_todo/screens/home/home_screen.dart';
 import 'package:flutter_todo/screens/login/login_screen.dart';
+import 'package:flutter_todo/widgets/loading_indicator.dart';
 
 class AuthWrapper extends StatelessWidget {
   static const String routeName = '/auth';
@@ -31,9 +32,7 @@ class AuthWrapper extends StatelessWidget {
         }
       },
       child: Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
+        body: LoadingIndicator(),
       ),
     );
   }
