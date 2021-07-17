@@ -1,7 +1,7 @@
+import 'package:assignments/blocs/theme/theme_bloc.dart';
+import 'package:assignments/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todo/blocs/theme/theme_bloc.dart';
-import 'package:flutter_todo/theme/app_theme.dart';
 
 enum ThemeOption { light, dark }
 

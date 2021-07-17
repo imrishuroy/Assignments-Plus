@@ -1,11 +1,10 @@
+import 'package:assignments/repositories/auth/auth_repository.dart';
+import 'package:assignments/screens/login/cubit/login_cubit.dart';
+import 'package:assignments/widgets/error_dialog.dart';
+import 'package:assignments/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_todo/repositories/auth/auth_repository.dart';
-
-import 'package:flutter_todo/screens/login/cubit/login_cubit.dart';
-import 'package:flutter_todo/widgets/error_dialog.dart';
-import 'package:flutter_todo/widgets/loading_indicator.dart';
 
 class LoginScreen extends StatelessWidget {
   static const String routeName = '/login';

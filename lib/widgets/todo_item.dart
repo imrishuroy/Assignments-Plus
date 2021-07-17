@@ -1,7 +1,8 @@
+import 'package:assignments/models/todo_model.dart';
+import 'package:assignments/widgets/dismissible_background.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/models/todo_model.dart';
-import 'package:flutter_todo/widgets/dismissible_background.dart';
+
 import 'package:timeago/timeago.dart' as timeago;
 
 class TodoItem extends StatelessWidget {

@@ -85,6 +85,9 @@ class NotificationService {
           priority: Priority.high,
           importance: Importance.max,
         ),
+        iOS: IOSNotificationDetails(
+          subtitle: 'Reminder',
+        ),
       ),
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,

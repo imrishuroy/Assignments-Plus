@@ -1,6 +1,8 @@
+import 'package:assignments/repositories/utils/base_util_repository.dart';
 import 'package:flutter/material.dart';
 
-class UitilsRepository {
+class UitilsRepository extends BaseUtilRepository {
+  @override
   Future<bool> askToRemove(BuildContext context) async {
     final result = await showDialog(
       context: context,

@@ -1,10 +1,10 @@
+import 'package:assignments/config/paths.dart';
+import 'package:assignments/models/failure_model.dart';
+import 'package:assignments/repositories/auth/auth_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/config/paths.dart';
-import 'package:flutter_todo/models/failure_model.dart';
-import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 
 part 'login_state.dart';
 

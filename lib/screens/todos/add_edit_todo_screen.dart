@@ -1,14 +1,11 @@
+import 'package:assignments/blocs/todo/todo_bloc.dart';
+import 'package:assignments/models/todo_model.dart';
+import 'package:assignments/services/notification_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
-
-import 'package:flutter_todo/models/todo_model.dart';
-import 'package:flutter_todo/services/notification_services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
-
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:uuid/uuid.dart';
@@ -25,12 +22,9 @@ class AddEditTodoScreen extends StatefulWidget {
   static const String routeName = '/addTodo';
 
   static Route route(var arguments) {
-    return MaterialPageRoute(
-      settings: RouteSettings(
-        name: routeName,
-        arguments: arguments,
-      ),
-      builder: (context) => AddEditTodoScreen(
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          AddEditTodoScreen(
         isEditing: false,
         onSave: (
           title,
@@ -53,8 +47,55 @@ class AddEditTodoScreen extends StatefulWidget {
               );
         },
       ),
+      // transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      //   var begin = Offset(0.0, 1.0);
+      //   var end = Offset.zero;
+      //   var curve = Curves.ease;
+
+      //   var tween = Tween(begin: begin, end: end).chain(
+      //     CurveTween(
+      //       curve: curve,
+      //     ),
+      //   );
+      //   return SlideTransition(
+      //     position: animation.drive(tween),
+      //     child: child,
+      //   );
+      // },
     );
   }
+
+  // static Route route(var arguments) {
+  //   return MaterialPageRoute(
+  //     settings: RouteSettings(
+  //       name: routeName,
+  //       arguments: arguments,
+  //     ),
+  //     builder: (context) => AddEditTodoScreen(
+  //       isEditing: false,
+  //       onSave: (
+  //         title,
+  //         todoString,
+  //         time, {
+  //         DateTime? notificationDate,
+  //         int? notificationId,
+  //       }) {
+  //         context.read<TodosBloc>().add(
+  //               AddTodo(
+  //                 Todo(
+  //                   id: Uuid().v4(),
+  //                   title: title,
+  //                   todo: todoString,
+  //                   dateTime: time,
+  //                   notificationId: notificationId,
+  //                   notificationDate: notificationDate,
+  //                 ),
+  //               ),
+  //             );
+  //       },
+  //     ),
+  //   );
+  // }
 
   final bool? isEditing;
   final OnSaveCallback? onSave;

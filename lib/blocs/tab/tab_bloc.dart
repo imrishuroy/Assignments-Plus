@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:assignments/models/app_tab_bar.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_todo/models/app_tab_bar.dart';
 
 part 'tab_event.dart';
 

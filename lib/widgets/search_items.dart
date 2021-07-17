@@ -1,5 +1,6 @@
+import 'package:assignments/models/todo_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/models/todo_model.dart';
+
 import 'package:timeago/timeago.dart' as timeago;
 
 class SearchItems extends StatelessWidget {

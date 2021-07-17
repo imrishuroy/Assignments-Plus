@@ -1,8 +1,8 @@
+import 'package:assignments/models/app_user_model.dart';
+import 'package:assignments/models/public_todos.dart';
+import 'package:assignments/repositories/auth/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_todo/models/app_user_model.dart';
-import 'package:flutter_todo/models/public_todos.dart';
-import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_bloc/flutter_bloc.dart';
 

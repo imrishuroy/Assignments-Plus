@@ -1,4 +1,4 @@
-import 'package:flutter_todo/models/app_user_model.dart';
+import 'package:assignments/models/app_user_model.dart';
 
 abstract class BaseAuthRepository {
   Future<AppUser?> signInWithGoogle();

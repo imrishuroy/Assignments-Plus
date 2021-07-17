@@ -1,5 +1,5 @@
+import 'package:assignments/screens/leadBoard/lead_board.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_todo/models/leadboard.dart';
 
 class FirebaseServices {
   final CollectionReference _users =
@@ -13,8 +13,8 @@ class FirebaseServices {
       final allUsers = await _users.get();
       allUsers.docs.forEach((element) {
         print(element.data());
-        LeadBoard user = LeadBoard.fromMap(element.data());
-        leadBoardUsers.add(user);
+        // LeadBoard user = LeadBoard.fromMap(element.data() as Map<String, dynamic>);
+        //  leadBoardUsers.add(user);
       });
 
       // ---------- with streams ---------- //

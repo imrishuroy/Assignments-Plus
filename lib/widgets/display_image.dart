@@ -1,6 +1,6 @@
+import 'package:assignments/widgets/loading_indicator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/widgets/loading_indicator.dart';
 
 class DisplayImage extends StatelessWidget {
   final String? imageUrl;

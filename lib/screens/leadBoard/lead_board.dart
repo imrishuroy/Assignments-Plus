@@ -1,9 +1,9 @@
+import 'package:assignments/models/app_user_model.dart';
+import 'package:assignments/repositories/profile/profile_repository.dart';
+import 'package:assignments/widgets/loading_indicator.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todo/models/app_user_model.dart';
-import 'package:flutter_todo/repositories/profile/profile_repository.dart';
-import 'package:flutter_todo/widgets/display_image.dart';
-import 'package:flutter_todo/widgets/loading_indicator.dart';
 
 class LeadBoard extends StatelessWidget {
   LeadBoard({Key? key}) : super(key: key);
@@ -11,33 +11,10 @@ class LeadBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _profileRepo = context.read<ProfileRepository>();
-    return Expanded(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 12.0),
       child: Column(
         children: [
-          const SizedBox(
-            width: 200.0,
-            child: Divider(
-              color: Colors.grey,
-            ),
-          ),
-          SizedBox(height: 18.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'LeadBoard',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w600,
-                ),
-                textAlign: TextAlign.start,
-              ),
-              const Icon(
-                Icons.leaderboard,
-                color: Colors.green,
-              ),
-            ],
-          ),
           SizedBox(height: 15.0),
           Expanded(
             child: FutureBuilder<Map<String, int>>(
@@ -61,21 +38,29 @@ class LeadBoard extends StatelessWidget {
                           }
                           final user = snapshot.data;
                           return ListTile(
-                            leading: SizedBox(
-                              height: 32.0,
-                              width: 32.0,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(50.0),
-                                child:
-                                    DisplayImage(user?.imageUrl ?? errorImage),
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0,
+                              horizontal: 12.0,
+                            ),
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(60.0),
+                              child: CachedNetworkImage(
+                                height: 50.0,
+                                width: 50.0,
+                                imageUrl: user?.imageUrl ?? errorImage,
                               ),
                             ),
                             title: Text(
                               '${index + 1}. ${user?.name}',
                               style: TextStyle(fontWeight: FontWeight.w400),
                             ),
-                            trailing:
-                                Text('${leadBoard.values.toList()[index]}'),
+                            trailing: Text(
+                              '${leadBoard.values.toList()[index]}',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           );
                         },
                       );

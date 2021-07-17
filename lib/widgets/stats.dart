@@ -1,10 +1,9 @@
+import 'package:assignments/models/todo_model.dart';
+import 'package:assignments/repositories/todo/todo_repository.dart';
+import 'package:assignments/widgets/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:flutter_todo/models/todo_model.dart';
-import 'package:flutter_todo/repositories/todo/todo_repository.dart';
-import 'package:flutter_todo/widgets/loading_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -113,23 +112,6 @@ class Stats extends StatelessWidget {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // import 'package:flutter/material.dart';
 // import 'package:flutter/widgets.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
@@ -190,11 +172,3 @@ class Stats extends StatelessWidget {
 //     );
 //   }
 // }
-
-
-
-
-
-
-
-

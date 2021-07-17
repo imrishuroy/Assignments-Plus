@@ -1,16 +1,17 @@
+import 'package:assignments/blocs/filtered-bloc/flitered_bloc.dart';
+import 'package:assignments/blocs/todo/todo_bloc.dart';
+import 'package:assignments/models/todo_model.dart';
+import 'package:assignments/repositories/todo/todo_repository.dart';
+import 'package:assignments/screens/todos/todos_details_screen.dart';
+import 'package:assignments/widgets/deleted_todo_snackbar.dart';
+import 'package:assignments/widgets/loading_indicator.dart';
+import 'package:assignments/widgets/search_items.dart';
+import 'package:assignments/widgets/todo_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todo/blocs/filtered-bloc/flitered_bloc.dart';
-import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
-import 'package:flutter_todo/models/todo_model.dart';
-import 'package:flutter_todo/repositories/todo/todo_repository.dart';
-import 'package:flutter_todo/screens/todos/todos_details_screen.dart';
-import 'package:flutter_todo/widgets/deleted_todo_snackbar.dart';
-import 'package:flutter_todo/widgets/loading_indicator.dart';
-import 'package:flutter_todo/widgets/search_items.dart';
-import 'package:flutter_todo/widgets/todo_item.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class FilteredTodos extends StatefulWidget {
   final String userId;
@@ -114,7 +115,10 @@ class _FilteredTodosState extends State<FilteredTodos> {
                               final removedTodo =
                                   await Navigator.of(context).push(
                                 MaterialPageRoute(builder: (_) {
-                                  return TodoDetailsScreen(id: todo.id);
+                                  return TodoDetailsScreen(
+                                    todoId: todo.id,
+                                    userId: widget.userId,
+                                  );
                                 }),
                               );
                               if (removedTodo != null) {
@@ -146,44 +150,68 @@ class _FilteredTodosState extends State<FilteredTodos> {
                         itemBuilder: (context, index) {
                           final todo = todos[index];
                           print(todo);
-                          return TodoItem(
-                            todo: todo,
-                            onDelete: () {
-                              BlocProvider.of<TodosBloc>(context)
-                                  .add(DeleteTodo(todo));
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                DeleteTodoSnackBar(
-                                  title: todo.title,
-                                  onUndo: () =>
-                                      BlocProvider.of<TodosBloc>(context)
-                                          .add(AddTodo(todo)),
+                          return AnimationConfiguration.staggeredList(
+                            position: index,
+                            duration: const Duration(milliseconds: 375),
+                            child: SlideAnimation(
+                              verticalOffset: 50.0,
+                              child: FadeInAnimation(
+                                child: TodoItem(
+                                  todo: todo,
+                                  onDelete: () {
+                                    BlocProvider.of<TodosBloc>(context)
+                                        .add(DeleteTodo(todo));
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      DeleteTodoSnackBar(
+                                        title: todo.title,
+                                        onUndo: () =>
+                                            BlocProvider.of<TodosBloc>(context)
+                                                .add(AddTodo(todo)),
+                                      ),
+                                    );
+                                  },
+                                  onTap: () async {
+                                    final removedTodo =
+                                        await Navigator.of(context).push(
+                                      PageRouteBuilder(
+                                        pageBuilder: (context, _, __) {
+                                          return TodoDetailsScreen(
+                                            todoId: todo.id,
+                                            userId: widget.userId,
+                                          );
+                                        },
+                                      ),
+                                    );
+
+                                    // final removedTodo =
+                                    //     await Navigator.of(context).push(
+                                    //   MaterialPageRoute(builder: (_) {
+                                    //     return TodoDetailsScreen(
+                                    //         todoId: todo.id, userId: widget.userId);
+                                    //   }),
+                                    // );
+                                    if (removedTodo != null) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        DeleteTodoSnackBar(
+                                          title: todo.title,
+                                          onUndo: () =>
+                                              BlocProvider.of<TodosBloc>(
+                                                      context)
+                                                  .add(AddTodo(todo)),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  onCheckboxChanged: (_) {
+                                    BlocProvider.of<TodosBloc>(context).add(
+                                      UpdateTodo(todo.copyWith(
+                                          completed: !todo.completed)),
+                                    );
+                                  },
                                 ),
-                              );
-                            },
-                            onTap: () async {
-                              final removedTodo =
-                                  await Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) {
-                                  return TodoDetailsScreen(id: todo.id);
-                                }),
-                              );
-                              if (removedTodo != null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  DeleteTodoSnackBar(
-                                    title: todo.title,
-                                    onUndo: () =>
-                                        BlocProvider.of<TodosBloc>(context)
-                                            .add(AddTodo(todo)),
-                                  ),
-                                );
-                              }
-                            },
-                            onCheckboxChanged: (_) {
-                              BlocProvider.of<TodosBloc>(context).add(
-                                UpdateTodo(
-                                    todo.copyWith(completed: !todo.completed)),
-                              );
-                            },
+                              ),
+                            ),
                           );
                         },
                       ),

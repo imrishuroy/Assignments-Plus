@@ -12,7 +12,7 @@ class LoadingIndicator extends StatelessWidget {
         height: size,
         width: size,
         child: const SpinKitCircle(
-          color: Colors.blue,
+          color: Colors.green,
         ),
       ),
     );

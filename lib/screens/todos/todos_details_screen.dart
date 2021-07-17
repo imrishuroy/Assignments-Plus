@@ -1,20 +1,24 @@
+import 'package:assignments/blocs/todo/todo_bloc.dart';
+import 'package:assignments/models/todo_model.dart';
+import 'package:assignments/repositories/utils/util_repository.dart';
+import 'package:assignments/screens/todos/add_edit_todo_screen.dart';
+import 'package:assignments/screens/todos/add_todo_switch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
-import 'package:flutter_todo/models/todo_model.dart';
-import 'package:flutter_todo/repositories/utils/util_repository.dart';
-import 'package:flutter_todo/screens/todos/add_edit_todo_screen.dart';
-import 'package:intl/intl.dart';
 
+import 'package:intl/intl.dart';
 import 'dart:core';
+
 import 'package:url_launcher/url_launcher.dart';
 
 class TodoDetailsScreen extends StatelessWidget {
-  final String? id;
+  final String? todoId;
+  final String? userId;
 
-  TodoDetailsScreen({Key? key, @required this.id}) : super(key: key);
+  TodoDetailsScreen({Key? key, @required this.todoId, @required this.userId})
+      : super(key: key);
 
   Future<void> _onOpen(LinkableElement link) async {
     await launch(link.url);
@@ -33,10 +37,12 @@ class TodoDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('This is current user $userId');
     return BlocBuilder<TodosBloc, TodosState>(
       builder: (context, state) {
-        final todo =
-            (state as TodosLoaded).todos.firstWhere((todo) => todo.id == id);
+        final todo = (state as TodosLoaded)
+            .todos
+            .firstWhere((todo) => todo.id == todoId);
 
         return Scaffold(
           appBar: AppBar(
@@ -57,11 +63,13 @@ class TodoDetailsScreen extends StatelessWidget {
             child: ListView(
               children: [
                 const SizedBox(height: 15.0),
-                // SwitchListTile.adaptive(
-                //   value: true,
-                //   title: Text('Make it public'),
-                //   onChanged: (value) {},
-                // ),
+                SizedBox(
+                  height: 70,
+                  child: AddTodoSwitch(
+                    userId: userId,
+                    todo: todo,
+                  ),
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

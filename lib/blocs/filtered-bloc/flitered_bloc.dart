@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:assignments/blocs/todo/todo_bloc.dart';
+import 'package:assignments/models/todo_model.dart';
+import 'package:assignments/models/visibility_filter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
-import 'package:flutter_todo/models/todo_model.dart';
-import 'package:flutter_todo/models/visibility_filter.dart';
 import 'package:meta/meta.dart';
 
 part 'flitered_event.dart';

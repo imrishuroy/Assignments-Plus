@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:assignments/config/shared_prefs.dart';
+import 'package:assignments/theme/app_theme.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/config/shared_prefs.dart';
-import 'package:flutter_todo/theme/app_theme.dart';
 
 part 'theme_event.dart';
 part 'theme_state.dart';

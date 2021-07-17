@@ -1,9 +1,8 @@
+import 'package:assignments/blocs/public-todo/publictodo_bloc.dart';
+import 'package:assignments/models/public_todos.dart';
+import 'package:assignments/repositories/auth/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todo/blocs/public-todo/publictodo_bloc.dart';
-
-import 'package:flutter_todo/models/public_todos.dart';
-import 'package:flutter_todo/repositories/auth/auth_repository.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';

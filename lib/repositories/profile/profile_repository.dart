@@ -1,6 +1,6 @@
+import 'package:assignments/config/paths.dart';
+import 'package:assignments/models/app_user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_todo/config/paths.dart';
-import 'package:flutter_todo/models/app_user_model.dart';
 
 class ProfileRepository {
   final CollectionReference _userRef =
@@ -13,7 +13,7 @@ class ProfileRepository {
       return _userRef
           .doc(userId)
           .snapshots()
-          .map((doc) => AppUser.fromMap(doc.data()!));
+          .map((doc) => AppUser.fromMap(doc.data() as Map<String, dynamic>));
     } catch (error) {
       print('Error getting getUser ${error.toString()}');
       throw error;
@@ -25,7 +25,7 @@ class ProfileRepository {
     try {
       final data = await _userRef.doc(userId).get();
       if (data.data() != null) {
-        appUser = AppUser.fromMap(data.data()!);
+        appUser = AppUser.fromMap(data.data() as Map<String, dynamic>);
       }
       return appUser;
     } catch (error) {
@@ -70,7 +70,8 @@ class ProfileRepository {
     try {
       final data = await _publicTodo.get();
       data.docs.forEach((element) async {
-        final userId = element.data()['authorId'];
+        final data = element.data() as Map<String, dynamic>?;
+        final userId = data?['authorId'];
         if (userId != null) {
           if (leadBoard.containsKey(userId)) {
             leadBoard[userId] = leadBoard[userId]! + 1;

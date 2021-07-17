@@ -1,4 +1,4 @@
-# flutter_todo
+# assignments
 
 A new Flutter project.
 
@@ -15,30 +15,59 @@ For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-   SHA1: 00:E8:ED:51:5F:9F:E4:32:8D:21:D7:C8:59:7E:67:D6:5E:64:02:4B
-         SHA256: E8:FC:2D:7B:6D:AE:4F:D1:F9:F5:A3:25:DF:20:E0:29:2B:A6:0F:5E:81:C1:78:02:30:73:B4:2F:9D:DF:28:EF
 
-  cached_network_image: ^3.0.0
-  firebase_core: "^1.1.0"
-  firebase_auth: "^1.1.2"
-  cloud_firestore: "^1.0.7"
-  google_sign_in: "^5.0.2"
-  firebase_storage: "^8.0.5"
-  cupertino_icons: ^1.0.2
-  equatable: ^2.0.0
-  flutter_bloc: ^7.0.0
-  image_cropper: ^1.4.0
-  image_picker: ^0.7.4
-  intl: ^0.17.0
-  meta: ^1.3.0
-  timeago: ^3.0.2
-  uuid: ^3.0.4
-  flutter_webrtc: ^0.2.8
-  sdp_transform: ^0.2.0
+flutter: PlatformException(google_sign_in, Your app is missing support for the following URL schemes: com.googleusercontent.apps.945647164575-0pok064mknbkf4ghsj2d9qrof0l9mdrh, NSInvalidArgumentException, null)
+flutter: ERROR Your app is missing support for the following URL schemes: com.googleusercontent.apps.945647164575-0pok064mknbkf4ghsj2d9qrof0l9mdrh
+Lost connection to device.
 
 
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.sixteenbrains.assignments">
+   <uses-permission android:name="android.permission.INTERNET"/>
+   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+   <uses-permission android:name="android.permission.VIBRATE" />
+   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+   <application
+        android:label="Assignments"
+        android:icon="@mipmap/ic_launcher">
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            <!-- Specifies an Android theme to apply to this Activity as soon as
+                 the Android process has started. This theme is visible to the user
+                 while the Flutter UI initializes. After that, this theme continues
+                 to determine the Window background behind the Flutter UI. -->
+            <meta-data
+              android:name="io.flutter.embedding.android.NormalTheme"
+              android:resource="@style/NormalTheme"
+              />
+            <!-- Displays an Android View that continues showing the launch screen
+                 Drawable until Flutter paints its first frame, then this splash
+                 screen fades out. A splash screen is useful to avoid any visual
+                 gap between the end of Android's launch screen and the painting of
+                 Flutter's first frame. -->
+            <meta-data
+              android:name="io.flutter.embedding.android.SplashScreenDrawable"
+              android:resource="@drawable/launch_background"
+              />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <!-- Don't delete the meta-data below.
+             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+    </application>
+</manifest> -->
 
-You can set any port using the --web-port option.
 
-flutter run -d chrome --web-port 8080
-flutter run -d chrome --web-port 7357 - registered on gcp
+945647164575-echf9vi9q6ib2bmr9d253ihiv4ov587t.apps.googleusercontent.com - client id
+
+9zgDUjlW608mrwDZNnGLVlYh - client secret

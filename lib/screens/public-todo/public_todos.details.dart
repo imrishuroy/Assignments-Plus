@@ -1,15 +1,16 @@
+import 'package:assignments/blocs/public-todo/publictodo_bloc.dart';
+import 'package:assignments/models/public_todos.dart';
+import 'package:assignments/repositories/auth/auth_repository.dart';
+import 'package:assignments/repositories/utils/util_repository.dart';
+import 'package:assignments/screens/public-todo/add_edit_public_todos.dart';
+import 'package:assignments/widgets/loading_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:flutter_todo/blocs/public-todo/publictodo_bloc.dart';
-import 'package:flutter_todo/models/public_todos.dart';
-import 'package:flutter_todo/repositories/auth/auth_repository.dart';
-import 'package:flutter_todo/repositories/utils/util_repository.dart';
-import 'package:flutter_todo/screens/public-todo/add_edit_public_todos.dart';
-import 'package:flutter_todo/widgets/loading_indicator.dart';
 import 'package:intl/intl.dart';
 import 'dart:core';
+
 import 'package:url_launcher/url_launcher.dart';
 
 class PublicTodoDetailsScreen extends StatelessWidget {
@@ -136,6 +137,3 @@ class PublicTodoDetailsScreen extends StatelessWidget {
     );
   }
 }
-
-// 2021-06-12 18:15:40.444249
-// 2021-06-12 18:15:40.444

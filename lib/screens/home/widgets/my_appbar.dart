@@ -1,8 +1,8 @@
+import 'package:assignments/models/app_tab_bar.dart';
+import 'package:assignments/screens/home/change_theme.dart';
+import 'package:assignments/widgets/extra_actions.dart';
+import 'package:assignments/widgets/filter_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/models/app_tab_bar.dart';
-import 'package:flutter_todo/screens/home/change_theme.dart';
-import 'package:flutter_todo/widgets/extra_actions.dart';
-import 'package:flutter_todo/widgets/filter_button.dart';
 
 class MyAppBar extends StatelessWidget {
   final AppTab? activeTab;
@@ -35,12 +35,22 @@ class MyAppBar extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: const Text('Track your progress'),
       );
-    } else if (activeTab == AppTab.public) {
-      return AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text('Public Todos'),
-      );
     }
-    return AppBar();
+    // } else if (activeTab == AppTab.public) {
+    //   return AppBar(
+    //     backgroundColor: Colors.green,
+    //     elevation: 0.0,
+    //     centerTitle: true,
+    //     automaticallyImplyLeading: false,
+    //     title: Padding(
+    //       padding: const EdgeInsets.only(
+    //         top: 25.0,
+    //       ),
+    //       child: const Text('Public Todos'),
+    //     ),
+    //   );
+    // }
+    return SizedBox.shrink();
+    //  return AppBar();
   }
 }

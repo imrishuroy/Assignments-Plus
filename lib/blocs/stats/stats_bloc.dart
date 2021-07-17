@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:assignments/blocs/todo/todo_bloc.dart';
+import 'package:assignments/models/todo_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_todo/blocs/todo/todo_bloc.dart';
-import 'package:flutter_todo/models/todo_model.dart';
 
 part 'stats_event.dart';
 part 'stats_state.dart';

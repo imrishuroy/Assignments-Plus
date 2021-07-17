@@ -1,10 +1,10 @@
+import 'package:assignments/config/paths.dart';
+import 'package:assignments/models/app_user_model.dart';
+import 'package:assignments/models/failure_model.dart';
+import 'package:assignments/repositories/auth/base_auth_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_todo/config/paths.dart';
-import 'package:flutter_todo/models/app_user_model.dart';
-import 'package:flutter_todo/models/failure_model.dart';
-import 'package:flutter_todo/repositories/auth/base_auth_repository.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -84,7 +84,7 @@ class AuthRepository extends BaseAuthRepository {
     AppUser? appUser;
     try {
       final user = await _userRef.doc(userId).get();
-      final userData = user.data();
+      final userData = user.data() as Map<String, dynamic>?;
       if (userData != null) {
         appUser = AppUser.fromMap(userData);
       }

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_todo/models/todo_model.dart';
+import 'package:assignments/models/todo_model.dart';
 
 abstract class BaseTodosRepository {
   Future<void> addNewTodo(Todo todo, String userId);
