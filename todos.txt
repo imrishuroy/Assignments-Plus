@@ -95,3 +95,9 @@ flutter: ERROR Your app is missing support for the following URL schemes: com.go
 
 559969452372-8chamtit6a5g6pcr0fqrkitg5osu5fpl.apps.googleusercontent.com
 com.googleusercontent.apps.559969452372-8chamtit6a5g6pcr0fqrkitg5osu5fpl
+
+
+You can set any port using the --web-port option.
+
+flutter run -d chrome --web-port 8080 
+flutter run -d chrome --web-port 7357 - registered on gcp

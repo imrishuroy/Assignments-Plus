@@ -57,6 +57,9 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<ProfileRepository>(
           create: (_) => ProfileRepository(),
         ),
+        RepositoryProvider<FirebaseServices>(
+          create: (_) => FirebaseServices(),
+        ),
         if (!UniversalPlatform.isWeb)
           RepositoryProvider<NotificationService>(
             create: (_) => NotificationService(),
@@ -108,7 +111,7 @@ class MyApp extends StatelessWidget {
           builder: (context, state) {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: '+Assignments',
+              title: 'Assignments ++',
               theme:
                   appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)],
               onGenerateRoute: CustomRouter.onGenerateRoute,

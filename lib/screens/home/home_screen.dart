@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:assignments/blocs/auth/auth_bloc.dart';
 import 'package:assignments/blocs/tab/tab_bloc.dart';
 import 'package:assignments/models/app_tab_bar.dart';
 import 'package:assignments/screens/home/widgets/my_appbar.dart';
@@ -9,7 +10,6 @@ import 'package:assignments/widgets/loading_indicator.dart';
 import 'package:assignments/widgets/tab_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -124,44 +124,50 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: _loading
-          ? Container(
-              color: Colors.white,
-              child: const LoadingIndicator(),
-            )
-          : BlocBuilder<TabBloc, AppTab>(
-              builder: (context, activeTab) {
-                return Scaffold(
-                  floatingActionButtonLocation:
-                      FloatingActionButtonLocation.miniCenterFloat,
-                  appBar: PreferredSize(
-                    preferredSize: Size.fromHeight(60),
-                    child: MyAppBar(
-                      activeTab: activeTab,
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        print('AuthBloc listener ${state.status}');
+        //  Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+      },
+      child: WillPopScope(
+        onWillPop: () async => false,
+        child: _loading
+            ? Container(
+                color: Colors.white,
+                child: const LoadingIndicator(),
+              )
+            : BlocBuilder<TabBloc, AppTab>(
+                builder: (context, activeTab) {
+                  return Scaffold(
+                    floatingActionButtonLocation:
+                        FloatingActionButtonLocation.miniCenterFloat,
+                    appBar: PreferredSize(
+                      preferredSize: Size.fromHeight(60),
+                      child: MyAppBar(
+                        activeTab: activeTab,
+                      ),
                     ),
-                  ),
-                  body: SwitchScreens(
-                      activeTab, _sharedText, _sharedTitle, widget.userId),
-                  floatingActionButton: activeTab == AppTab.todos
-                      ? FloatingActionButton(
-                          onPressed: () {
-                            Navigator.pushNamed(
-                                context, AddEditTodoScreen.routeName);
-                          },
-                          child: const Icon(Icons.add),
-                          tooltip: 'Add Todo',
-                        )
-                      : null,
-                  bottomNavigationBar: TabSelector(
-                    activeTab: activeTab,
-                    onTabSelected: (tab) =>
-                        BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
-                  ),
-                );
-              },
-            ),
+                    body: SwitchScreens(
+                        activeTab, _sharedText, _sharedTitle, widget.userId),
+                    floatingActionButton: activeTab == AppTab.todos
+                        ? FloatingActionButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, AddEditTodoScreen.routeName);
+                            },
+                            child: const Icon(Icons.add),
+                            tooltip: 'Add Todo',
+                          )
+                        : null,
+                    bottomNavigationBar: TabSelector(
+                      activeTab: activeTab,
+                      onTabSelected: (tab) =>
+                          BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+                    ),
+                  );
+                },
+              ),
+      ),
     );
   }
 }

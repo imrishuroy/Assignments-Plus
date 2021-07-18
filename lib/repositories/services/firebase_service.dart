@@ -1,9 +1,16 @@
+import 'package:assignments/config/paths.dart';
+import 'package:assignments/models/contact_us.dart';
+import 'package:assignments/models/failure_model.dart';
+
 import 'package:assignments/screens/leadBoard/lead_board.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirebaseServices {
   final CollectionReference _users =
       FirebaseFirestore.instance.collection('leadBoard');
+
+  final CollectionReference _contact =
+      FirebaseFirestore.instance.collection(Paths.contact);
 
   // Stream<LeadBoard> leadBoardUsers() async {
 
@@ -26,6 +33,15 @@ class FirebaseServices {
       return leadBoardUsers;
     } catch (e) {
       return leadBoardUsers;
+    }
+  }
+
+  Future<void> sendContactUsInformation(ContactUs contactUs) async {
+    try {
+      await _contact.add(contactUs.toMap());
+    } catch (error) {
+      print('Error sending contact us information ${error.toString()}');
+      throw Failure(message: 'Something went wrong');
     }
   }
 }

@@ -1,5 +1,5 @@
 import 'package:assignments/config/auth_wrapper.dart';
-import 'package:assignments/screens/contact/contact_us.dart';
+import 'package:assignments/screens/contact/contact_us_screen.dart';
 import 'package:assignments/screens/home/home_screen.dart';
 import 'package:assignments/screens/login/login_screen.dart';
 import 'package:assignments/screens/privacy/privacy_policy.dart';
@@ -34,8 +34,8 @@ class CustomRouter {
       case PrivicyPolicy.routeName:
         return PrivicyPolicy.route();
 
-      case ContactUs.routeName:
-        return ContactUs.route();
+      case ContactUsScreen.routeName:
+        return ContactUsScreen.route();
       default:
         return _errorRoute();
     }

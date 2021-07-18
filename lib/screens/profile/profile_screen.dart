@@ -1,6 +1,6 @@
 import 'package:assignments/blocs/profile/profile_bloc.dart';
 import 'package:assignments/models/app_user_model.dart';
-import 'package:assignments/screens/contact/contact_us.dart';
+import 'package:assignments/screens/contact/contact_us_screen.dart';
 import 'package:assignments/screens/privacy/privacy_policy.dart';
 import 'package:assignments/screens/profile/widgets/logout.dart';
 import 'package:assignments/screens/profile/widgets/name_and_about.dart';
@@ -136,7 +136,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     if (UniversalPlatform.isWeb)
                       ListTile(
                         onTap: () {
-                          Navigator.of(context).pushNamed(ContactUs.routeName);
+                          Navigator.of(context)
+                              .pushNamed(ContactUsScreen.routeName);
                         },
                         title: Text('Contact Us'),
                         trailing: Icon(Icons.navigate_next_sharp),

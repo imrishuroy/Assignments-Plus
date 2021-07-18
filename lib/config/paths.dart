@@ -6,4 +6,6 @@ class Paths {
   static String get todos => isProduction ? 'todos' : 'dev-todos';
 
   static String get public => isProduction ? 'public' : 'dev-public';
+
+  static String get contact => isProduction ? 'contact' : 'dev-contact';
 }
