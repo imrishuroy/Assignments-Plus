@@ -101,3 +101,30 @@ You can set any port using the --web-port option.
 
 flutter run -d chrome --web-port 8080 
 flutter run -d chrome --web-port 7357 - registered on gcp
+
+
+// error log
+
+Launching lib/main.dart on Rishu’s iPad in debug mode...
+lib/main.dart:1
+Automatically signing iOS for device deployment using specified development team in Xcode project: BM8JLJ4FMJ
+Xcode build done.                                           603.6s
+(lldb) 2021-07-19 00:14:53.883566+0530 Runner[3509:279338] Could not load the "LaunchImage" image referenced from a nib in the bundle with identifier "com.sixteenbrains.assignments"
+8.3.0 - [Firebase/Core][I-COR000005] No app has been configured yet.
+Connecting to the VM Service is taking longer than expected...
+Still attempting to connect to the VM Service...
+If you do NOT see the Flutter application running, it might have crashed. The device logs (e.g. from adb or XCode) might have more details.
+If you do see the Flutter application running on the device, try re-running with --host-vmservice-port to use a specific port known to be available.
+Exception attempting to connect to the VM Service: SocketException: OS Error: Connection refused, errno = 61, address = 127.0.0.1, port = 51710
+This was attempt #50. Will retry in 0:00:01.600000.
+[connection] nw_endpoint_handler_set_adaptive_read_handler [C1.1 142.250.76.202:443 ready channel-flow (satisfied (Path is satisfied), viable, interface: en0, ipv4, dns)] unregister notification for read_timeout failed
+[connection] nw_endpoint_handler_set_adaptive_write_handler [C1.1 142.250.76.202:443 ready channel-flow (satisfied (Path is satisfied), viable, interface: en0, ipv4, dns)] unregister notification for write_timeout failed
+Exited
+
+
+https://stackoverflow.com/questions/63204172/errors-launching-flutter-app-in-ios-simulator
+
+“iproxy” cannot be opened because the developer cannot be verified.
+macOS cannot verify that this app is free from malware.
+
+sudo xattr -d com.apple.quarantine /Users/imrishuroy/Developer/flutter/bin/cache/artifacts/usbmuxd/iproxy
