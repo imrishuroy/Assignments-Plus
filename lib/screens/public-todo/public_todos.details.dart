@@ -1,4 +1,5 @@
 import 'package:assignments/blocs/public-todo/publictodo_bloc.dart';
+import 'package:assignments/models/app_user_model.dart';
 import 'package:assignments/models/public_todos.dart';
 import 'package:assignments/repositories/auth/auth_repository.dart';
 import 'package:assignments/repositories/utils/util_repository.dart';
@@ -37,103 +38,113 @@ class PublicTodoDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _authRepo = context.read<AuthRepository>();
-    return BlocBuilder<PublictodoBloc, PublictodoState>(
-      builder: (context, state) {
-        print('this is state of public todos details ----- $state');
-        if (state is PublictodoLoading) {
-          return Center(
-            child: LoadingIndicator(),
-          );
-        }
-        if (state is PublicTodosLoaded) {
-          if (state.todos.isNotEmpty) {
-            final todo = state.todos.firstWhere((todo) => todo.todoId == id);
+    return StreamBuilder<AppUser?>(
+        stream: _authRepo.onAuthChanges,
+        builder: (context, snapshot) {
+          return BlocBuilder<PublictodoBloc, PublictodoState>(
+            builder: (context, state) {
+              print('this is state of public todos details ----- $state');
+              if (state is PublictodoLoading) {
+                return Center(
+                  child: LoadingIndicator(),
+                );
+              }
+              if (state is PublicTodosLoaded) {
+                if (state.todos.isNotEmpty) {
+                  final todo =
+                      state.todos.firstWhere((todo) => todo.todoId == id);
 
-            return Scaffold(
-              appBar: AppBar(
-                title: Text('Todo Details'),
-                actions: [
-                  if (_authRepo.userId == todo.authorId)
-                    IconButton(
-                      tooltip: 'Delete Todo',
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        _deleteTodo(context, todo);
-                      },
-                    )
-                ],
-              ),
-              body: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
-                child: ListView(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Column(
+                  return Scaffold(
+                    appBar: AppBar(
+                      title: Text('Todo Details'),
+                      actions: [
+                        if (snapshot.data?.uid == todo.authorId)
+                          IconButton(
+                            tooltip: 'Delete Todo',
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              _deleteTodo(context, todo);
+                            },
+                          )
+                      ],
+                    ),
+                    body: Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
+                      child: ListView(
+                        children: [
+                          Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                padding: EdgeInsets.only(
-                                  top: 8.0,
-                                  bottom: 16.0,
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      padding: EdgeInsets.only(
+                                        top: 8.0,
+                                        bottom: 16.0,
+                                      ),
+                                      child: Text(
+                                        '${todo.title}',
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    ),
+                                    SelectableLinkify(
+                                      onOpen: _onOpen,
+                                      options: LinkifyOptions(humanize: false),
+                                      text: todo.todo!,
+                                      style:
+                                          Theme.of(context).textTheme.subtitle1,
+                                      linkStyle: TextStyle(color: Colors.blue),
+                                    ),
+                                  ],
                                 ),
-                                child: Text(
-                                  '${todo.title}',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ),
-                              SelectableLinkify(
-                                onOpen: _onOpen,
-                                options: LinkifyOptions(humanize: false),
-                                text: todo.todo!,
-                                style: Theme.of(context).textTheme.subtitle1,
-                                linkStyle: TextStyle(color: Colors.blue),
                               ),
                             ],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
-              floatingActionButton: FloatingActionButton(
-                tooltip: 'Edit Todo',
-                child: Icon(Icons.edit),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return AddEditPublicTodoScreen(
-                          onSave: (title, todoString) {
-                            BlocProvider.of<PublictodoBloc>(context).add(
-                              UpdatePublicTodo(
-                                todo.copyWith(
-                                  title: title,
-                                  todo: todoString,
+                    floatingActionButton: snapshot.data?.uid == todo.authorId
+                        ? FloatingActionButton(
+                            tooltip: 'Edit Todo',
+                            child: Icon(Icons.edit),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return AddEditPublicTodoScreen(
+                                      onSave: (title, todoString) {
+                                        BlocProvider.of<PublictodoBloc>(context)
+                                            .add(
+                                          UpdatePublicTodo(
+                                            todo.copyWith(
+                                              title: title,
+                                              todo: todoString,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      isEditing: true,
+                                      todo: todo,
+                                    );
+                                  },
                                 ),
-                              ),
-                            );
-                          },
-                          isEditing: true,
-                          todo: todo,
-                        );
-                      },
-                    ),
+                              );
+                            },
+                          )
+                        : null,
                   );
-                },
-              ),
-            );
-          } else {
-            return Container();
-          }
-        } else {
-          return Container();
-        }
-      },
-    );
+                } else {
+                  return Container();
+                }
+              } else {
+                return Container();
+              }
+            },
+          );
+        });
   }
 }
