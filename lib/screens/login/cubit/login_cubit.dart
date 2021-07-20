@@ -34,12 +34,35 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(otp: value, status: LoginStatus.initial));
   }
 
-  void logInWithGoogle() async {
+  void googleLogin() async {
     if (state.status == LoginStatus.submitting) return;
     emit(state.copyWith(status: LoginStatus.submitting));
     try {
       final user = await _authRepository!.signInWithGoogle();
 
+      if (user != null) {
+        final doc = await usersRef.doc(user.uid).get();
+        if (!doc.exists) {
+          usersRef.doc(user.uid).set(user.toMap());
+        }
+      }
+
+      emit(state.copyWith(status: LoginStatus.succuss));
+    } on Failure catch (error) {
+      emit(
+        state.copyWith(
+          status: LoginStatus.error,
+          failure: Failure(message: error.message),
+        ),
+      );
+    }
+  }
+
+  void appleLogin() async {
+    if (state.status == LoginStatus.submitting) return;
+    emit(state.copyWith(status: LoginStatus.submitting));
+    try {
+      final user = await _authRepository!.signInWithApple();
       if (user != null) {
         final doc = await usersRef.doc(user.uid).get();
         if (!doc.exists) {

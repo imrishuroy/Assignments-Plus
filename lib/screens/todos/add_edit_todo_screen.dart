@@ -23,6 +23,7 @@ class AddEditTodoScreen extends StatefulWidget {
 
   static Route route(var arguments) {
     return PageRouteBuilder(
+      settings: RouteSettings(arguments: arguments, name: routeName),
       pageBuilder: (context, animation, secondaryAnimation) =>
           AddEditTodoScreen(
         isEditing: false,
@@ -47,55 +48,8 @@ class AddEditTodoScreen extends StatefulWidget {
               );
         },
       ),
-      // transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      //   var begin = Offset(0.0, 1.0);
-      //   var end = Offset.zero;
-      //   var curve = Curves.ease;
-
-      //   var tween = Tween(begin: begin, end: end).chain(
-      //     CurveTween(
-      //       curve: curve,
-      //     ),
-      //   );
-      //   return SlideTransition(
-      //     position: animation.drive(tween),
-      //     child: child,
-      //   );
-      // },
     );
   }
-
-  // static Route route(var arguments) {
-  //   return MaterialPageRoute(
-  //     settings: RouteSettings(
-  //       name: routeName,
-  //       arguments: arguments,
-  //     ),
-  //     builder: (context) => AddEditTodoScreen(
-  //       isEditing: false,
-  //       onSave: (
-  //         title,
-  //         todoString,
-  //         time, {
-  //         DateTime? notificationDate,
-  //         int? notificationId,
-  //       }) {
-  //         context.read<TodosBloc>().add(
-  //               AddTodo(
-  //                 Todo(
-  //                   id: Uuid().v4(),
-  //                   title: title,
-  //                   todo: todoString,
-  //                   dateTime: time,
-  //                   notificationId: notificationId,
-  //                   notificationDate: notificationDate,
-  //                 ),
-  //               ),
-  //             );
-  //       },
-  //     ),
-  //   );
-  // }
 
   final bool? isEditing;
   final OnSaveCallback? onSave;

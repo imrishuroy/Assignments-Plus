@@ -9,9 +9,9 @@ class ContactUsScreen extends StatefulWidget {
   ContactUsScreen({Key? key}) : super(key: key);
 
   static Route route() {
-    return MaterialPageRoute(
+    return PageRouteBuilder(
       settings: RouteSettings(name: routeName),
-      builder: (_) => BlocProvider<ContactusCubit>(
+      pageBuilder: (context, _, __) => BlocProvider<ContactusCubit>(
         create: (context) => ContactusCubit(
           firebaseServices: context.read<FirebaseServices>(),
         ),

@@ -128,3 +128,10 @@ https://stackoverflow.com/questions/63204172/errors-launching-flutter-app-in-ios
 macOS cannot verify that this app is free from malware.
 
 sudo xattr -d com.apple.quarantine /Users/imrishuroy/Developer/flutter/bin/cache/artifacts/usbmuxd/iproxy
+
+
+production 
+
+Certificate fingerprints:
+         SHA1: 38:20:FC:A0:34:B5:90:7B:6F:99:E9:4D:A7:93:1D:1E:85:43:39:74
+         SHA256: 83:BC:CB:91:48:2C:80:06:FA:E6:E8:E1:F3:0C:48:7A:EB:BA:92:53:2E:52:FF:83:D5:13:27:22:5D:2C:65:2D

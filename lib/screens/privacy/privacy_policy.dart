@@ -5,9 +5,9 @@ class PrivicyPolicy extends StatelessWidget {
   const PrivicyPolicy({Key? key}) : super(key: key);
 
   static Route route() {
-    return MaterialPageRoute(
+    return PageRouteBuilder(
       settings: RouteSettings(name: routeName),
-      builder: (_) => PrivicyPolicy(),
+      pageBuilder: (context, _, __) => PrivicyPolicy(),
     );
   }
 

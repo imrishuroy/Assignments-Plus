@@ -6,6 +6,7 @@
    <uses-permission android:name="android.permission.VIBRATE" />
    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
    <application
+        android:name="io.flutter.app.FlutterApplication"
         android:label="Assignments Plus"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:universal_platform/universal_platform.dart';
+
 class LoginScreen extends StatelessWidget {
   static const String routeName = '/login';
 
@@ -77,7 +80,7 @@ class LoginScreen extends StatelessWidget {
                                   padding: EdgeInsets.zero,
                                 ),
                                 onPressed: () {
-                                  context.read<LoginCubit>().logInWithGoogle();
+                                  context.read<LoginCubit>().googleLogin();
                                 },
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -122,6 +125,16 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            if (UniversalPlatform.isIOS)
+                              SizedBox(
+                                width: 250.0,
+                                child: SignInWithAppleButton(
+                                  onPressed: () {
+                                    context.read<LoginCubit>().appleLogin();
+                                  },
+                                  style: SignInWithAppleButtonStyle.black,
+                                ),
+                              ),
                             Center(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(

@@ -9,9 +9,9 @@ class AuthWrapper extends StatelessWidget {
   static const String routeName = '/auth';
 
   static Route route() {
-    return MaterialPageRoute(
+    return PageRouteBuilder(
       settings: RouteSettings(name: routeName),
-      builder: (_) => AuthWrapper(),
+      pageBuilder: (context, _, __) => AuthWrapper(),
     );
   }
 

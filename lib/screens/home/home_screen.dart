@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:assignments/blocs/auth/auth_bloc.dart';
 import 'package:assignments/blocs/tab/tab_bloc.dart';
 import 'package:assignments/models/app_tab_bar.dart';
 import 'package:assignments/screens/home/widgets/my_appbar.dart';
@@ -63,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // For sharing or opening urls/text coming from outside the app while the app is in the memory
       _intentDataStreamSubscription =
           ReceiveSharingIntent.getTextStream().listen((String? value) {
+        print('Stream String $value');
         setState(() {
           _sharedText = value;
         });
@@ -71,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       // For sharing or opening urls/text coming from outside the app while the app is closed
       ReceiveSharingIntent.getInitialText().then((String? value) {
+        print('Future text $value');
         setState(() {
           _sharedText = value;
           if (_sharedText != null) {
@@ -83,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _loading = false;
       });
 
-      print('Shared Text $_sharedText and Header is $_sharedTitle');
+      print('Shared Text $_sharedText and Header is $_sharedTitle  1');
     } catch (e) {
       setState(() {
         _loading = false;
@@ -102,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _sharedTitle = data?.title;
         _loading = false;
         data = null;
+        print('Shared title $_sharedTitle, Shared text $_sharedText  2');
       });
     }
   }
@@ -124,50 +126,44 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        print('AuthBloc listener ${state.status}');
-        //  Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-      },
-      child: WillPopScope(
-        onWillPop: () async => false,
-        child: _loading
-            ? Container(
-                color: Colors.white,
-                child: const LoadingIndicator(),
-              )
-            : BlocBuilder<TabBloc, AppTab>(
-                builder: (context, activeTab) {
-                  return Scaffold(
-                    floatingActionButtonLocation:
-                        FloatingActionButtonLocation.miniCenterFloat,
-                    appBar: PreferredSize(
-                      preferredSize: Size.fromHeight(60),
-                      child: MyAppBar(
-                        activeTab: activeTab,
-                      ),
-                    ),
-                    body: SwitchScreens(
-                        activeTab, _sharedText, _sharedTitle, widget.userId),
-                    floatingActionButton: activeTab == AppTab.todos
-                        ? FloatingActionButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                  context, AddEditTodoScreen.routeName);
-                            },
-                            child: const Icon(Icons.add),
-                            tooltip: 'Add Todo',
-                          )
-                        : null,
-                    bottomNavigationBar: TabSelector(
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: _loading
+          ? Container(
+              color: Colors.white,
+              child: const LoadingIndicator(),
+            )
+          : BlocBuilder<TabBloc, AppTab>(
+              builder: (context, activeTab) {
+                return Scaffold(
+                  floatingActionButtonLocation:
+                      FloatingActionButtonLocation.miniCenterFloat,
+                  appBar: PreferredSize(
+                    preferredSize: Size.fromHeight(60),
+                    child: MyAppBar(
                       activeTab: activeTab,
-                      onTabSelected: (tab) =>
-                          BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
                     ),
-                  );
-                },
-              ),
-      ),
+                  ),
+                  body: SwitchScreens(
+                      activeTab, _sharedText, _sharedTitle, widget.userId),
+                  floatingActionButton: activeTab == AppTab.todos
+                      ? FloatingActionButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, AddEditTodoScreen.routeName);
+                          },
+                          child: const Icon(Icons.add),
+                          tooltip: 'Add Todo',
+                        )
+                      : null,
+                  bottomNavigationBar: TabSelector(
+                    activeTab: activeTab,
+                    onTabSelected: (tab) =>
+                        BlocProvider.of<TabBloc>(context).add(UpdateTab(tab)),
+                  ),
+                );
+              },
+            ),
     );
   }
 }

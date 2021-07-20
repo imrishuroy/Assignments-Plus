@@ -20,8 +20,8 @@ class AddEditPublicTodoScreen extends StatefulWidget {
   static const String routeName = '/addPublicTodo';
 
   static Route route() {
-    return MaterialPageRoute(
-      builder: (context) => AddEditPublicTodoScreen(
+    return PageRouteBuilder(
+      pageBuilder: (context, _, __) => AddEditPublicTodoScreen(
         isEditing: false,
         onSave: (
           title,
