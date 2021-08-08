@@ -235,6 +235,12 @@ PODS:
   - Firebase/Firestore (8.3.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 8.3.0)
+  - Firebase/InAppMessaging (8.3.0):
+    - Firebase/CoreOnly
+    - FirebaseInAppMessaging (~> 8.3.0-beta)
+  - Firebase/Messaging (8.3.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 8.3.0)
   - firebase_auth (3.0.1):
     - Firebase/Auth (= 8.3.0)
     - firebase_core
@@ -242,6 +248,16 @@ PODS:
   - firebase_core (1.4.0):
     - Firebase/CoreOnly (= 8.3.0)
     - Flutter
+  - firebase_in_app_messaging (0.5.0-7):
+    - Firebase/InAppMessaging (= 8.3.0)
+    - firebase_core
+    - Flutter
+  - firebase_messaging (10.0.4):
+    - Firebase/Messaging (= 8.3.0)
+    - firebase_core
+    - Flutter
+  - FirebaseABTesting (8.5.0):
+    - FirebaseCore (~> 8.0)
   - FirebaseAuth (8.3.0):
     - FirebaseCore (~> 8.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
@@ -268,6 +284,24 @@ PODS:
     - "gRPC-C++ (~> 1.28.0)"
     - leveldb-library (~> 1.22)
     - nanopb (~> 2.30908.0)
+  - FirebaseInAppMessaging (8.3.0-beta):
+    - FirebaseABTesting (~> 8.0)
+    - FirebaseCore (~> 8.0)
+    - FirebaseInstallations (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.4)
+    - nanopb (~> 2.30908.0)
+  - FirebaseInstallations (8.5.0):
+    - FirebaseCore (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.4)
+    - GoogleUtilities/UserDefaults (~> 7.4)
+    - PromisesObjC (< 3.0, >= 1.2)
+  - FirebaseMessaging (8.3.0):
+    - FirebaseCore (~> 8.0)
+    - FirebaseInstallations (~> 8.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
+    - GoogleUtilities/Environment (~> 7.4)
+    - GoogleUtilities/Reachability (~> 7.4)
+    - GoogleUtilities/UserDefaults (~> 7.4)
   - Flutter (1.0.0)
   - flutter_local_notifications (0.0.1):
     - Flutter
@@ -299,6 +333,8 @@ PODS:
     - GoogleUtilities/Reachability
   - "GoogleUtilities/NSData+zlib (7.5.0)"
   - GoogleUtilities/Reachability (7.5.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (7.5.0):
     - GoogleUtilities/Logger
   - "gRPC-C++ (1.28.2)":
     - "gRPC-C++/Implementation (= 1.28.2)"
@@ -355,6 +391,8 @@ DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - firebase_in_app_messaging (from `.symlinks/plugins/firebase_in_app_messaging/ios`)
+  - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
@@ -372,10 +410,14 @@ SPEC REPOS:
     - AppAuth
     - BoringSSL-GRPC
     - Firebase
+    - FirebaseABTesting
     - FirebaseAuth
     - FirebaseCore
     - FirebaseCoreDiagnostics
     - FirebaseFirestore
+    - FirebaseInAppMessaging
+    - FirebaseInstallations
+    - FirebaseMessaging
     - FMDB
     - GoogleDataTransport
     - GoogleSignIn
@@ -395,6 +437,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
+  firebase_in_app_messaging:
+    :path: ".symlinks/plugins/firebase_in_app_messaging/ios"
+  firebase_messaging:
+    :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
   flutter_local_notifications:
@@ -424,14 +470,20 @@ SPEC CHECKSUMS:
   Firebase: 817b9171d0d51dccc458b94a5e8edff6b1dd323d
   firebase_auth: 3b08d67bda60758347d15584fd0a7a4cf5f6496f
   firebase_core: 72374607c8c6f5a0adc0559e5c5bf57deda975e3
+  firebase_in_app_messaging: 8fbd1a437a3f86f5e166333b9886ed5c235c9571
+  firebase_messaging: 55c5b8184efd330b9d1f1765b55c4ae57e015c5e
+  FirebaseABTesting: f7cb3fbed1c5bd3e733a79d9955447be3f3b06a5
   FirebaseAuth: fd12c82de44e7ad3b821610c387b8251f03aa0f9
   FirebaseCore: a6dba751680d7033b9d3831e1cfc95ead0605118
   FirebaseCoreDiagnostics: 7e873baabcfaa9512f538554ae4fa0817aaafbdb
   FirebaseFirestore: f4f42828c6d82f6945575611c23dd343e0e7d0aa
+  FirebaseInAppMessaging: cdb999d41b21463146fa6af0a77377f753ee321f
+  FirebaseInstallations: f2bc590b291d25fb40a9a05b8281c02a881b5117
+  FirebaseMessaging: 42252b79b860482021483748669ec32e22196462
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  google_sign_in: 6bd214b9c154f881422f5fe27b66aaa7bbd580cc
+  google_sign_in: de494e5e993986afae63e22a32441e30c35c9823
   GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
   GoogleUtilities: eea970f4a389963963bffe8d8fabe43540678b9c

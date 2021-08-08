@@ -163,7 +163,7 @@ class _AddEditTodoScreenState extends State<AddEditTodoScreen> {
           context: context,
           time: notificationTime!,
           id: id,
-          title: 'Reminder',
+          title: 'Assignments ++',
           message: _title!,
           channelId: dateTime.toString(),
           channelName: dateTime.toString(),

@@ -10,7 +10,7 @@ class AppUser extends Equatable {
   final String? about;
   final String? email;
 
-  AppUser({
+  const AppUser({
     @required this.uid,
     @required this.name,
     @required this.imageUrl,
@@ -20,6 +20,14 @@ class AppUser extends Equatable {
 
   @override
   bool? get stringify => true;
+
+  static const emptyUser = AppUser(
+    uid: '',
+    name: '',
+    imageUrl: '',
+    about: '',
+    email: '',
+  );
 
   AppUser copyWith({
     String? uid,

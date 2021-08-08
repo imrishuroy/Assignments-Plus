@@ -33,7 +33,7 @@ class MyAppBar extends StatelessWidget {
     } else if (activeTab == AppTab.stats) {
       return AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Track your progress'),
+        title: const Text('Activites'),
       );
     }
     // } else if (activeTab == AppTab.public) {

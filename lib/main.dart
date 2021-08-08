@@ -20,14 +20,26 @@ import 'package:assignments/services/notification_services.dart';
 import 'package:assignments/theme/app_theme.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+///Receive message when app is in background solution for on message
+Future<void> _backgroundHandler(RemoteMessage message) async {
+  await FirebaseMessaging.instance.requestPermission();
+  print(message.data.toString());
+  print(message.notification!.title);
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  if (!UniversalPlatform.isWeb) {
+    FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
+  }
+
   Bloc.observer = SimpleBlocObserver();
   EquatableConfig.stringify = kDebugMode;
   await SharedPrefs().init();
@@ -56,9 +68,6 @@ class MyApp extends StatelessWidget {
         ),
         RepositoryProvider<ProfileRepository>(
           create: (_) => ProfileRepository(),
-        ),
-        RepositoryProvider<FirebaseServices>(
-          create: (_) => FirebaseServices(),
         ),
         if (!UniversalPlatform.isWeb)
           RepositoryProvider<NotificationService>(
@@ -111,11 +120,12 @@ class MyApp extends StatelessWidget {
           builder: (context, state) {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: 'Assignments ++',
+              title: '+Assignments',
               theme:
                   appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)],
               onGenerateRoute: CustomRouter.onGenerateRoute,
               initialRoute: AuthWrapper.routeName,
+              // home: ActivitiesScreen(),
             );
           },
         ),

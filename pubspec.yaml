@@ -31,7 +31,9 @@ dependencies:
   equatable: ^2.0.3
   firebase_auth: ^3.0.1
   firebase_core: ^1.4.0
-  flutter_bloc: ^7.0.1
+  firebase_in_app_messaging: ^0.5.0+7
+  firebase_messaging: ^10.0.4
+  flutter_bloc: ^7.1.0
   flutter_datetime_picker: ^1.5.1
   flutter_linkify: ^5.0.2
   flutter_local_notifications: ^6.0.0
@@ -52,6 +54,7 @@ dependencies:
   universal_platform: ^1.0.0+1
   url_launcher: ^6.0.9
   uuid: ^3.0.4
+  enum_to_string: ^2.0.1
 
 dev_dependencies:
   flutter_test:

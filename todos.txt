@@ -1,7 +1,16 @@
 Todos 
 
+
 We don't claim ownership links are resourses added in the app. We only help them to 
 organise them better and make our users life manageable
+
+# 13 July 2021
+1. Add option of making todos as today, ( most important ) , can be done tommorrow and 
+can be done any day
+2. Add welcome / splash screen and also user guide or like something and make ui beetter
+3.Solve the navigation issue on web 
+4. Add push notification on the app
+
 
 # 12 July 2021
 
