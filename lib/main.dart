@@ -10,12 +10,14 @@ import 'package:assignments/blocs/todo/todo_bloc.dart';
 import 'package:assignments/config/auth_wrapper.dart';
 import 'package:assignments/config/custom_router.dart';
 import 'package:assignments/config/shared_prefs.dart';
+import 'package:assignments/repositories/activities/activities_repo.dart';
 import 'package:assignments/repositories/auth/auth_repository.dart';
 import 'package:assignments/repositories/profile/profile_repository.dart';
 import 'package:assignments/repositories/public-todos/public_todos_repository.dart';
 import 'package:assignments/repositories/services/firebase_service.dart';
 import 'package:assignments/repositories/todo/todo_repository.dart';
 import 'package:assignments/repositories/utils/util_repository.dart';
+import 'package:assignments/screens/activities/bloc/activities_bloc.dart';
 import 'package:assignments/services/notification_services.dart';
 import 'package:assignments/theme/app_theme.dart';
 import 'package:equatable/equatable.dart';
@@ -69,6 +71,9 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<ProfileRepository>(
           create: (_) => ProfileRepository(),
         ),
+        RepositoryProvider<ActivitiesRepository>(
+          create: (_) => ActivitiesRepository(),
+        ),
         if (!UniversalPlatform.isWeb)
           RepositoryProvider<NotificationService>(
             create: (_) => NotificationService(),
@@ -114,6 +119,11 @@ class MyApp extends StatelessWidget {
               profileRepository: context.read<ProfileRepository>(),
               authRepository: context.read<AuthRepository>(),
             )..add(LoadProfile()),
+          ),
+          BlocProvider<ActivitiesBloc>(
+            create: (context) => ActivitiesBloc(
+              activitiesRepository: context.read<ActivitiesRepository>(),
+            ),
           )
         ],
         child: BlocBuilder<ThemeBloc, ThemeState>(

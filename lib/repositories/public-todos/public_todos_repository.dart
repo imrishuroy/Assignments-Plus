@@ -1,9 +1,15 @@
 import 'package:assignments/config/paths.dart';
+import 'package:assignments/enums/activity_type.dart';
+import 'package:assignments/models/activity.dart';
+import 'package:assignments/models/app_user_model.dart';
 import 'package:assignments/models/failure_model.dart';
 import 'package:assignments/models/public_todos.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 
 class PublicTodosRepository {
+  final _firebaseFirestore = FirebaseFirestore.instance;
+
   final CollectionReference _publicTodos =
       FirebaseFirestore.instance.collection(Paths.public);
 
@@ -40,9 +46,28 @@ class PublicTodosRepository {
     }
   }
 
-  Future<void> addPublicTodo(PublicTodo todo) async {
+  Future<void> addPublicTodo(PublicTodo publicTodo) async {
     try {
-      await _publicTodos.doc(todo.todoId).set(todo.toMap());
+      final id = Uuid().v4();
+      await _firebaseFirestore
+          .collection(Paths.public)
+          .doc(id)
+          .set(publicTodo.toMap());
+      // await _publicTodos.doc(publicTodo.todoId).set(publicTodo.toMap());
+
+      final activity = Activity(
+        id: id,
+        type: ActivityType.newPost,
+        fromUser: AppUser.emptyUser.copyWith(uid: publicTodo.authorId),
+        //todo: publicTodo,
+        todo: PublicTodo.empty.copyWith(todoId: id),
+        dateTime: DateTime.now(),
+      );
+
+      await _firebaseFirestore
+          .collection(Paths.activities)
+          .doc(id)
+          .set(activity.toMap());
     } catch (error) {
       print(error.toString());
       throw Failure(message: 'Something went wrong try again :(');

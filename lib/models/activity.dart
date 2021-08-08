@@ -46,14 +46,50 @@ class Activity extends Equatable {
       'type': notifType,
       'fromUser':
           FirebaseFirestore.instance.collection(Paths.users).doc(fromUser?.uid),
-      'todo': todo?.toMap(),
+      //'todo': todo?.toMap(),
+      'todo': todo != null
+          ? FirebaseFirestore.instance
+              .collection(Paths.public)
+              .doc(todo?.todoId)
+          : null,
       'dateTime': dateTime?.millisecondsSinceEpoch,
     };
+  }
+
+  static Future<Activity?> fromDocument(DocumentSnapshot? doc) async {
+    if (doc == null) return null;
+    print('it runs ----------------');
+    final data = doc.data() as Map?;
+    final ActivityType? notificationType =
+        EnumToString.fromString(ActivityType.values, data?['type']);
+
+    // From User
+    final fromUserRef = data?['fromUser'] as DocumentReference?;
+    if (fromUserRef != null) {}
+    final fromUserDoc = await fromUserRef?.get();
+    print('From user -------------- $fromUserDoc');
+
+    // Post
+
+    final todoRef = data?['todo'] as DocumentReference?;
+
+    final todoDoc = await todoRef?.get();
+
+    print('todo ------------- $todoDoc');
+
+    return Activity(
+      id: data?['id'],
+      type: notificationType,
+      fromUser: AppUser.fromMap(fromUserDoc?.data() as Map<String, dynamic>?),
+      todo: PublicTodo.fromMap(todoDoc?.data() as Map<String, dynamic>),
+      dateTime: DateTime.fromMillisecondsSinceEpoch(data?['dateTime']),
+    );
   }
 
   factory Activity.fromMap(Map<String, dynamic> map) {
     final ActivityType? notificationType =
         EnumToString.fromString(ActivityType.values, map['type']);
+
     return Activity(
       id: map['id'],
       type: notificationType,

@@ -9,13 +9,21 @@ class PublicTodo extends Equatable {
   final String? todoId;
   final DateTime? dateTime;
 
-  PublicTodo({
+  const PublicTodo({
     required this.title,
     required this.todo,
     required this.authorId,
     required this.todoId,
     required this.dateTime,
   });
+
+  static const empty = PublicTodo(
+    title: '',
+    todo: '',
+    authorId: '',
+    todoId: '',
+    dateTime: null,
+  );
 
   PublicTodo copyWith({
     String? title,
@@ -43,13 +51,13 @@ class PublicTodo extends Equatable {
     };
   }
 
-  factory PublicTodo.fromMap(Map<String, dynamic> map) {
+  factory PublicTodo.fromMap(Map<String, dynamic>? map) {
     return PublicTodo(
-      title: map['title'] ?? '',
-      todo: map['todo'] ?? '',
-      authorId: map['authorId'] ?? '',
-      todoId: map['todoId'] ?? '',
-      dateTime: DateTime.fromMillisecondsSinceEpoch(map['dateTime'] ?? 0),
+      title: map?['title'] ?? '',
+      todo: map?['todo'] ?? '',
+      authorId: map?['authorId'] ?? '',
+      todoId: map?['todoId'] ?? '',
+      dateTime: DateTime.fromMillisecondsSinceEpoch(map?['dateTime'] ?? 0),
     );
   }
 

@@ -55,13 +55,13 @@ class AppUser extends Equatable {
     };
   }
 
-  factory AppUser.fromMap(Map<String, dynamic> map) {
+  factory AppUser.fromMap(Map<String, dynamic>? map) {
     return AppUser(
-      uid: map['uid'],
-      name: map['name'] ?? '',
-      imageUrl: map['imageUrl'] ?? '',
-      about: map['about'] ?? '',
-      email: map['email'] ?? '',
+      uid: map?['uid'],
+      name: map?['name'] ?? '',
+      imageUrl: map?['imageUrl'] ?? '',
+      about: map?['about'] ?? '',
+      email: map?['email'] ?? '',
     );
   }
 
