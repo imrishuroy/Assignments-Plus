@@ -1,6 +1,7 @@
 import 'package:assignments/blocs/profile/profile_bloc.dart';
 import 'package:assignments/models/app_user_model.dart';
 import 'package:assignments/screens/contact/contact_us_screen.dart';
+import 'package:assignments/screens/in-app-purchase/in_app_puchase_button.dart';
 import 'package:assignments/screens/privacy/privacy_policy.dart';
 import 'package:assignments/screens/profile/widgets/logout.dart';
 import 'package:assignments/screens/profile/widgets/name_and_about.dart';
@@ -9,6 +10,7 @@ import 'package:assignments/widgets/loading_indicator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:universal_platform/universal_platform.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -142,7 +144,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         title: Text('Contact Us'),
                         trailing: Icon(Icons.navigate_next_sharp),
                       ),
-                    const SizedBox(height: 250.0),
+                    const SizedBox(height: 200.0),
+                    InAppPurchaseButton(),
+                    const SizedBox(height: 15.0),
                     const Logout(),
                     const Text(
                       'Made in 🇮🇳 by SixteenBrains,',

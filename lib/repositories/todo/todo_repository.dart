@@ -74,7 +74,7 @@ class TodosRepository implements BaseTodosRepository {
   }
 
   @required
-  Stream<List<Todo>> searchTodos(String keyword, String userId) {
+  Stream<List<Todo>> searchTodos(String keyword, String? userId) {
     try {
       return _usersRef
           .doc(userId)

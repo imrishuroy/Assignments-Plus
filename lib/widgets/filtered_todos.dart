@@ -14,7 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class FilteredTodos extends StatefulWidget {
-  final String userId;
+  final String? userId;
 
   FilteredTodos({Key? key, required this.userId}) : super(key: key);
 

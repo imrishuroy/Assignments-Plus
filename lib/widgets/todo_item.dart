@@ -83,6 +83,8 @@ class TodoItem extends StatelessWidget {
                 fontSize: 18,
                 letterSpacing: 0.8,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           subtitle: Padding(

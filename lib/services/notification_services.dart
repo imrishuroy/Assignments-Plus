@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -11,7 +13,6 @@ class NotificationService {
 
   void initialiseSettings(
       Future<void> Function(String? value) onPressed) async {
-    print('This runs---------------');
     if (!UniversalPlatform.isWeb) {
       // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
       final AndroidInitializationSettings initializationSettingsAndroid =
@@ -32,17 +33,17 @@ class NotificationService {
 
       await flutterLocalNotificationsPlugin.initialize(
         initializationSettings,
-        //     onSelectNotification: (value) async {
-        //   print('-----------Notification selected');
-        //   Navigator.of(context)
-        //       .push(MaterialPageRoute(builder: (_) => NewScreen(payload: value)));
-        // });
         onSelectNotification: onPressed,
       );
     }
   }
 
-  Future<void> showNotification() async {
+  Future<void> showNotification({
+    required String? title,
+    required String? body,
+    required String? payload,
+  }) async {
+    final id = Random().nextInt(100);
     var android = new AndroidNotificationDetails(
       'id',
       'channel ',
@@ -53,11 +54,11 @@ class NotificationService {
     var iOS = new IOSNotificationDetails();
     var platform = new NotificationDetails(android: android, iOS: iOS);
     await flutterLocalNotificationsPlugin.show(
-      0,
-      'Flutter devs',
-      'Flutter Local Notification Demo',
+      id,
+      '${title ?? 'Hello'}',
+      '${body ?? 'You may have new notifications'}',
       platform,
-      payload: 'Welcome to the Local Notification demo ',
+      payload: payload ?? '',
     );
   }
 

@@ -27,24 +27,32 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 
 ///Receive message when app is in background solution for on message
-Future<void> _backgroundHandler(RemoteMessage message) async {
-  await FirebaseMessaging.instance.requestPermission();
+Future<void> backgroundHandler(RemoteMessage message) async {
+  //await Firebase.initializeApp();
+  // await FirebaseMessaging.instance.requestPermission();
   print(message.data.toString());
   print(message.notification!.title);
 }
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  if (!UniversalPlatform.isWeb) {
-    FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
-  }
+
+  // if (!UniversalPlatform.isWeb) {
+  //   FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
+  // }
 
   Bloc.observer = SimpleBlocObserver();
   EquatableConfig.stringify = kDebugMode;
   await SharedPrefs().init();
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+  if (UniversalPlatform.isAndroid) {
+    InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
+  }
+
   runApp(MyApp());
 }
 
@@ -130,12 +138,11 @@ class MyApp extends StatelessWidget {
           builder: (context, state) {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: '+Assignments',
+              title: 'Assignments Plus',
               theme:
                   appThemeData[AppTheme.values.elementAt(SharedPrefs().theme)],
               onGenerateRoute: CustomRouter.onGenerateRoute,
               initialRoute: AuthWrapper.routeName,
-              // home: ActivitiesScreen(),
             );
           },
         ),

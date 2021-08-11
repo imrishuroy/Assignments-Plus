@@ -1,0 +1,5 @@
+consumable_product - Consumeable (Upgrade to premium)
+
+non_consumable - Non Consumeable
+
+subscription - Subscription

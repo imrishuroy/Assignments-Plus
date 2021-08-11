@@ -23,7 +23,7 @@ class CustomRouter {
         return LoginScreen.route();
 
       case HomeScreen.routeName:
-        return HomeScreen.route(settings.arguments as String);
+        return HomeScreen.route(settings.arguments as String?);
 
       case AddEditTodoScreen.routeName:
         return AddEditTodoScreen.route(settings.arguments);
@@ -37,7 +37,7 @@ class CustomRouter {
       case ContactUsScreen.routeName:
         return ContactUsScreen.route();
       default:
-        return _errorRoute();
+        return ErrorRoute.route();
     }
   }
 
@@ -56,23 +56,71 @@ class CustomRouter {
   //   }
   // }
 
-  static Route _errorRoute() {
+  // static Route _errorRoute() {
+  //   return MaterialPageRoute(
+  //     settings: const RouteSettings(name: '/error'),
+  //     builder: (_) => Scaffold(
+  //       appBar: AppBar(
+  //         title: const Text(
+  //           'Error',
+  //         ),
+  //       ),
+  //       body: Center(
+  //         child: Column(
+  //           children: [
+  //             Text(
+  //               'Something went wrong',
+  //               style: TextStyle(
+  //                 color: Colors.black,
+  //               ),
+  //             ),
+  //             const SizedBox(height: 6.0),
+  //             TextButton(
+  //                 onPressed: () {
+  //                   Navigator.of(context).pushNamed('/');
+  //                 },
+  //                 child: Text('Re Try'))
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+}
+
+class ErrorRoute extends StatelessWidget {
+  const ErrorRoute({Key? key}) : super(key: key);
+
+  static const String routeNmae = '/error';
+
+  static Route route() {
     return MaterialPageRoute(
-      settings: const RouteSettings(name: '/error'),
-      builder: (_) => Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Error',
-          ),
-        ),
-        body: const Center(
-          child: Text(
+      settings: RouteSettings(name: routeNmae),
+      builder: (_) => ErrorRoute(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(AuthWrapper.routeName, (route) => false);
+    return Center(
+      child: Column(
+        children: [
+          Text(
             'Something went wrong',
             style: TextStyle(
               color: Colors.black,
             ),
           ),
-        ),
+          const SizedBox(height: 6.0),
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    AuthWrapper.routeName, (route) => false);
+              },
+              child: Text('Re Try'))
+        ],
       ),
     );
   }

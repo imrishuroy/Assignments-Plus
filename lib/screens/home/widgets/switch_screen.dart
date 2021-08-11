@@ -14,7 +14,7 @@ class SwitchScreens extends StatefulWidget {
   final AppTab activeTab;
   final String? sharedString;
   final String? title;
-  final String userId;
+  final String? userId;
 
   const SwitchScreens(
       this.activeTab, this.sharedString, this.title, this.userId);
