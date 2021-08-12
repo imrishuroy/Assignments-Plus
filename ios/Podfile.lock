@@ -227,6 +227,10 @@ PODS:
     - Firebase/Firestore (= 8.3.0)
     - firebase_core
     - Flutter
+  - cloud_functions (3.0.0):
+    - Firebase/Functions (= 8.3.0)
+    - firebase_core
+    - Flutter
   - Firebase/Auth (8.3.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 8.3.0)
@@ -235,6 +239,9 @@ PODS:
   - Firebase/Firestore (8.3.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 8.3.0)
+  - Firebase/Functions (8.3.0):
+    - Firebase/CoreOnly
+    - FirebaseFunctions (~> 8.3.0)
   - Firebase/InAppMessaging (8.3.0):
     - Firebase/CoreOnly
     - FirebaseInAppMessaging (~> 8.3.0-beta)
@@ -284,6 +291,9 @@ PODS:
     - "gRPC-C++ (~> 1.28.0)"
     - leveldb-library (~> 1.22)
     - nanopb (~> 2.30908.0)
+  - FirebaseFunctions (8.3.0):
+    - FirebaseCore (~> 8.0)
+    - GTMSessionFetcher/Core (~> 1.5)
   - FirebaseInAppMessaging (8.3.0-beta):
     - FirebaseABTesting (~> 8.0)
     - FirebaseCore (~> 8.0)
@@ -364,6 +374,8 @@ PODS:
     - AppAuth/Core (~> 1.4)
     - GTMSessionFetcher/Core (~> 1.5)
   - GTMSessionFetcher/Core (1.6.1)
+  - in_app_purchase_ios (0.0.1):
+    - Flutter
   - leveldb-library (1.22.1)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
@@ -389,6 +401,7 @@ PODS:
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
+  - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_in_app_messaging (from `.symlinks/plugins/firebase_in_app_messaging/ios`)
@@ -396,6 +409,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
+  - in_app_purchase_ios (from `.symlinks/plugins/in_app_purchase_ios/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - receive_sharing_intent (from `.symlinks/plugins/receive_sharing_intent/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
@@ -415,6 +429,7 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCoreDiagnostics
     - FirebaseFirestore
+    - FirebaseFunctions
     - FirebaseInAppMessaging
     - FirebaseInstallations
     - FirebaseMessaging
@@ -433,6 +448,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
+  cloud_functions:
+    :path: ".symlinks/plugins/cloud_functions/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
@@ -447,6 +464,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   google_sign_in:
     :path: ".symlinks/plugins/google_sign_in/ios"
+  in_app_purchase_ios:
+    :path: ".symlinks/plugins/in_app_purchase_ios/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   receive_sharing_intent:
@@ -467,6 +486,7 @@ SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   cloud_firestore: d6c77e2b33f00576fed2b070fec1be58d7e5f276
+  cloud_functions: 3c28b449603cc0be688d37a15f9feee5880fca8b
   Firebase: 817b9171d0d51dccc458b94a5e8edff6b1dd323d
   firebase_auth: 3b08d67bda60758347d15584fd0a7a4cf5f6496f
   firebase_core: 72374607c8c6f5a0adc0559e5c5bf57deda975e3
@@ -477,6 +497,7 @@ SPEC CHECKSUMS:
   FirebaseCore: a6dba751680d7033b9d3831e1cfc95ead0605118
   FirebaseCoreDiagnostics: 7e873baabcfaa9512f538554ae4fa0817aaafbdb
   FirebaseFirestore: f4f42828c6d82f6945575611c23dd343e0e7d0aa
+  FirebaseFunctions: f391cdeef45d2e85ef4e16a6ecca05f30e162c41
   FirebaseInAppMessaging: cdb999d41b21463146fa6af0a77377f753ee321f
   FirebaseInstallations: f2bc590b291d25fb40a9a05b8281c02a881b5117
   FirebaseMessaging: 42252b79b860482021483748669ec32e22196462
@@ -491,6 +512,7 @@ SPEC CHECKSUMS:
   gRPC-Core: 4afa11bfbedf7cdecd04de535a9e046893404ed5
   GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
   GTMSessionFetcher: 36689134877faeb055b27dfa4ccc9ceaa42e029e
+  in_app_purchase_ios: 18c65275991b8a28b2a47634a7797fb23d5d773e
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c

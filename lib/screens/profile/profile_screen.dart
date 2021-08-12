@@ -1,7 +1,8 @@
 import 'package:assignments/blocs/profile/profile_bloc.dart';
 import 'package:assignments/models/app_user_model.dart';
 import 'package:assignments/screens/contact/contact_us_screen.dart';
-import 'package:assignments/screens/in-app-purchase/in_app_puchase_button.dart';
+import 'package:assignments/screens/in-app-purchase/check_premium.dart';
+
 import 'package:assignments/screens/privacy/privacy_policy.dart';
 import 'package:assignments/screens/profile/widgets/logout.dart';
 import 'package:assignments/screens/profile/widgets/name_and_about.dart';
@@ -145,7 +146,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         trailing: Icon(Icons.navigate_next_sharp),
                       ),
                     const SizedBox(height: 200.0),
-                    InAppPurchaseButton(),
+                    Center(
+                      child: Container(
+                        height: 100,
+                        width: double.infinity,
+                        child: CheckPremium(),
+                      ),
+                    ),
+                    // InAppPurchaseButton(),
                     const SizedBox(height: 15.0),
                     const Logout(),
                     const Text(

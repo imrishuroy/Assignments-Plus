@@ -3,3 +3,29 @@ consumable_product - Consumeable (Upgrade to premium)
 non_consumable - Non Consumeable
 
 subscription - Subscription
+
+subscription
+
+expireSubscriptions
+Error: 9 FAILED_PRECONDITION: The query requires an index. You can create it here: 
+https://console.firebase.google.com/v1/r/project/assignments-66459/firestore/indexes?create_composite=ClNwcm9qZWN0cy9hc3NpZ25tZW50cy02NjQ1OS9kYXRhYmFzZXMvKGRlZmF1bHQpL2NvbGxlY3Rpb25Hcm91cHMvcHVyY2hhc2VzL2luZGV4ZXMvXxABGgoKBnN0YXR1cxABGg4KCmV4cGlyeURhdGUQARoMCghfX25hbWVfXxAB at Object.callErrorFromStatus (/workspace/node_modules/@grpc/grpc-js/build/src/call.js:31:26) at Object.onReceiveStatus (/workspace/node_modules/@grpc/grpc-js/build/src/client.js:330:49) at Object.onReceiveStatus (/workspace/node_modules/@grpc/grpc-js/build/src/client-interceptors.js:299:181) at /workspace/node_modules/@grpc/grpc-js/build/src/call-stream.js:145:78 at processTicksAndRejections (internal/process/task_queues.js:77:11)
+
+
+
+<asynchronous suspension>
+Image provider: AssetImage(bundle: null, name: "assets/dash_old.png")
+Image key: AssetBundleImageKey(bundle: PlatformAssetBundle#ff0ac(), name: "assets/dash_old.png", scale: 1.0)
+════════════════════════════════════════════════════════════════════════════════
+<SKPaymentQueue: 0x282021480>: Payment completed with error: Error Domain=ASDErrorDomain Code=500 "Unhandled exception" UserInfo={NSUnderlyingError=0x282c541b0 {Error Domain=AMSErrorDomain Code=100 "Authentication Failed" UserInfo={NSLocalizedFailureReason=The verify credentials call failed., NSLocalizedDescription=Authentication Failed, NSUnderlyingError=0x282c54a20 {Error Domain=AMSServerErrorDomain Code=-5000 "The operation couldn’t be completed. (AMSServerErrorDomain error -5000.)" UserInfo={NSLocalizedDescription=The operation couldn’t be completed. (AMSServerErrorDomain error -5000.)}}}}, NSLocalizedFailureReason=An unknown error occurred, NSLocalizedDescription=Unhandled exception}
+8.3.0 - [Firebase/Firestore][I-FST000001] WatchStream (281e20c18) Stream error: 'Unavailable: Network connectivity changed'
+
+
+connection] nw_endpoint_handler_set_adaptive_read_handler [C5.1 216.58.203.10:443 ready channel-flow (satisfied (Path is satisfied), viable, interface: en0, ipv4, dns)] unregister notification for read_timeout failed
+[connection] nw_endpoint_handler_set_adaptive_write_handler [C5.1 216.58.203.10:443 ready channel-flow (satisfied (Path is satisfied), viable, interface: en0, ipv4, dns)] unregister notification for write_timeout failed
+[connection] nw_endpoint_handler_set_adaptive_read_handler [C6.1 216.58.196.74:443 ready channel-flow (satisfied (Path is satisfied), viable, interface: en0, ipv4, dns)] unregister notification for read_timeout failed
+[connection] nw_endpoint_handler_set_adaptive_write_handler [C6.1 216.58.196.74:443 ready channel-flow (satisfied (Path is satisfied), viable, interface: en0, ipv4, dns)] unregister notification for write_timeout failed
+<SKPaymentQueue: 0x282021480>: Payment completed with error: Error Domain=ASDErrorDomain Code=907 "Unhandled exception" UserInfo={NSUnderlyingError=0x282cb4420 {Error Domain=AMSErrorDomain Code=100 "Authentication Failed" UserInfo={NSLocalizedFailureReason=The verify credentials call failed., NSLocalizedDescription=Authentication Failed, NSUnderlyingError=0x282cb4210 {Error Domain=AMSErrorDomain Code=6 "Authentication Failed" UserInfo={NSLocalizedFailureReason=User cancelled, NSLocalizedDescription=Authentication Failed, NSUnderlyingError=0x282cb4060 {Error Domain=AKAuthenticationError Code=-7003 "The operation couldn’t be completed. (AKAuthenticationError error -7003.)" UserInfo=0x28220b040 (not displayed)}}}}}, NSLocalizedFailureReason=An unknown error occurred, NSLocalizedDescription=Unhandled exception}
+<SKPaymentQueue: 0x282021480>: Payment completed with error: Error Domain=ASDErrorDomain Code=907 "Unhandled exception" UserInfo={NSUnderlyingError=0x282ce5ec0 {Error Domain=AMSErrorDomain Code=100 "Authentication Failed" UserInfo={NSLocalizedFailureReason=The verify credentials call failed., NSLocalizedDescription=Authentication Failed, NSUnderlyingError=0x282ce43c0 {Error Domain=AMSErrorDomain Code=6 "Authentication Failed" UserInfo={NSLocalizedFailureReason=User cancelled, NSLocalizedDescription=Authentication Failed, NSUnderlyingError=0x282ce4d50 {Error Domain=AKAuthenticationError Code=-7003 "The operation couldn’t be completed. (AKAuthenticationError error -7003.)" UserInfo=0x2822834a0 (not displayed)}}}}}, NSLocalizedFailureReason=An unknown error occurred, NSLocalizedDescription=Unhandled exception}
+
+[connection] nw_endpoint_handler_set_adaptive_read_handler [C11.1 216.58.203.10:443 ready channel-flow (satisfied (Path is satisfied), viable, interface: en0, ipv4, dns)] unregister notification for read_timeout failed
+[connection] nw_endpoint_handler_set_adaptive_write_handler [C11.1 216.58.203.10:443 ready channel-flow (satisfied (Path is satisfied), viable, interface: en0, ipv4, dns)] unregister notification for write_timeout failed

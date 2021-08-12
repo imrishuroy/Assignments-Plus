@@ -38,8 +38,27 @@ class _InAppPurchaseButtonState extends State<InAppPurchaseButton> {
     if (purchaseDetails.status == PurchaseStatus.purchased) {
       // Send to server
       var validPurchase = await _verifyPurchase(purchaseDetails);
-      print('Purchase Validation $validPurchase');
+      print('Payment Result $validPurchase');
     }
+    if (purchaseDetails.pendingCompletePurchase) {
+      await _iap.completePurchase(purchaseDetails);
+    }
+
+    // print('This runs 1');
+    // print('Purchase details ${purchaseDetails.status}');
+    // if (purchaseDetails.status == PurchaseStatus.purchased) {
+    //   print('This runs 1');
+    //   // Send to server
+    //   var validPurchase = await _verifyPurchase(purchaseDetails);
+    //   print('Purchase Validation $validPurchase');
+    // } else if (purchaseDetails.status == PurchaseStatus.pending) {
+    //   print('This runs 2');
+    //   await _iap.completePurchase(purchaseDetails);
+    // } else {
+    //   print('This runs 5');
+
+    //   await _iap.completePurchase(purchaseDetails);
+    // }
   }
 
   Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) async {
@@ -64,7 +83,7 @@ class _InAppPurchaseButtonState extends State<InAppPurchaseButton> {
     print(error);
   }
 
-  _pay() async {
+  Future<void> _pay() async {
     final bool available = await _iap.isAvailable();
     print(available);
     if (available) {
@@ -73,6 +92,7 @@ class _InAppPurchaseButtonState extends State<InAppPurchaseButton> {
           await InAppPurchase.instance.queryProductDetails(_kIds);
       print(response.productDetails[0].description);
       final productDetails = response.productDetails[0];
+
       PurchaseParam purchaseParam =
           PurchaseParam(productDetails: productDetails);
       await _iap.buyConsumable(purchaseParam: purchaseParam);
@@ -85,6 +105,9 @@ class _InAppPurchaseButtonState extends State<InAppPurchaseButton> {
       onPressed: _pay,
       child: Text(
         'Buy Premium',
+        style: TextStyle(
+          fontSize: 20,
+        ),
       ),
     );
   }
