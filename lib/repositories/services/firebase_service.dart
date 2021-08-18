@@ -1,6 +1,7 @@
 import 'package:assignments/config/paths.dart';
 import 'package:assignments/models/contact_us.dart';
 import 'package:assignments/models/failure_model.dart';
+import 'package:assignments/models/purchase.dart';
 
 import 'package:assignments/screens/leadBoard/lead_board.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,6 +12,8 @@ class FirebaseServices {
 
   final CollectionReference _contact =
       FirebaseFirestore.instance.collection(Paths.contact);
+
+  final _fireStore = FirebaseFirestore.instance;
 
   // Stream<LeadBoard> leadBoardUsers() async {
 
@@ -42,6 +45,17 @@ class FirebaseServices {
     } catch (error) {
       print('Error sending contact us information ${error.toString()}');
       throw Failure(message: 'Something went wrong');
+    }
+  }
+
+  Stream<List<Purchase?>> queryPurchase() {
+    try {
+      return _fireStore.collection('purchases').snapshots().map((snaps) {
+        return snaps.docs.map((doc) => Purchase.fromMap(doc.data())).toList();
+      });
+    } catch (error) {
+      print('Error query purchases ${error.toString()}');
+      throw error;
     }
   }
 }

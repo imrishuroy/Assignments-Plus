@@ -29,3 +29,35 @@ connection] nw_endpoint_handler_set_adaptive_read_handler [C5.1 216.58.203.10:44
 
 [connection] nw_endpoint_handler_set_adaptive_read_handler [C11.1 216.58.203.10:443 ready channel-flow (satisfied (Path is satisfied), viable, interface: en0, ipv4, dns)] unregister notification for read_timeout failed
 [connection] nw_endpoint_handler_set_adaptive_write_handler [C11.1 216.58.203.10:443 ready channel-flow (satisfied (Path is satisfied), viable, interface: en0, ipv4, dns)] unregister notification for write_timeout failed
+
+<SKPaymentQueue: 0x2808861b0>: Payment completed with error: Error Domain=ASDErrorDomain Code=500 "Unhandled exception" UserInfo={NSUnderlyingError=0x2804f1a70 {Error Domain=AMSErrorDomain Code=100 "Authentication Failed" UserInfo={NSLocalizedFailureReason=The verify credentials call failed., NSLocalizedDescription=Authentication Failed, NSUnderlyingError=0x2804f1c80 {Error Domain=AMSServerErrorDomain Code=-5000 "The operation couldn’t be completed. (AMSServerErrorDomain error -5000.)" UserInfo={NSLocalizedDescription=The operation couldn’t be completed. (AMSServerErrorDomain error -5000.)}}}}, NSLocalizedFailureReason=An unknown error occurred, NSLocalizedDescription=Unhandled exception}
+
+
+
+flutter: Payment Result true
+flutter: Purchase Details Status PurchaseStatus.pending
+<SKPaymentQueue: 0x2808861b0>: Payment completed with error: Error Domain=ASDErrorDomain Code=500 "Unhandled exception" UserInfo={NSUnderlyingError=0x2804d2970 {Error Domain=AMSErrorDomain Code=100 "Authentication Failed" UserInfo={NSLocalizedFailureReason=The verify credentials call failed., NSLocalizedDescription=Authentication Failed, NSUnderlyingError=0x2804d3660 {Error Domain=AMSServerErrorDomain Code=-5000 "The operation couldn’t be completed. (AMSServerErrorDomain error -5000.)" UserInfo={NSLocalizedDescription=The operation couldn’t be completed. (AMSServerErrorDomain error -5000.)}}}}, NSLocalizedFailureReason=An unknown error occurred, NSLocalizedDescription=Unhandled exception}
+
+
+: Purchase Details Status PurchaseStatus.pending
+2
+flutter: Purchase Details Status PurchaseStatus.error
+flutter: Error purchase details SKErrorDomain
+flutter: Handle Purchase error This widget has been unmounted, so the State no longer has a context (and should be considered defunct).
+Consider canceling any active work during "dispose" or using the "mounted" getter to determine if the State is still active.
+[VERBOSE-2:ui_dart_state.cc(199)] Unhandled Exception: This widget has been unmounted, so the State no longer has a context (and should be considered defunct).
+Consider canceling any active work during "dispose" or using the "mounted" getter to determine if the State is still active.
+#0      State.context.<anonymous closure>
+package:flutter/…/widgets/framework.dart:909
+#1      State.context
+package:flutter/…/widgets/framework.dart:915
+#2      _InAppPurchaseButtonState._handlePurchase
+package:assignments/…/in-app-purchase/in_app_puchase_button.dart:66
+<asynchronous suspension>
+#3      _InAppPurchaseButtonState._onPurchaseUpdate
+package:assignments/…/in-app-purchase/in_app_puchase_button.dart:39
+<asynchronous suspension>
+flutter: Error purchase details SKErrorDomain
+
+
+#Rishu2024
