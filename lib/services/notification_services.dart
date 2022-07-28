@@ -2,9 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 import 'package:timezone/timezone.dart' as tz;
-
 import 'package:universal_platform/universal_platform.dart';
 
 class NotificationService {
@@ -47,7 +45,7 @@ class NotificationService {
     var android = new AndroidNotificationDetails(
       'id',
       'channel ',
-      'description',
+      //'description',
       priority: Priority.high,
       importance: Importance.max,
     );
@@ -82,7 +80,7 @@ class NotificationService {
         android: AndroidNotificationDetails(
           '$channelId',
           '$channelName',
-          '$channelDescription',
+          //'$channelDescription',
           priority: Priority.high,
           importance: Importance.max,
         ),
@@ -104,9 +102,8 @@ class NotificationService {
       summaryText: 'summaryText',
     );
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'big text channel id',
-        'big text channel name',
-        'big text channel description',
+        'big text channel id', 'big text channel name',
+        //  'big text channel description',
         styleInformation: bigPictureStyleInformation);
     var platformChannelSpecifics = NotificationDetails(
         android: androidPlatformChannelSpecifics, iOS: null);
@@ -123,7 +120,7 @@ class NotificationService {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'media channel id',
       'media channel name',
-      'media channel description',
+      //s 'media channel description',
       color: Colors.red,
       enableLights: true,
       largeIcon: DrawableResourceAndroidBitmap("chat_icon"),

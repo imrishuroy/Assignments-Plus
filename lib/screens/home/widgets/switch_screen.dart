@@ -4,9 +4,7 @@ import 'package:assignments/screens/profile/profile_screen.dart';
 import 'package:assignments/screens/public-todo/public_todos_tab.dart';
 import 'package:assignments/screens/todos/add_edit_todo_screen.dart';
 import 'package:assignments/widgets/filtered_todos.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -43,7 +41,7 @@ class _SwitchScreensState extends State<SwitchScreens> {
     if (widget.activeTab == AppTab.todos &&
         widget.sharedString != null &&
         count == 1) {
-      WidgetsBinding.instance?.addPostFrameCallback(
+      WidgetsBinding.instance.addPostFrameCallback(
         (_) {
           Navigator.of(context).pushNamed(
             AddEditTodoScreen.routeName,
