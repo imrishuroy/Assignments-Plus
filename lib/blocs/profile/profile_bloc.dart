@@ -38,6 +38,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           .streamUser(userId)
           .listen((appUser) => add(ProfileUpdated(appUser)));
     });
+    // print
 
     on<UpdateProfile>((event, emit) async {
       await _profileRepository.updateProfile(event.appUser, userId!);
