@@ -6,7 +6,6 @@ import 'package:assignments/repositories/auth/auth_repository.dart';
 import 'package:assignments/repositories/todo/todo_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-
 import 'package:meta/meta.dart';
 
 part 'todo_event.dart';
@@ -14,8 +13,8 @@ part 'todo_state.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final TodosRepository _todosRepository;
-  late StreamSubscription _todosSubscription;
-  late StreamSubscription _authSubsrciption;
+  StreamSubscription? _todosSubscription;
+  StreamSubscription? _authSubsrciption;
   final AuthRepository _authRepository;
   //final String _userId;
   String? userId;
@@ -36,54 +35,37 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         });
       }
     });
-    // _todosSubscription = _todosRepository.todos(_userId).listen((todos) {
-    //   add(TodosUpdated(todos));
-    // });
-  }
 
-  @override
-  Stream<TodosState> mapEventToState(TodosEvent event) async* {
-    if (event is AddTodo) {
-      yield* _mapAddTodoToState(event);
-    } else if (event is LoadTodos) {
-      yield* _mapLoadTodosToState();
-    } else if (event is TodosUpdated) {
-      yield* _mapTodosUpdateToState(event);
-    } else if (event is DeleteTodo) {
-      yield* _mapDeleteTodoToState(event);
-    } else if (event is UpdateTodo) {
-      yield* _mapUpdateTodoToState(event);
-    }
-  }
+    on<AddTodo>((event, emit) async {
+      await _todosRepository.addNewTodo(event.todo, userId!);
+    });
 
-  Stream<TodosState> _mapLoadTodosToState() async* {
-    // yield TodosLoading();
-    _todosSubscription.cancel();
-    _todosSubscription = _todosRepository
-        .todos(userId!)
-        .listen((todos) => add(TodosUpdated(todos)));
-  }
+    on<LoadTodos>((event, emit) {
+      _todosSubscription?.cancel();
+      if (userId != null) {
+        _todosSubscription = _todosRepository
+            .todos(userId!)
+            .listen((todos) => add(TodosUpdated(todos)));
+      }
+    });
 
-  Stream<TodosState> _mapTodosUpdateToState(TodosUpdated event) async* {
-    yield TodosLoaded(event.todos);
-  }
+    on<TodosUpdated>((event, emit) {
+      emit(TodosLoaded(event.todos));
+    });
 
-  Stream<TodosState> _mapAddTodoToState(AddTodo event) async* {
-    _todosRepository.addNewTodo(event.todo, userId!);
-  }
+    on<DeleteTodo>((event, emit) async {
+      await _todosRepository.deleteTodo(event.todo, userId!);
+    });
 
-  Stream<TodosState> _mapDeleteTodoToState(DeleteTodo event) async* {
-    _todosRepository.deleteTodo(event.todo, userId!);
-  }
-
-  Stream<TodosState> _mapUpdateTodoToState(UpdateTodo event) async* {
-    _todosRepository.updateTodo(event.updatedTodo, userId!);
+    on<UpdateTodo>((event, emit) async {
+      await _todosRepository.updateTodo(event.updatedTodo, userId!);
+    });
   }
 
   @override
   Future<void> close() async {
-    await _todosSubscription.cancel();
-    await _authSubsrciption.cancel();
+    await _todosSubscription?.cancel();
+    await _authSubsrciption?.cancel();
     return super.close();
   }
 }

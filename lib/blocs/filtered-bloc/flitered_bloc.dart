@@ -28,42 +28,30 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
         add(UpdateTodos((todosBloc.state as TodosLoaded).todos));
       }
     });
-  }
 
-  @override
-  Stream<FilteredTodosState> mapEventToState(FilteredTodosEvent event) async* {
-    if (event is UpdateFilter) {
-      yield* _mapUpdateFilterToState(event);
-    } else if (event is UpdateTodos) {
-      yield* _mapTodosUpdatedToState(event);
-    }
-  }
+    on<UpdateFilter>((event, emit) {
+      final currentState = _todosBloc.state;
+      if (currentState is TodosLoaded) {
+        emit(FilteredTodosLoaded(
+          _mapTodosToFilteredTodos(currentState.todos, event.filter),
+          event.filter,
+        ));
+      }
+    });
 
-  Stream<FilteredTodosState> _mapUpdateFilterToState(
-    UpdateFilter event,
-  ) async* {
-    final currentState = _todosBloc.state;
-    if (currentState is TodosLoaded) {
-      yield FilteredTodosLoaded(
-        _mapTodosToFilteredTodos(currentState.todos, event.filter),
-        event.filter,
-      );
-    }
-  }
+    on<UpdateTodos>((event, emit) {
+      final visibilityFilter = state is FilteredTodosLoaded
+          ? (state as FilteredTodosLoaded).activeFilter
+          : VisibilityFilter.all;
 
-  Stream<FilteredTodosState> _mapTodosUpdatedToState(
-    UpdateTodos event,
-  ) async* {
-    final visibilityFilter = state is FilteredTodosLoaded
-        ? (state as FilteredTodosLoaded).activeFilter
-        : VisibilityFilter.all;
-    yield FilteredTodosLoaded(
-      _mapTodosToFilteredTodos(
-        (_todosBloc.state as TodosLoaded).todos,
+      emit(FilteredTodosLoaded(
+        _mapTodosToFilteredTodos(
+          (_todosBloc.state as TodosLoaded).todos,
+          visibilityFilter,
+        ),
         visibilityFilter,
-      ),
-      visibilityFilter,
-    );
+      ));
+    });
   }
 
   List<Todo> _mapTodosToFilteredTodos(

@@ -10,10 +10,10 @@ part 'profile_event.dart';
 part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  late StreamSubscription _streamSubscription;
+  StreamSubscription? _streamSubscription;
   final ProfileRepository _profileRepository;
   final AuthRepository _authRepository;
-  late StreamSubscription _authSubsciption;
+  StreamSubscription? _authSubsciption;
 
   String? userId;
   ProfileBloc({
@@ -31,41 +31,20 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         });
       }
     });
-  }
 
-  @override
-  Future<void> close() {
-    _streamSubscription.cancel();
-    _authSubsciption.cancel();
+    on<LoadProfile>((event, emit) async {
+      await _streamSubscription?.cancel();
+      _streamSubscription = _profileRepository
+          .streamUser(userId)
+          .listen((appUser) => add(ProfileUpdated(appUser)));
+    });
 
-    return super.close();
-  }
+    on<UpdateProfile>((event, emit) async {
+      await _profileRepository.updateProfile(event.appUser, userId!);
+    });
 
-  @override
-  Stream<ProfileState> mapEventToState(
-    ProfileEvent event,
-  ) async* {
-    if (event is LoadProfile) {
-      yield* _mapLoadProfileToState();
-    } else if (event is UpdateProfile) {
-      yield* _mapEditTodoToState(event);
-    } else if (event is ProfileUpdated) {
-      yield* _mapProfileUpdatedToState(event);
-    }
-  }
-
-  Stream<ProfileState> _mapLoadProfileToState() async* {
-    await _streamSubscription.cancel();
-    _streamSubscription = _profileRepository
-        .streamUser(userId)
-        .listen((appUser) => add(ProfileUpdated(appUser)));
-  }
-
-  Stream<ProfileState> _mapEditTodoToState(UpdateProfile event) async* {
-    _profileRepository.updateProfile(event.appUser, userId!);
-  }
-
-  Stream<ProfileState> _mapProfileUpdatedToState(ProfileUpdated event) async* {
-    yield ProfileLoaded(event.appUser!);
+    on<ProfileUpdated>((event, emit) async {
+      emit(ProfileLoaded(event.appUser!));
+    });
   }
 }

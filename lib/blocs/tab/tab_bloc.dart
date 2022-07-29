@@ -7,17 +7,12 @@ import 'package:equatable/equatable.dart';
 part 'tab_event.dart';
 
 class TabBloc extends Bloc<TabEvent, AppTab> {
-  TabBloc() : super(AppTab.todos);
+  TabBloc() : super(AppTab.todos) {
+    on<UpdateTab>((event, emit) => emit(event.tab));
+  }
 
   @override
   Future<void> close() {
     return super.close();
-  }
-
-  @override
-  Stream<AppTab> mapEventToState(TabEvent event) async* {
-    if (event is UpdateTab) {
-      yield event.tab;
-    }
   }
 }

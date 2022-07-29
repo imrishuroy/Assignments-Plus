@@ -19,17 +19,14 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
         add(UpdateStats(state.todos));
       }
     });
-  }
-
-  @override
-  Stream<StatsState> mapEventToState(StatsEvent event) async* {
-    if (event is UpdateStats) {
+    on<UpdateStats>((event, emit) {
       int numActive =
           event.todos.where((todo) => !todo.completed).toList().length;
       int numCompleted =
           event.todos.where((todo) => todo.completed).toList().length;
-      yield StatsLoaded(numActive, numCompleted);
-    }
+
+      emit(StatsLoaded(numActive, numCompleted));
+    });
   }
 
   @override
