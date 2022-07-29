@@ -22,28 +22,18 @@ class ActivitiesBloc extends Bloc<ActivitiesEvent, ActivitiesState> {
       final allActivities = await Future.wait(activities);
       add(LoadActivities(activities: allActivities));
     });
+
+    on<LoadActivities>((event, emit) {
+      emit(state.copyWith(
+        activities: event.activities,
+        status: ActivityStatus.succuss,
+      ));
+    });
   }
 
   @override
   Future<void> close() {
     _activitiesSubscription?.cancel();
     return super.close();
-  }
-
-  @override
-  Stream<ActivitiesState> mapEventToState(
-    ActivitiesEvent event,
-  ) async* {
-    if (event is LoadActivities) {
-      yield* _mapLoadActivitiesToState(event);
-    }
-  }
-
-  Stream<ActivitiesState> _mapLoadActivitiesToState(
-      LoadActivities event) async* {
-    yield state.copyWith(
-      activities: event.activities,
-      status: ActivityStatus.succuss,
-    );
   }
 }

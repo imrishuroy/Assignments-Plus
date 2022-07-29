@@ -4,7 +4,6 @@ import 'package:assignments/models/app_user_model.dart';
 import 'package:assignments/repositories/auth/auth_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-
 import 'package:flutter/material.dart';
 
 part 'auth_event.dart';
@@ -20,28 +19,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _userSubscription = _authRepository.onAuthChanges.listen(
       (user) => add(AuthUserChanged(user: user)),
     );
+    on<AuthUserChanged>((event, emit) {
+      if (event.user != null) {
+        emit(AuthState.authenticated(user: event.user));
+      } else {
+        emit(AuthState.unAuthenticated());
+      }
+    });
+
+    on<AuthLogoutRequested>((event, emit) async {
+      await _authRepository.signOut();
+    });
   }
 
   @override
   Future<void> close() {
     _userSubscription.cancel();
     return super.close();
-  }
-
-  @override
-  Stream<AuthState> mapEventToState(
-    AuthEvent event,
-  ) async* {
-    if (event is AuthUserChanged) {
-      yield* _mapUserChangedToState(event);
-    } else if (event is AuthLogoutRequested) {
-      await _authRepository.signOut();
-    }
-  }
-
-  Stream<AuthState> _mapUserChangedToState(AuthUserChanged event) async* {
-    yield event.user != null
-        ? AuthState.authenticated(user: event.user)
-        : AuthState.unAuthenticated();
   }
 }

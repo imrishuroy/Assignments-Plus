@@ -5,10 +5,10 @@ import 'package:assignments/constants/puchase_const.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
 //import for AppStorePurchaseDetails
 // import 'package:in_app_purchase_ios/in_app_purchase_ios.dart';
 //import for SKProductWrapper
-import 'package:in_app_purchase_ios/store_kit_wrappers.dart';
 
 class InAppPurchaseButton extends StatefulWidget {
   const InAppPurchaseButton({Key? key}) : super(key: key);
