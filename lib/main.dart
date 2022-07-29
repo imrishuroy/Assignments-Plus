@@ -2,7 +2,6 @@ import 'package:assignments/blocs/auth/auth_bloc.dart';
 import 'package:assignments/blocs/filtered-bloc/flitered_bloc.dart';
 import 'package:assignments/blocs/profile/profile_bloc.dart';
 import 'package:assignments/blocs/public-todo/publictodo_bloc.dart';
-import 'package:assignments/blocs/simple_bloc_oberver.dart';
 import 'package:assignments/blocs/stats/stats_bloc.dart';
 import 'package:assignments/blocs/tab/tab_bloc.dart';
 import 'package:assignments/blocs/theme/theme_bloc.dart';
@@ -27,7 +26,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:in_app_purchase_android/in_app_purchase_android.dart';
+
+import 'bootstrap.dart';
 
 ///Receive message when app is in background solution for on message
 Future<void> backgroundHandler(RemoteMessage message) async {
@@ -45,18 +45,19 @@ void main() async {
   //   FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
   // }
 
-  Bloc.observer = SimpleBlocObserver();
+  //Bloc.observer = SimpleBlocObserver();
   EquatableConfig.stringify = kDebugMode;
   await SharedPrefs().init();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   if (UniversalPlatform.isAndroid) {
-    InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
+    //InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
   }
 
-  runApp(MyApp());
+  bootstrap(() => const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
