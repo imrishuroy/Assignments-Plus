@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:assignments/blocs/tab/tab_bloc.dart';
 import 'package:assignments/models/app_tab_bar.dart';
 import 'package:assignments/screens/home/widgets/my_appbar.dart';
@@ -191,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     if (!UniversalPlatform.isWeb) {
-      ReceiveSharingIntent?.reset();
+      ReceiveSharingIntent.reset();
     }
     _intentDataStreamSubscription?.cancel();
 
@@ -237,6 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return false;
     } catch (error) {
       print(error.toString());
+      rethrow;
     }
   }
 
