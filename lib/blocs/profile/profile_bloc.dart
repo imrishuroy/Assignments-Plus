@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:assignments/models/app_user_model.dart';
-import 'package:assignments/repositories/auth/auth_repository.dart';
-import 'package:assignments/repositories/profile/profile_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
+import '/models/app_user_model.dart';
+import '/repositories/auth/auth_repository.dart';
+import '/repositories/profile/profile_repository.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';
@@ -13,7 +14,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   StreamSubscription? _streamSubscription;
   final ProfileRepository _profileRepository;
   final AuthRepository _authRepository;
-  StreamSubscription? _authSubsciption;
+  late StreamSubscription? _authSubsciption;
 
   String? userId;
   ProfileBloc({
@@ -47,5 +48,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ProfileUpdated>((event, emit) async {
       emit(ProfileLoaded(event.appUser!));
     });
+  }
+  @override
+  Future<void> close() {
+    _streamSubscription?.cancel();
+    _authSubsciption?.cancel();
+
+    return super.close();
   }
 }

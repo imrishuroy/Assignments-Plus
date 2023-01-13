@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:assignments/blocs/public-todo/publictodo_bloc.dart';
 import 'package:assignments/models/app_user_model.dart';
 import 'package:assignments/models/public_todos.dart';
@@ -5,13 +7,10 @@ import 'package:assignments/repositories/auth/auth_repository.dart';
 import 'package:assignments/repositories/utils/util_repository.dart';
 import 'package:assignments/screens/public-todo/add_edit_public_todos.dart';
 import 'package:assignments/widgets/loading_indicator.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:intl/intl.dart';
-import 'dart:core';
-
 import 'package:url_launcher/url_launcher.dart';
 
 class PublicTodoDetailsScreen extends StatelessWidget {
@@ -20,7 +19,7 @@ class PublicTodoDetailsScreen extends StatelessWidget {
   PublicTodoDetailsScreen({Key? key, @required this.id}) : super(key: key);
 
   Future<void> _onOpen(LinkableElement link) async {
-    await launch(link.url);
+    await launchUrl(Uri.parse(link.url));
   }
 
   final DateFormat format = DateFormat('dd MMM yy  hh:mm a');

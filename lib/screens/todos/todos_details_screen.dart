@@ -1,16 +1,14 @@
+import 'dart:core';
+
 import 'package:assignments/blocs/todo/todo_bloc.dart';
 import 'package:assignments/models/todo_model.dart';
 import 'package:assignments/repositories/utils/util_repository.dart';
 import 'package:assignments/screens/todos/add_edit_todo_screen.dart';
 import 'package:assignments/screens/todos/add_todo_switch.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-
 import 'package:intl/intl.dart';
-import 'dart:core';
-
 import 'package:url_launcher/url_launcher.dart';
 
 class TodoDetailsScreen extends StatelessWidget {
@@ -21,7 +19,7 @@ class TodoDetailsScreen extends StatelessWidget {
       : super(key: key);
 
   Future<void> _onOpen(LinkableElement link) async {
-    await launch(link.url);
+    await launchUrl(Uri.parse(link.url));
   }
 
   final DateFormat format = DateFormat('dd MMM yy  hh:mm a');

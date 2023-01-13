@@ -1,17 +1,16 @@
-import 'package:assignments/blocs/filtered-bloc/flitered_bloc.dart';
-import 'package:assignments/blocs/todo/todo_bloc.dart';
-import 'package:assignments/models/todo_model.dart';
-import 'package:assignments/repositories/todo/todo_repository.dart';
-import 'package:assignments/screens/todos/todos_details_screen.dart';
-import 'package:assignments/widgets/deleted_todo_snackbar.dart';
-import 'package:assignments/widgets/loading_indicator.dart';
-import 'package:assignments/widgets/search_items.dart';
-import 'package:assignments/widgets/todo_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+
+import '/blocs/filtered-bloc/flitered_bloc.dart';
+import '/blocs/todo/todo_bloc.dart';
+import '/models/todo_model.dart';
+import '/repositories/todo/todo_repository.dart';
+import '/screens/todos/todos_details_screen.dart';
+import '/widgets/deleted_todo_snackbar.dart';
+import '/widgets/loading_indicator.dart';
+import '/widgets/search_items.dart';
+import '/widgets/todo_item.dart';
 
 class FilteredTodos extends StatefulWidget {
   final String? userId;

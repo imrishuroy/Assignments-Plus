@@ -1,13 +1,13 @@
-import 'package:assignments/blocs/public-todo/publictodo_bloc.dart';
-import 'package:assignments/models/public_todos.dart';
-import 'package:assignments/repositories/auth/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:meta/meta.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:uuid/uuid.dart';
+
+import '/blocs/public-todo/publictodo_bloc.dart';
+import '/models/public_todos.dart';
+import '/repositories/auth/auth_repository.dart';
 
 typedef OnSaveCallback = Function(
   String title,
@@ -84,7 +84,7 @@ class _AddEditPublicTodoScreenState extends State<AddEditPublicTodoScreen> {
     print('DISPOSE CALLED');
     _formKey.currentState?.dispose();
     if (!UniversalPlatform.isWeb) {
-      ReceiveSharingIntent?.reset();
+      ReceiveSharingIntent.reset();
     }
 
     _titleController.dispose();

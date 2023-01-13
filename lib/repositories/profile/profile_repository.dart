@@ -31,6 +31,7 @@ class ProfileRepository {
     } catch (error) {
       print(error.toString());
     }
+    return null;
   }
 
   Future<void> updateProfile(AppUser appUser, String userId) async {

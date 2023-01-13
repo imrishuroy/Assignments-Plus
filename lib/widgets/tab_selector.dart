@@ -1,6 +1,4 @@
 import 'package:assignments/models/app_tab_bar.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class TabSelector extends StatelessWidget {

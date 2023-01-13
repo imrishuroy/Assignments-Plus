@@ -1,24 +1,4 @@
-import 'package:assignments/blocs/auth/auth_bloc.dart';
-import 'package:assignments/blocs/filtered-bloc/flitered_bloc.dart';
-import 'package:assignments/blocs/profile/profile_bloc.dart';
-import 'package:assignments/blocs/public-todo/publictodo_bloc.dart';
-import 'package:assignments/blocs/stats/stats_bloc.dart';
-import 'package:assignments/blocs/tab/tab_bloc.dart';
-import 'package:assignments/blocs/theme/theme_bloc.dart';
-import 'package:assignments/blocs/todo/todo_bloc.dart';
-import 'package:assignments/config/auth_wrapper.dart';
-import 'package:assignments/config/custom_router.dart';
-import 'package:assignments/config/shared_prefs.dart';
-import 'package:assignments/repositories/activities/activities_repo.dart';
-import 'package:assignments/repositories/auth/auth_repository.dart';
-import 'package:assignments/repositories/profile/profile_repository.dart';
-import 'package:assignments/repositories/public-todos/public_todos_repository.dart';
-import 'package:assignments/repositories/services/firebase_service.dart';
-import 'package:assignments/repositories/todo/todo_repository.dart';
-import 'package:assignments/repositories/utils/util_repository.dart';
-import 'package:assignments/screens/activities/bloc/activities_bloc.dart';
-import 'package:assignments/services/notification_services.dart';
-import 'package:assignments/theme/app_theme.dart';
+import 'package:assignments/firebase_options.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -27,7 +7,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import 'bootstrap.dart';
+import '/blocs/auth/auth_bloc.dart';
+import '/blocs/filtered-bloc/flitered_bloc.dart';
+import '/blocs/profile/profile_bloc.dart';
+import '/blocs/public-todo/publictodo_bloc.dart';
+import '/blocs/simple_bloc_oberver.dart';
+import '/blocs/stats/stats_bloc.dart';
+import '/blocs/tab/tab_bloc.dart';
+import '/blocs/theme/theme_bloc.dart';
+import '/blocs/todo/todo_bloc.dart';
+import '/config/auth_wrapper.dart';
+import '/config/custom_router.dart';
+import '/config/shared_prefs.dart';
+import '/repositories/activities/activities_repo.dart';
+import '/repositories/auth/auth_repository.dart';
+import '/repositories/profile/profile_repository.dart';
+import '/repositories/public-todos/public_todos_repository.dart';
+import '/repositories/services/firebase_service.dart';
+import '/repositories/todo/todo_repository.dart';
+import '/repositories/utils/util_repository.dart';
+import '/screens/activities/bloc/activities_bloc.dart';
+import '/services/notification_services.dart';
+import '/theme/app_theme.dart';
 
 ///Receive message when app is in background solution for on message
 Future<void> backgroundHandler(RemoteMessage message) async {
@@ -39,7 +40,9 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   // if (!UniversalPlatform.isWeb) {
   //   FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
@@ -52,8 +55,9 @@ void main() async {
   if (UniversalPlatform.isAndroid) {
     //InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
   }
+  Bloc.observer = SimpleBlocObserver();
 
-  bootstrap(() => const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:meta/meta.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:uuid/uuid.dart';
@@ -135,7 +134,7 @@ class _AddEditTodoScreenState extends State<AddEditTodoScreen> {
     print('DISPOSE CALLED');
     _formKey.currentState?.dispose();
     if (!UniversalPlatform.isWeb) {
-      ReceiveSharingIntent?.reset();
+      ReceiveSharingIntent.reset();
     }
 
     _titleController.dispose();

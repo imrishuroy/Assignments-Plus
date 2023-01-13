@@ -1,9 +1,8 @@
-import 'package:assignments/models/todo_model.dart';
-import 'package:assignments/widgets/dismissible_background.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:timeago/timeago.dart' as timeago;
+
+import '/models/todo_model.dart';
+import '/widgets/dismissible_background.dart';
 
 class TodoItem extends StatelessWidget {
   final GestureTapCallback? onTap;
@@ -64,6 +63,7 @@ class TodoItem extends StatelessWidget {
         direction: DismissDirection.endToStart,
         confirmDismiss: (direction) async {
           _deleteTodo(context);
+          return null;
         },
         background: DismissibleBackground(),
         key: Key('__todo_item_${todo!.id}'),

@@ -1,12 +1,13 @@
-import 'package:assignments/models/app_tab_bar.dart';
-import 'package:assignments/screens/activities/activities_screen.dart';
-import 'package:assignments/screens/profile/profile_screen.dart';
-import 'package:assignments/screens/public-todo/public_todos_tab.dart';
-import 'package:assignments/screens/todos/add_edit_todo_screen.dart';
-import 'package:assignments/widgets/filtered_todos.dart';
 import 'package:flutter/material.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:universal_platform/universal_platform.dart';
+
+import '/models/app_tab_bar.dart';
+import '/screens/activities/activities_screen.dart';
+import '/screens/profile/profile_screen.dart';
+import '/screens/public-todo/public_todos_tab.dart';
+import '/screens/todos/add_edit_todo_screen.dart';
+import '/widgets/filtered_todos.dart';
 
 class SwitchScreens extends StatefulWidget {
   final AppTab activeTab;
@@ -27,7 +28,7 @@ class _SwitchScreensState extends State<SwitchScreens> {
   void dispose() {
     print('Switch screen dispose callled');
     if (!UniversalPlatform.isWeb) {
-      ReceiveSharingIntent?.reset();
+      ReceiveSharingIntent.reset();
     }
 
     super.dispose();

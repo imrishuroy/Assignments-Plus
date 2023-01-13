@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class _PieData {
+  // ignore: unused_element
   _PieData(this.xData, this.yData, [this.text]);
   final String xData;
   final num yData;

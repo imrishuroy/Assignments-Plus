@@ -28,7 +28,9 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
   final _formKey = GlobalKey<FormState>();
 
   Future<void> _openEmail() async {
-    await launch('mailto:rishukumar.prince@gmail.com?body=Hello there !');
+    await launchUrl(
+        Uri.parse('mailto:rishukumar.prince@gmail.com?body=Hello there !'));
+    // await launch('mailto:rishukumar.prince@gmail.com?body=Hello there !');
   }
 
   final TextEditingController _name = TextEditingController();

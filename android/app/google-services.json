@@ -14,6 +14,30 @@
       },
       "oauth_client": [
         {
+          "client_id": "945647164575-5b7taq3bmocjoe14alo735i0h70kael1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sixteenbrains.assignments",
+            "certificate_hash": "4533cc06fec68556d11d37611dade95b8e2730e8"
+          }
+        },
+        {
+          "client_id": "945647164575-pd0eo8tfta1sf9ev9lvnqvcbf8bfbq50.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sixteenbrains.assignments",
+            "certificate_hash": "3820fca034b5907b6f99e94da7931d1e85433974"
+          }
+        },
+        {
+          "client_id": "945647164575-tmpgtin43l7or1ml5b509e5om40cpujl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sixteenbrains.assignments",
+            "certificate_hash": "45925e8bb477ed49f74442f4ff908995dba68cda"
+          }
+        },
+        {
           "client_id": "945647164575-2vep0ve40m7ccnro60uj8kujhm7eps17.apps.googleusercontent.com",
           "client_type": 3
         }
