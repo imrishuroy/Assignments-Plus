@@ -1,4 +1,5 @@
 import 'package:assignments/models/app_tab_bar.dart';
+import 'package:assignments/pdf_download.dart';
 import 'package:assignments/screens/home/change_theme.dart';
 import 'package:assignments/widgets/extra_actions.dart';
 import 'package:assignments/widgets/filter_button.dart';
@@ -17,6 +18,14 @@ class MyAppBar extends StatelessWidget {
         title: const Text('Your Todos'),
         actions: [
           FilterButton(visible: activeTab == AppTab.todos),
+          IconButton(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => PdfDownloader(),
+              ),
+            ),
+            icon: Icon(Icons.download),
+          ),
           ExtraActions(),
           const SizedBox(width: 5),
         ],

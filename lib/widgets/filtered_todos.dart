@@ -143,6 +143,8 @@ class _FilteredTodosState extends State<FilteredTodos> {
                     return LoadingIndicator();
                   } else if (state is FilteredTodosLoaded) {
                     final todos = state.filteredTodos;
+                    print('Todo len ${todos.length}');
+
                     return Expanded(
                       child: ListView.builder(
                         itemCount: todos.length,
