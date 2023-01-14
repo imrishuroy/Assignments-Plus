@@ -1,9 +1,10 @@
-import 'package:assignments/models/app_tab_bar.dart';
-import 'package:assignments/pdf_download.dart';
-import 'package:assignments/screens/home/change_theme.dart';
-import 'package:assignments/widgets/extra_actions.dart';
-import 'package:assignments/widgets/filter_button.dart';
 import 'package:flutter/material.dart';
+
+import '/models/app_tab_bar.dart';
+import '/screens/home/change_theme.dart';
+import '/screens/home/widgets/pdf_download_button.dart';
+import '/widgets/extra_actions.dart';
+import '/widgets/filter_button.dart';
 
 class MyAppBar extends StatelessWidget {
   final AppTab? activeTab;
@@ -18,15 +19,11 @@ class MyAppBar extends StatelessWidget {
         title: const Text('Your Todos'),
         actions: [
           FilterButton(visible: activeTab == AppTab.todos),
-          IconButton(
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => PdfDownloader(),
-              ),
-            ),
-            icon: Icon(Icons.download),
-          ),
+          const SizedBox(width: 5),
+          PdfDownloadButton(),
+          const SizedBox(width: 5),
           ExtraActions(),
+          const SizedBox(width: 5),
           const SizedBox(width: 5),
         ],
       );

@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import '/blocs/auth/auth_bloc.dart';
@@ -56,7 +57,7 @@ void main() async {
     //InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
   }
   Bloc.observer = SimpleBlocObserver();
-
+  usePathUrlStrategy();
   runApp(MyApp());
 }
 

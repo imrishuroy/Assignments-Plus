@@ -1,6 +1,3 @@
-import 'package:assignments/blocs/todo/todo_bloc.dart';
-import 'package:assignments/models/todo_model.dart';
-import 'package:assignments/services/notification_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -8,6 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:uuid/uuid.dart';
+
+import '/blocs/todo/todo_bloc.dart';
+import '/models/todo_model.dart';
+import '/services/notification_services.dart';
 
 typedef OnSaveCallback = Function(
   String title,
@@ -210,8 +211,8 @@ class _AddEditTodoScreenState extends State<AddEditTodoScreen> {
                   onSaved: (value) => _todo = value,
                   validator: (value) =>
                       value!.isEmpty ? 'Todo can\'t be empty' : null,
-                  maxLength: 500,
-                  maxLines: 11,
+                  // maxLength: 500,
+                  maxLines: 1000,
                   minLines: 3,
                   decoration: InputDecoration(
                     hintText: 'Add your todo here...',
