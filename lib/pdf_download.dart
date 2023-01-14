@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:assignments/blocs/filtered-bloc/flitered_bloc.dart';
-import 'package:assignments/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +8,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
+
+import '/blocs/filtered-bloc/flitered_bloc.dart';
+import '/extensions/extensions.dart';
 
 class PdfDownloader extends StatelessWidget {
   const PdfDownloader({super.key});
@@ -35,6 +36,10 @@ class PdfDownloader extends StatelessWidget {
           const downloadsFolderPath = '/storage/emulated/0/Download/';
           Directory dir = Directory(downloadsFolderPath);
           file = File('${dir.path}$fileName');
+
+          // if (await file.exists()) {
+          //   file = File('${dir.path}/${fileName}');
+          // }
 
           // load file that you want to save on user's phone
           // it can be loaded from whenever you want, e.g. some API.
